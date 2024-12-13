@@ -33,17 +33,30 @@
 	},
 	"homepage": "https://github.com/mohamedashrafothman/eshop-fe#readme",
 	"dependencies": {
-		"react": "^19.0.0",
-		"react-dom": "^19.0.0",
-		"next": "15.1.0"
+		"next": "15.1.0",
+		"react": "19.0.0",
+		"react-dom": "19.0.0"
 	},
 	"devDependencies": {
-		"typescript": "^5",
-		"@types/node": "^20",
-		"@types/react": "^19",
-		"@types/react-dom": "^19",
-		"eslint": "^9",
+		"@commitlint/cli": "19.6.0",
+		"@commitlint/config-conventional": "19.6.0",
+		"@eslint/eslintrc": "3",
+		"@types/node": "20",
+		"@types/react": "19",
+		"@types/react-dom": "19",
+		"conventional-recommended-bump": "10.0.0",
+		"eslint": "9",
 		"eslint-config-next": "15.1.0",
-		"@eslint/eslintrc": "^3"
+		"husky": "9.1.7",
+		"lint-staged": "15.2.11",
+		"prettier": "3.4.2",
+		"semver": "7.6.3",
+		"standard-version": "9.5.0",
+		"typescript": "5"
+	},
+	"standard-version": {
+		"skip": {
+			"tag": true
+		}
 	}
 }
