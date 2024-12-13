@@ -1,25 +1,49 @@
 {
-  "name": "eshop-fe",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "next": "15.1.0"
-  },
-  "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.1.0",
-    "@eslint/eslintrc": "^3"
-  }
+	"name": "eshop-fe",
+	"version": "0.1.0",
+	"private": true,
+	"engines": {
+		"node": ">=18.0.0",
+		"npm": ">=10.0.0"
+	},
+	"description": "",
+	"keywords": [],
+	"license": "ISC",
+	"author": "Mohamed Ashraf Othman - mohamedashrafothman@gmail.com",
+	"scripts": {
+		"dev": "next dev --turbopack",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"prestart": "npm run build",
+		"prepare": "husky install",
+		"prettify": "prettier --write --ignore-path .gitignore",
+		"get-next-release-version": "node ./get-next-release-version.js",
+		"release": "standard-version",
+		"release:minor": "standard-version --release-as minor",
+		"release:patch": "standard-version --release-as patch",
+		"release:major": "standard-version --release-as major"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/mohamedashrafothman/eshop-fe.git"
+	},
+	"bugs": {
+		"url": "https://github.com/mohamedashrafothman/eshop-fe/issues"
+	},
+	"homepage": "https://github.com/mohamedashrafothman/eshop-fe#readme",
+	"dependencies": {
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"next": "15.1.0"
+	},
+	"devDependencies": {
+		"typescript": "^5",
+		"@types/node": "^20",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"eslint": "^9",
+		"eslint-config-next": "15.1.0",
+		"@eslint/eslintrc": "^3"
+	}
 }
