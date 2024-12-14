@@ -18,6 +18,8 @@
 		"prestart": "npm run build",
 		"prepare": "husky install",
 		"prettify": "prettier --write --ignore-path .gitignore",
+		"docker-compose-up": "docker compose up --watch",
+		"docker-compose-down": "docker compose down -v --rmi all",
 		"get-next-release-version": "node ./get-next-release-version.js",
 		"release": "standard-version",
 		"release:minor": "standard-version --release-as minor",
