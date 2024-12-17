@@ -11,7 +11,7 @@
 	"license": "ISC",
 	"author": "Mohamed Ashraf Othman - mohamedashrafothman@gmail.com",
 	"scripts": {
-		"dev": "next dev --turbopack",
+		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
@@ -35,23 +35,27 @@
 	},
 	"homepage": "https://github.com/mohamedashrafothman/eshop-fe#readme",
 	"dependencies": {
-		"next": "15.1.0",
-		"react": "19.0.0",
-		"react-dom": "19.0.0"
+		"axios": "1.7.9",
+		"bootstrap": "5.3.3",
+		"next": "14.2.20",
+		"react": "18",
+		"react-bootstrap": "2.10.7",
+		"react-dom": "18"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "19.6.0",
 		"@commitlint/config-conventional": "19.6.0",
 		"@eslint/eslintrc": "3",
 		"@types/node": "20",
-		"@types/react": "19",
-		"@types/react-dom": "19",
+		"@types/react": "18",
+		"@types/react-dom": "18",
 		"conventional-recommended-bump": "10.0.0",
-		"eslint": "9",
-		"eslint-config-next": "15.1.0",
+		"eslint": "8",
+		"eslint-config-next": "14.2.20",
 		"husky": "8.0.1",
 		"lint-staged": "15.2.11",
 		"prettier": "3.4.2",
+		"sass": "1.83.0",
 		"semver": "7.6.3",
 		"standard-version": "9.5.0",
 		"typescript": "5"

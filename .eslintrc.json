@@ -1,0 +1,14 @@
+{
+	"extends": "next/core-web-vitals",
+	"rules": {
+		"no-unused-vars": [
+			1,
+			{
+				"args": "after-used",
+				"argsIgnorePattern": "^_",
+				"varsIgnorePattern": "^_",
+				"destructuredArrayIgnorePattern": "^_"
+			}
+		]
+	}
+}
