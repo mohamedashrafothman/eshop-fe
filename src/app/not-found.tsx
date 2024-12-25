@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+// TODO: Not Found Error UI Skeleton
 const NotFound = () => (
 	<div>
 		<h2>Not Found</h2>

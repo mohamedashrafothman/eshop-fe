@@ -1,19 +1,14 @@
-"use client"; // Error boundaries must be Client Components
+"use client"; // NOTE: Error boundaries must be Client Components
 
-import { useEffect } from "react";
+type Props = { error: Error & { digest?: string }; reset: () => void };
 
-const Error = ({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) => {
-	useEffect(() => {
-		console.error(error);
-	}, [error]);
-
-	return (
-		<div>
-			<h2>Something went wrong!</h2>
-			<p>{error.message}</p>
-			<button onClick={() => reset()}>Try again</button>
-		</div>
-	);
-};
+// TODO: Error Boundary UI Skeleton
+const Error = ({ error, reset }: Props) => (
+	<div>
+		<h2>Something went wrong!</h2>
+		<p>{error.message}</p>
+		<button onClick={() => reset()}>Try again</button>
+	</div>
+);
 
 export default Error;

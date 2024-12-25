@@ -1,11 +1,21 @@
 "use client";
 
-import useAxiosInterceptor from "hooks/useAxiosInterceptor";
+import NextTopLoader from "nextjs-toploader";
+import { default as AxiosProvider } from "./Axios";
+import { default as ReactQueryProvider } from "./ReactQuery";
+import { default as ReduxProvider } from "./Redux";
 
-const Providers = ({ children }: Readonly<{ children: React.ReactNode }>) => {
-	useAxiosInterceptor();
+type Props = { children?: React.ReactNode };
 
-	return <>{children}</>;
-};
+const Providers = ({ children }: Props) => (
+	<ReduxProvider>
+		<AxiosProvider>
+			<ReactQueryProvider>
+				<NextTopLoader color="var(--bs-primary)" />
+				{children}
+			</ReactQueryProvider>
+		</AxiosProvider>
+	</ReduxProvider>
+);
 
 export default Providers;
