@@ -10,6 +10,7 @@ export type varsTypes = {
 		name: string;
 	};
 	api: { headers: Pick<RawAxiosRequestHeaders, "Accept" | "Content-Type"> };
+	secrets: { nextAuth: { secret: string }; google: { recaptchaKey: string } };
 };
 
 export const vars: varsTypes = {
@@ -22,6 +23,10 @@ export const vars: varsTypes = {
 		name: process.env.NEXT_PUBLIC_NAME || "",
 	},
 	api: { headers: { Accept: "application/json", "Content-Type": "application/json" } },
+	secrets: {
+		nextAuth: { secret: process.env.NEXTAUTH_SECRET || "" },
+		google: { recaptchaKey: process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_KEY || "" },
+	},
 };
 
 export default vars;

@@ -1,14 +1,14 @@
 // libraries
-@use "libs.scss";
+@import "libs.scss";
 // variables
-@use "variables.scss";
+@import "variables.scss";
 // utilities
-@use "utilities.scss";
+@import "utilities.scss";
 // components
-@use "components.scss";
+@import "components.scss";
 // sections
-@use "sections.scss";
+@import "sections.scss";
 // pages
-@use "pages.scss";
+@import "pages.scss";
 // custom & override styles
-@use "custom.scss";
+@import "custom.scss";

@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
+import Breadcrumb from "views/components/Breadcrumb";
+import { default as ResetPasswordSection } from "views/sections/ResetPassword";
 
-export const metadata: Metadata = { title: "Reset Password" };
+const PAGE_TITLE = "Reset Password";
+export const metadata: Metadata = { title: PAGE_TITLE };
 
-type Props = { params: { token: string } };
-
-const ResetPasswordPage = ({ params: { token = "" } }: Props) => (
-	<div>{`reset password page - ${token}`}</div>
+const ResetPasswordPage = () => (
+	<>
+		<div className="pt-4">
+			<div className="container">
+				<Breadcrumb items={[{ href: "/auth/password/forgot", title: PAGE_TITLE }]} />
+			</div>
+		</div>
+		<ResetPasswordSection title={PAGE_TITLE} />
+	</>
 );
 
 export default ResetPasswordPage;

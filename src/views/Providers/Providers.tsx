@@ -11,7 +11,7 @@ const Providers = ({ children }: Props) => (
 	<ReduxProvider>
 		<AxiosProvider>
 			<ReactQueryProvider>
-				<NextTopLoader color="var(--bs-primary)" />
+				<NextTopLoader color="var(--e-shop-primary)" />
 				{children}
 			</ReactQueryProvider>
 		</AxiosProvider>

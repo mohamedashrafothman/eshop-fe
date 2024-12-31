@@ -1,11 +1,14 @@
-const PublicLayout = async ({ children }: Readonly<{ children: React.ReactNode }>) => (
+import Footer from "views/components/Footer";
+import Header from "views/components/Header";
+import Main from "views/components/Main";
+
+type Props = { children: React.ReactNode };
+
+const PublicLayout = async ({ children }: Props) => (
 	<>
-		<header>Public Header</header>
-		<main>
-			<p>Public Main section</p>
-			{children}
-		</main>
-		<footer>Public Footer</footer>
+		<Header />
+		<Main>{children}</Main>
+		<Footer />
 	</>
 );
 
