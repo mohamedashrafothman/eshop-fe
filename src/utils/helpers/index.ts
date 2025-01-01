@@ -1,6 +1,10 @@
+export * from "./api";
 export * from "./dom";
 
 export const isFunction = (value: unknown) => typeof value === "function";
+
+export const isObject = (value: any) =>
+	typeof value === "object" && !Array.isArray(value) && value !== null;
 
 export const percentage = (
 	val: number | "infinity",

@@ -1,7 +1,12 @@
 "use client";
 
 import { FocusError } from "focus-formik-error";
-import { FormikHelpers, useFormik } from "formik";
+import { FormikErrors, FormikHelpers, useFormik } from "formik";
+import useLoginMutation from "hooks/useLoginMutation";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { apiFormErrorExtractor } from "utils/helpers";
 import CheckboxField from "views/components/CheckboxField";
 import LoginByButton from "views/components/LoginByButton";
 import NextLink from "views/components/NextLink";
@@ -10,11 +15,56 @@ import TextField from "views/components/TextField";
 import loginValidationSchema, { type schemaType } from "./schema";
 
 const Login = () => {
-	// event handlers
+	const { push } = useRouter();
+
+	// server state hooks
+	const loginMutation = useLoginMutation();
+
+	// ref hook
+	const loginCancelRequestRef = useRef<AbortController | null>(null);
+
+	// Handle form submission.
 	const onFormSubmitHandler = async (
-		values: schemaType,
-		actions: FormikHelpers<schemaType>
-	) => {};
+		data: schemaType,
+		formikHelpers: FormikHelpers<schemaType>
+	) => {
+		// Abort any previous request, and create a new abort controller.
+		if (loginCancelRequestRef.current?.signal) loginCancelRequestRef.current?.abort();
+		loginCancelRequestRef.current = new AbortController();
+
+		// Call the login mutation.
+		await loginMutation.mutateAsync(
+			{ data, signal: loginCancelRequestRef.current.signal },
+			{
+				onError: async (responseError) => {
+					// Extract errors from the response error.
+					const errors = apiFormErrorExtractor(responseError) as FormikErrors<schemaType>;
+					// Set errors to the form.
+					if (errors) formikHelpers.setErrors(errors);
+				},
+				onSuccess: async (response: any) => {
+					loginMutation.reset();
+					// Extract user, and tokens data from the response.
+					const {
+						accessToken = "",
+						refreshToken = "",
+						tokenType = "",
+						...user
+					} = response?.entities?.data || {};
+					// Call the signIn function from next-auth.
+					await signIn("credentials", {
+						...(accessToken && { accessToken }),
+						...(refreshToken && { refreshToken }),
+						...(tokenType && { tokenType }),
+						...(user && { user }),
+						redirect: false,
+					});
+					// Redirect to the dashboard after success login.
+					push("/dashboard");
+				},
+			}
+		);
+	};
 
 	// form state
 	const formState = useFormik<schemaType>({
@@ -22,6 +72,13 @@ const Login = () => {
 		validationSchema: loginValidationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
+
+	// effect hooks
+	useEffect(() => {
+		return () => {
+			if (loginCancelRequestRef.current?.signal) loginCancelRequestRef.current?.abort();
+		};
+	}, []);
 
 	return (
 		<form onSubmit={formState.handleSubmit} noValidate>
@@ -139,7 +196,7 @@ const Login = () => {
 										)}
 									</button>
 									<NextLink
-										href="/auth/register"
+										href="/auth/login"
 										className="btn btn-outline-primary border-primary-dark w-100 text-capitalize">
 										<strong>don't have an account? join us</strong>
 									</NextLink>

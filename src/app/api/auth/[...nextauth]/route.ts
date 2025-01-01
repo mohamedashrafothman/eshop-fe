@@ -1,16 +1,5 @@
-// import axios from "config/axios";
-import NextAuth, { type NextAuthOptions } from "next-auth";
-// import CredentialsProvider from "next-auth/providers/credentials";
-import vars from "utils/vars";
-
-const authOptions: NextAuthOptions = {
-	pages: { signIn: "/auth/login", signOut: "/", error: "/auth/login" },
-	providers: [],
-	callbacks: {},
-	session: { strategy: "jwt" },
-	debug: !vars.isProduction,
-	secret: vars.secrets.nextAuth.secret,
-};
+import { authOptions } from "config/next-auth";
+import NextAuth from "next-auth";
 
 const handler = NextAuth(authOptions);
 

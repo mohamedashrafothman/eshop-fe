@@ -1,31 +1,90 @@
 "use client";
 
-import axiosInstance, { isAxiosCancelError, isAxiosError, type AxiosInstance } from "config/axios";
+import axiosInstance, { isAxiosCancelError, type AxiosInstance } from "config/axios";
+import { useSession } from "next-auth/react";
 import { useCallback, useLayoutEffect } from "react";
+import { toast } from "react-toastify";
 
 type Props = { children?: React.ReactNode; instance?: AxiosInstance };
 
 const Axios = ({ children, instance = axiosInstance }: Props) => {
-	// event handlers
-	const requestSuccessInterceptor = useCallback((config: any) => {
-		// TODO: handle request headers to attach authentication, and other headers.
-		return config;
-	}, []);
+	const { data: session } = useSession();
 
-	const requestErrorInterceptor = useCallback((error: any) => {
-		// TODO: handle request errors.
-		return Promise.reject(error);
-	}, []);
+	console.log("session:", session);
+
+	// event handlers
+	const requestSuccessInterceptor = useCallback(
+		(config: any) => ({
+			...config,
+			headers: {
+				...config.headers,
+				...(session?.accessToken && session?.tokenType
+					? { authorization: `${session.tokenType} ${session.accessToken}` }
+					: {}),
+			},
+		}),
+		[]
+	);
+
+	const requestErrorInterceptor = useCallback((error: any) => Promise.reject(error), []);
 
 	const responseSuccessInterceptor = useCallback((response: any) => {
-		// TODO: handle response and response global response handling.
+		// extract response data.
+		const { data: { message = null, flashes = {} } = {} } = response;
+
+		// handle flash messages
+		if (message) toast.error(message);
+		if (Object.keys(flashes).length)
+			Object.keys(flashes).forEach((messageType) =>
+				flashes[messageType].forEach((singleMessage: string) => {
+					if (typeof singleMessage !== "string") return;
+					toast(singleMessage, {
+						type:
+							messageType === "success"
+								? "success"
+								: messageType === "danger"
+									? "error"
+									: messageType === "info"
+										? "info"
+										: "warning",
+					});
+				})
+			);
+
 		return response;
 	}, []);
 
-	const responseErrorInterceptor = useCallback((error: any) => {
-		// TODO: handle response errors
-		if (isAxiosCancelError(error) || isAxiosError(error)) return Promise.reject(error);
-		return Promise.reject(error);
+	const responseErrorInterceptor = useCallback((responseError: any) => {
+		if (isAxiosCancelError(responseError)) return Promise.reject(responseError);
+
+		// extract error response data.
+		const {
+			response: {
+				data: { message = null, error, flashes = {} },
+				status,
+			},
+		} = responseError;
+
+		// handle flash messages
+		if (message) toast.error(message);
+		if (Object.keys(flashes).length)
+			Object.keys(flashes).forEach((messageType) =>
+				flashes[messageType].forEach((singleMessage: string) => {
+					if (typeof singleMessage !== "string") return;
+					toast(singleMessage, {
+						type:
+							messageType === "success"
+								? "success"
+								: messageType === "danger"
+									? "error"
+									: messageType === "info"
+										? "info"
+										: "warning",
+					});
+				})
+			);
+
+		return Promise.reject(responseError);
 	}, []);
 
 	// layout effects
@@ -36,8 +95,8 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 			requestErrorInterceptor
 		);
 
+		// clean up request interceptors
 		return () => {
-			// clean up request interceptors
 			instance.interceptors.request.eject(requestInterceptor);
 		};
 	}, [requestErrorInterceptor, requestSuccessInterceptor]);
@@ -49,8 +108,8 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 			responseErrorInterceptor
 		);
 
+		// clean up response interceptors
 		return () => {
-			// clean up response interceptors
 			instance.interceptors.response.eject(responseInterceptor);
 		};
 	}, [responseErrorInterceptor, responseSuccessInterceptor]);

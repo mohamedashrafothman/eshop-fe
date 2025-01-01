@@ -1,9 +1,13 @@
 "use client";
 
 import { FocusError } from "focus-formik-error";
-import { FormikHelpers, useFormik } from "formik";
-import { useCallback, useRef } from "react";
-import { isFunction } from "utils/helpers";
+import { FormikErrors, FormikHelpers, useFormik } from "formik";
+import useRegisterMutation from "hooks/useRegisterMutation";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+import { apiFormErrorExtractor } from "utils/helpers";
 import LoginByButton from "views/components/LoginByButton";
 import NextLink from "views/components/NextLink";
 import PasswordField from "views/components/PasswordField";
@@ -12,27 +16,71 @@ import TextField from "views/components/TextField";
 import registerValidationSchema, { type schemaType } from "./schema";
 
 const Register = () => {
+	const { push } = useRouter();
+
+	// server state hooks
+	const registerMutation = useRegisterMutation();
+
 	// ref hook
-	const recaptchaRef = useRef(null);
+	const registerCancelRequestRef = useRef<AbortController | null>(null);
+	const recaptchaRef = useRef<ReCAPTCHA | null>(null);
 
-	// event handlers
+	// Handle form submission.
 	const onFormSubmitHandler = async (
-		values: schemaType,
-		actions: FormikHelpers<schemaType>
-	) => {};
+		data: schemaType,
+		formikHelpers: FormikHelpers<schemaType>
+	) => {
+		// Abort any previous request, and create a new abort controller.
+		if (registerCancelRequestRef.current?.signal) registerCancelRequestRef.current?.abort();
+		registerCancelRequestRef.current = new AbortController();
 
-	const resetRecaptcha = useCallback(
-		({ setFieldTouched, setFieldValue }: Partial<FormikHelpers<schemaType>>): Promise<void> =>
-			new Promise((resolve) => {
-				if (isFunction((window as any)?.grecaptcha?.reset))
-					(window as any).grecaptcha.reset();
-				if (isFunction(setFieldValue)) setFieldValue("g-recaptcha-response", "", false);
-				if (isFunction(setFieldTouched))
-					setFieldTouched("g-recaptcha-response", false, false);
-				resolve();
-			}),
-		[]
-	);
+		// Call the register mutation.
+		await registerMutation.mutateAsync(
+			{ data, signal: registerCancelRequestRef.current.signal },
+			{
+				onError: async (responseError) => {
+					// Extract errors from the response error.
+					const errors = apiFormErrorExtractor(responseError) as FormikErrors<schemaType>;
+					// Set errors to the form.
+					if (errors) formikHelpers.setErrors(errors);
+					// Reset recaptcha.
+					await resetRecaptcha(formikHelpers);
+				},
+				onSuccess: async (response: any) => {
+					registerMutation.reset();
+					// Extract user, and tokens data from the response.
+					const {
+						accessToken = "",
+						refreshToken = "",
+						tokenType = "",
+						...user
+					} = response?.entities?.data || {};
+					// Call the signIn function from next-auth.
+					await signIn("credentials", {
+						...(accessToken && { accessToken }),
+						...(refreshToken && { refreshToken }),
+						...(tokenType && { tokenType }),
+						...(user && { user }),
+						redirect: false,
+					});
+					// Redirect to the dashboard after success register.
+					push("/dashboard");
+				},
+			}
+		);
+	};
+
+	// Resets the recaptcha value and touched state.
+	const resetRecaptcha = (formikHelpers: FormikHelpers<schemaType>): Promise<void> =>
+		new Promise((resolve) => {
+			// Reset the recaptcha widget.
+			(window as any)?.grecaptcha?.reset();
+			// Reset the recaptcha field value and touched state.
+			formikHelpers?.setFieldValue("g-recaptcha-response", "", false);
+			formikHelpers?.setFieldTouched("g-recaptcha-response", false, false);
+			// Resolve the promise.
+			resolve();
+		});
 
 	// form state
 	const formState = useFormik<schemaType>({
@@ -46,6 +94,13 @@ const Register = () => {
 		validationSchema: registerValidationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
+
+	// effect hooks
+	useEffect(() => {
+		return () => {
+			if (registerCancelRequestRef.current?.signal) registerCancelRequestRef.current?.abort();
+		};
+	}, []);
 
 	return (
 		<form onSubmit={formState.handleSubmit} noValidate>

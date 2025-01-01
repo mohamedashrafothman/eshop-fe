@@ -1,14 +1,14 @@
 import { axiosRequest } from "config/axios";
 
 // constants
-export const REGISTER_URL = "/auth/register";
-export const LOGIN_URL = "/auth/login";
-export const LOGOUT_URL = "/auth/logout";
-export const REFRESH_TOKEN_URL = "/auth/refresh-token";
-export const SOCIAL_LOGIN_URL = "/auth/:provider";
-export const SOCIAL_UNLINK_URL = "/auth/:provider/unlink";
-export const FORGOT_PASSWORD_URL = "/auth/password/forgot";
-export const RESET_PASSWORD_URL = "/auth/password/reset";
+export const REGISTER_URL = "/v1/auth/register";
+export const LOGIN_URL = "/v1/auth/login";
+export const LOGOUT_URL = "/v1/auth/logout";
+export const REFRESH_TOKEN_URL = "/v1/auth/refresh-token";
+export const SOCIAL_LOGIN_URL = "/v1/auth/:provider";
+export const SOCIAL_UNLINK_URL = "/v1/auth/:provider/unlink";
+export const PASSWORD_FORGOT_URL = "/v1/auth/password/forgot";
+export const PASSWORD_RESET_URL = "/v1/auth/password/reset";
 
 // requests methods
 export const postRegister = ({ ...options }) =>
@@ -30,7 +30,7 @@ export const postUnlinkSocialMedia = ({ ...options }) =>
 	axiosRequest({ ...options, url: SOCIAL_UNLINK_URL });
 
 export const postForgotPassword = ({ ...options }) =>
-	axiosRequest({ ...options, method: "post", url: FORGOT_PASSWORD_URL });
+	axiosRequest({ ...options, method: "post", url: PASSWORD_FORGOT_URL });
 
 export const postResetPassword = ({ ...options }) =>
-	axiosRequest({ ...options, method: "post", url: RESET_PASSWORD_URL });
+	axiosRequest({ ...options, method: "post", url: PASSWORD_RESET_URL });

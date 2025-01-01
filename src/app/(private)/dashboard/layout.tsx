@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = { title: { default: "Dashboard", template: "%s | Dashboard" } };
 
-const DashboardLayout = async ({ children }: Readonly<{ children: React.ReactNode }>) => (
+type Props = { children: React.ReactNode };
+
+const DashboardLayout = async ({ children }: Props) => (
 	<>
 		<header>Dashboard Header</header>
 		<main>

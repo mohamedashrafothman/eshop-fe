@@ -1,5 +1,7 @@
-import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import { dehydrate, QueryClient } from "@tanstack/react-query";
+import { getSession } from "config/next-auth";
 import type { Metadata } from "next";
+import type { Session } from "next-auth";
 import { Poppins } from "next/font/google";
 import "stylesheets/styles.scss";
 import Providers from "views/Providers";
@@ -20,10 +22,8 @@ export const metadata: Metadata = {
 type Props = { children: React.ReactNode };
 
 const RootLayout = async ({ children }: Props) => {
+	const session = (await getSession()) as Session;
 	const queryClient = new QueryClient();
-	/**
-	 * NOTE: You can use queryClient to prefetch data
-	 */
 
 	return (
 		<html lang="en" dir="ltr" data-bs-theme="light" className={`${poppins.variable}`}>
@@ -31,10 +31,8 @@ const RootLayout = async ({ children }: Props) => {
 				<noscript>You need to enable JavaScript to run this app.</noscript>
 				<SVGs />
 				<div id="app">
-					<Providers>
-						<HydrationBoundary state={dehydrate(queryClient)}>
-							{children}
-						</HydrationBoundary>
+					<Providers session={session} hydrationBoundaryState={dehydrate(queryClient)}>
+						{children}
 					</Providers>
 				</div>
 				<div id="portals"></div>

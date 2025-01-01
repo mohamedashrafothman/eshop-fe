@@ -5,9 +5,7 @@ import { getNodeHeight, getWindowScrollingValue } from "utils/helpers";
 import Logo from "views/components/Logo";
 
 export const PROPS_TYPES = { PUBLIC: "public", DASHBOARD: "dashboard" } as const;
-type Props = {
-	type?: (typeof PROPS_TYPES)[keyof typeof PROPS_TYPES];
-};
+type Props = { type?: (typeof PROPS_TYPES)[keyof typeof PROPS_TYPES] };
 
 const Header = ({ type = "public" }: Props) => {
 	// ref hook

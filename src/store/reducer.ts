@@ -13,7 +13,7 @@ const reducerPersisted = persistReducer(
 		key: vars.app.name || "root",
 		storage,
 		debug: ENABLE_DEV_TOOLS_AND_DEBUG,
-		whitelist: ["session"],
+		whitelist: [],
 		rootReducer,
 	}),
 	rootReducer

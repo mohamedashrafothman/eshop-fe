@@ -1,6 +1,7 @@
 import slice, {
 	initialState,
 	isAuthenticatedSelector,
+	sessionSelector,
 	userSelector,
 	type Session,
 	type SliceState,
@@ -14,6 +15,7 @@ export {
 	isAuthenticatedSelector,
 	name,
 	reducer,
+	sessionSelector,
 	userSelector,
 	type Session,
 	type SliceState,

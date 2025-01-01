@@ -1,1 +1,3 @@
-export default interface User {}
+export default interface User {
+	email: string;
+}

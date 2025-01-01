@@ -1,20 +1,20 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type AxiosErrorProps, type AxiosRequestProps } from "config/axios";
 import { postLogin as mutationFn } from "services/api/e-shop.com/auth";
-import { type schemaType } from "views/forms/Login/schema";
+import { type Session } from "store/session";
 
-export const KEY_ARRAY = ["auth", "login"];
+export const KEY_ARRAY = ["auth", "refreshToken"];
 
-const useLoginMutation = () => {
+const useRefreshTokenMutation = () => {
 	const queryClient = useQueryClient();
 
 	queryClient.setMutationDefaults(KEY_ARRAY, { mutationFn });
 
 	return useMutation<
-		AxiosRequestProps<schemaType>,
+		AxiosRequestProps<Omit<Session, "isAuthenticated" | "user">>,
 		AxiosErrorProps,
-		AxiosRequestProps<schemaType>
+		AxiosRequestProps<{ refreshToken: string }>
 	>({ mutationKey: KEY_ARRAY });
 };
 
-export default useLoginMutation;
+export default useRefreshTokenMutation;
