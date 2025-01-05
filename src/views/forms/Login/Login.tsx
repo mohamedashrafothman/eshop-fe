@@ -2,13 +2,23 @@
 
 import { FocusError } from "focus-formik-error";
 import { FormikErrors, FormikHelpers, useFormik } from "formik";
+import useLoginBySocialMutation from "hooks/useLoginBySocialMutation";
 import useLoginMutation from "hooks/useLoginMutation";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import qs from "qs";
+import { useEffect, useRef, useState } from "react";
+import { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from "react-facebook-login";
+import { GoogleLoginResponseOffline, type GoogleLoginResponse } from "react-google-login";
+import { toast } from "react-toastify";
+import {
+	type OAuthProviderNamesType,
+	type PostLoginBySocialMediaDataType,
+} from "services/api/e-shop.com/auth";
 import { apiFormErrorExtractor } from "utils/helpers";
 import CheckboxField from "views/components/CheckboxField";
-import LoginByButton from "views/components/LoginByButton";
+import FacebookOAuthButton from "views/components/FacebookOAuthButton";
+import GoogleOAuthButton from "views/components/GoogleOAuthButton";
 import NextLink from "views/components/NextLink";
 import PasswordField from "views/components/PasswordField";
 import TextField from "views/components/TextField";
@@ -19,11 +29,37 @@ const Login = () => {
 
 	// server state hooks
 	const loginMutation = useLoginMutation();
+	const loginBySocialMutation = useLoginBySocialMutation();
 
 	// ref hook
 	const loginCancelRequestRef = useRef<AbortController | null>(null);
+	const loginBySocialCancelRequestRef = useRef<AbortController | null>(null);
+
+	// state hook
+	const [facebookOAuthLoadingState, setFacebookOAuthLoadingState] = useState(false);
+	const [googleOAuthLoadingState, setGoogleOAuthLoadingState] = useState(false);
 
 	// Handle form submission.
+	const onLoginSuccessHandler = async (response: any) => {
+		// Extract user, and tokens data from the response.
+		const {
+			accessToken = "",
+			refreshToken = "",
+			tokenType = "",
+			...user
+		} = response?.data?.entities?.data || {};
+		// Call the signIn function from next-auth.
+		await signIn("credentials", {
+			...(accessToken && { accessToken }),
+			...(refreshToken && { refreshToken }),
+			...(tokenType && { tokenType }),
+			...(user && { user }),
+			redirect: false,
+		});
+		// Redirect to the dashboard after success login.
+		push("/dashboard");
+	};
+
 	const onFormSubmitHandler = async (
 		data: schemaType,
 		formikHelpers: FormikHelpers<schemaType>
@@ -36,31 +72,69 @@ const Login = () => {
 		await loginMutation.mutateAsync(
 			{ data, signal: loginCancelRequestRef.current.signal },
 			{
-				onError: async (responseError) => {
+				onError: (responseError) => {
 					// Extract errors from the response error.
 					const errors = apiFormErrorExtractor(responseError) as FormikErrors<schemaType>;
 					// Set errors to the form.
 					if (errors) formikHelpers.setErrors(errors);
 				},
-				onSuccess: async (response: any) => {
+				onSuccess: (response) => {
+					// Resetting login query mutation.
 					loginMutation.reset();
-					// Extract user, and tokens data from the response.
-					const {
-						accessToken = "",
-						refreshToken = "",
-						tokenType = "",
-						...user
-					} = response?.entities?.data || {};
-					// Call the signIn function from next-auth.
-					await signIn("credentials", {
-						...(accessToken && { accessToken }),
-						...(refreshToken && { refreshToken }),
-						...(tokenType && { tokenType }),
-						...(user && { user }),
-						redirect: false,
-					});
-					// Redirect to the dashboard after success login.
-					push("/dashboard");
+					onLoginSuccessHandler(response);
+				},
+			}
+		);
+	};
+
+	const onOAuthLoginHandler = async (
+		providerName: OAuthProviderNamesType,
+		providerData: Partial<PostLoginBySocialMediaDataType>
+	) => {
+		// Check if email, or name not found, then redirect user to use email, and password method.
+		if (!providerData?.email || !providerData?.name) {
+			setFacebookOAuthLoadingState(false);
+			setGoogleOAuthLoadingState(false);
+			toast(
+				"Your social account is missing the email or name. Please register a new account instead!",
+				{ type: "error" }
+			);
+			push(
+				`/auth/register?${qs.stringify({
+					...(providerData?.email ? { email: providerData.email } : {}),
+					...(providerData?.name ? { name: providerData.name } : {}),
+				})}`
+			);
+			return;
+		}
+
+		// Abort any previous request, and create a new abort controller.
+		if (loginBySocialCancelRequestRef.current?.signal)
+			loginBySocialCancelRequestRef.current?.abort();
+		loginBySocialCancelRequestRef.current = new AbortController();
+
+		// Call the login by social mutation.
+		await loginBySocialMutation.mutateAsync(
+			{
+				variables: { providerName },
+				data: providerData as PostLoginBySocialMediaDataType,
+				signal: loginBySocialCancelRequestRef.current.signal,
+			},
+			{
+				onError: () => {
+					// Reset Oauth loading state
+					setFacebookOAuthLoadingState(false);
+					setGoogleOAuthLoadingState(false);
+				},
+				onSuccess: async (response) => {
+					// Reset Oauth loading state
+					setFacebookOAuthLoadingState(false);
+					setGoogleOAuthLoadingState(false);
+
+					// Resetting login by social query mutation.
+					loginBySocialMutation.reset();
+
+					onLoginSuccessHandler(response);
 				},
 			}
 		);
@@ -77,6 +151,8 @@ const Login = () => {
 	useEffect(() => {
 		return () => {
 			if (loginCancelRequestRef.current?.signal) loginCancelRequestRef.current?.abort();
+			if (loginBySocialCancelRequestRef.current?.signal)
+				loginBySocialCancelRequestRef.current?.abort();
 		};
 	}, []);
 
@@ -89,25 +165,58 @@ const Login = () => {
 					<div className="col-12">
 						<div className="row gy-3">
 							<div className="col-12">
-								<LoginByButton
-									title="Login by Google"
-									platform="google"
-									icon={
-										<svg className="bi w-22px h-22px" width="22" height="22">
-											<use href="#icon-google" />
-										</svg>
-									}
+								<GoogleOAuthButton
+									onSuccess={(
+										res: GoogleLoginResponseOffline | GoogleLoginResponse
+									) => {
+										const { profileObj, accessToken: providerToken = "" } =
+											res as GoogleLoginResponse;
+										const {
+											name: fullName = "",
+											familyName = "",
+											givenName = "",
+											email = "",
+											googleId: providerId = "",
+										} = profileObj;
+										const name =
+											fullName || `${givenName} ${familyName}`.trim() || "";
+
+										setGoogleOAuthLoadingState(true);
+
+										onOAuthLoginHandler("google", {
+											name,
+											email,
+											providerToken,
+											providerId,
+										});
+									}}
+									isLoading={googleOAuthLoadingState}
 								/>
 							</div>
 							<div className="col-12">
-								<LoginByButton
-									title="Login by Facebook"
-									platform="facebook"
-									icon={
-										<svg className="bi w-22px h-22px" width="22" height="22">
-											<use href="#icon-facebook" />
-										</svg>
-									}
+								<FacebookOAuthButton
+									callback={(
+										userInfo:
+											| ReactFacebookLoginInfo
+											| ReactFacebookFailureResponse
+									) => {
+										const {
+											name = "",
+											email = "",
+											accessToken: providerToken = "",
+											id: providerId = "",
+										} = userInfo as ReactFacebookLoginInfo;
+
+										setFacebookOAuthLoadingState(true);
+
+										onOAuthLoginHandler("facebook", {
+											name,
+											email,
+											providerToken,
+											providerId,
+										});
+									}}
+									isLoading={facebookOAuthLoadingState}
 								/>
 							</div>
 						</div>
@@ -196,7 +305,7 @@ const Login = () => {
 										)}
 									</button>
 									<NextLink
-										href="/auth/login"
+										href="/auth/register"
 										className="btn btn-outline-primary border-primary-dark w-100 text-capitalize">
 										<strong>don't have an account? join us</strong>
 									</NextLink>

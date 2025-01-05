@@ -31,7 +31,7 @@ const RecaptchaField = forwardRef(
 		<>
 			<ReCAPTCHA
 				ref={ref}
-				sitekey={vars.secrets.google.recaptchaKey}
+				sitekey={vars.secrets.OAuth.google.recaptchaKey}
 				onChange={onChange}
 				onExpired={onExpired}
 			/>

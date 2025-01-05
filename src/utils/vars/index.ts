@@ -9,9 +9,16 @@ export type varsTypes = {
 		host: string;
 		baseUrl: string;
 		name: string;
+		authorName: string;
 	};
 	api: { headers: Pick<RawAxiosRequestHeaders, "accept" | "content-type"> };
-	secrets: { nextAuth: { secret: string }; google: { recaptchaKey: string } };
+	secrets: {
+		nextAuth: { secret: string };
+		OAuth: {
+			google: { recaptchaKey: string; appId: string };
+			facebook: { appId: string };
+		};
+	};
 };
 
 export const vars: varsTypes = {
@@ -23,11 +30,18 @@ export const vars: varsTypes = {
 		host: process.env.NEXT_PUBLIC_HOST || "",
 		baseUrl: `${process.env.NEXT_PUBLIC_API_URL || ""}/api`,
 		name: process.env.NEXT_PUBLIC_NAME || "",
+		authorName: process.env.NEXT_PUBLIC_AUTHOR_NAME || "",
 	},
 	api: { headers: { accept: "application/json", "content-type": "application/json" } },
 	secrets: {
 		nextAuth: { secret: process.env.NEXTAUTH_SECRET || "" },
-		google: { recaptchaKey: process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_KEY || "" },
+		OAuth: {
+			google: {
+				recaptchaKey: process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA_KEY || "",
+				appId: process.env.NEXT_PUBLIC_GOOGLE_APP_ID || "",
+			},
+			facebook: { appId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || "" },
+		},
 	},
 };
 

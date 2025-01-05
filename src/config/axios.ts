@@ -1,29 +1,22 @@
-import axios, {
-	AxiosError,
-	AxiosInstance,
-	AxiosRequestConfig,
-	AxiosResponse,
-	isCancel,
-} from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import vars from "utils/vars";
 
-export type AxiosRequestProps<D = any> = AxiosRequestConfig<D> & { query?: { [key: string]: any } };
+export type AxiosRequestProps<D = any, v = any> = AxiosRequestConfig<D> & { variables?: v };
+export type AxiosResponseProps<T = any, D = any> = AxiosResponse<{ entities: { data: T } }, D>;
 export type AxiosErrorProps = AxiosError<{
-	error?: any;
-	flashes?: { [key: string]: string[] };
-	message?: string;
-	entities?: any;
+	error?: any | undefined;
+	flashes?: { [key: string]: string[] } | undefined;
+	message?: string | undefined;
+	entities?: never | undefined;
 }>;
-export type IsAxiosCancelError = typeof isCancel;
+export type IsAxiosCancelError = typeof axios.isCancel;
 export type IsAxiosError = typeof axios.isAxiosError;
 
 const config: AxiosRequestConfig = { baseURL: vars.app.baseUrl, headers: vars.api.headers };
 const axiosInstance: AxiosInstance = axios.create(config);
 
-export const axiosRequest = (options: AxiosRequestProps) =>
-	axiosInstance(options).then(({ data }) => data);
 export const isAxiosCancelError: IsAxiosCancelError = axios.isCancel;
 export const isAxiosError: IsAxiosError = axios.isAxiosError;
 
-export { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse };
+export { type AxiosInstance, type AxiosRequestConfig };
 export default axiosInstance;

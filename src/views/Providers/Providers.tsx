@@ -1,10 +1,10 @@
 "use client";
 
-import { HydrationBoundary, type DehydratedState } from "@tanstack/react-query";
+import { type DehydratedState } from "@tanstack/react-query";
 import type { Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
 import NextTopLoader from "nextjs-toploader";
 import { Slide, ToastContainer } from "react-toastify";
+import { default as AuthProvider } from "./Auth";
 import { default as AxiosProvider } from "./Axios";
 import { default as ReactQueryProvider } from "./ReactQuery";
 import { default as ReduxProvider } from "./Redux";
@@ -17,7 +17,7 @@ type Props = {
 
 const Providers = ({ children, session, hydrationBoundaryState }: Props) => (
 	<ReduxProvider>
-		<SessionProvider session={session} refetchOnWindowFocus={false}>
+		<AuthProvider session={session}>
 			<AxiosProvider>
 				<NextTopLoader color="var(--e-shop-primary)" />
 				<ToastContainer
@@ -30,11 +30,9 @@ const Providers = ({ children, session, hydrationBoundaryState }: Props) => (
 					hideProgressBar
 					closeOnClick
 				/>
-				<ReactQueryProvider>
-					<HydrationBoundary state={hydrationBoundaryState}>{children}</HydrationBoundary>
-				</ReactQueryProvider>
+				<ReactQueryProvider state={hydrationBoundaryState}>{children}</ReactQueryProvider>
 			</AxiosProvider>
-		</SessionProvider>
+		</AuthProvider>
 	</ReduxProvider>
 );
 

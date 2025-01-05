@@ -2,10 +2,9 @@ import isStrongPassword from "validator/lib/isStrongPassword";
 import { boolean, InferType, object, string } from "yup";
 
 const schema = object().shape({
-	email: string(),
-	// .required("Field required!").email(),
+	email: string().required("Field required!").email(),
 	password: string()
-		// .required("Field required!")
+		.required("Field required!")
 		.test({
 			name: "password",
 			test: (value = "") =>

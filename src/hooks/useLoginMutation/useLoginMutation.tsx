@@ -1,7 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { type AxiosErrorProps, type AxiosRequestProps } from "config/axios";
-import { postLogin as mutationFn } from "services/api/e-shop.com/auth";
-import { type schemaType } from "views/forms/Login/schema";
+import {
+	type AxiosErrorProps,
+	type AxiosRequestProps,
+	type AxiosResponseProps,
+} from "config/axios";
+import {
+	postLogin as mutationFn,
+	type PostLoginDataType,
+	type PostLoginResponseType,
+} from "services/api/e-shop.com/auth";
 
 export const KEY_ARRAY = ["auth", "login"];
 
@@ -11,9 +18,9 @@ const useLoginMutation = () => {
 	queryClient.setMutationDefaults(KEY_ARRAY, { mutationFn });
 
 	return useMutation<
-		AxiosRequestProps<schemaType>,
+		AxiosResponseProps<PostLoginResponseType>,
 		AxiosErrorProps,
-		AxiosRequestProps<schemaType>
+		AxiosRequestProps<PostLoginDataType>
 	>({ mutationKey: KEY_ARRAY });
 };
 

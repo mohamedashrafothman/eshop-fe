@@ -10,8 +10,6 @@ type Props = { children?: React.ReactNode; instance?: AxiosInstance };
 const Axios = ({ children, instance = axiosInstance }: Props) => {
 	const { data: session } = useSession();
 
-	console.log("session:", session);
-
 	// event handlers
 	const requestSuccessInterceptor = useCallback(
 		(config: any) => ({
@@ -54,16 +52,12 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 		return response;
 	}, []);
 
-	const responseErrorInterceptor = useCallback((responseError: any) => {
+	const responseErrorInterceptor = useCallback((responseError: any = {}) => {
 		if (isAxiosCancelError(responseError)) return Promise.reject(responseError);
 
 		// extract error response data.
-		const {
-			response: {
-				data: { message = null, error, flashes = {} },
-				status,
-			},
-		} = responseError;
+		const { response: { data: { message = null, error, flashes = {} } = {}, status } = {} } =
+			responseError;
 
 		// handle flash messages
 		if (message) toast.error(message);

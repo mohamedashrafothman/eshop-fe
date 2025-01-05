@@ -1,8 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { type AxiosErrorProps, type AxiosRequestProps } from "config/axios";
-import { default as IUser } from "interfaces/User.interface";
-import { postLoginBySocialMedia as mutationFn } from "services/api/e-shop.com/auth";
-import { type Session } from "store/session";
+import {
+	type AxiosErrorProps,
+	type AxiosRequestProps,
+	type AxiosResponseProps,
+} from "config/axios";
+import {
+	postLoginBySocialMedia as mutationFn,
+	type PostLoginBySocialMediaDataType,
+	type PostLoginBySocialMediaResponseType,
+} from "services/api/e-shop.com/auth";
 
 export const KEY_ARRAY = ["auth", "login", "social"];
 
@@ -12,14 +18,9 @@ const useLoginBySocialMutation = () => {
 	queryClient.setMutationDefaults(KEY_ARRAY, { mutationFn });
 
 	return useMutation<
-		AxiosRequestProps<Omit<Session, "isAuthenticated" | "user"> & IUser>,
+		AxiosResponseProps<PostLoginBySocialMediaResponseType>,
 		AxiosErrorProps,
-		AxiosRequestProps<{
-			name: string;
-			email: string;
-			providerId: string;
-			providerToken: string;
-		}>
+		AxiosRequestProps<PostLoginBySocialMediaDataType>
 	>({ mutationKey: KEY_ARRAY });
 };
 
