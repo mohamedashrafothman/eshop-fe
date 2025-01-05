@@ -84,6 +84,8 @@ const Register = () => {
 					await resetRecaptcha(formikHelpers);
 				},
 				onSuccess: (response) => {
+					// Resetting formik.
+					formikHelpers.resetForm();
 					// Resetting register query mutation.
 					registerMutation.reset();
 					onRegisterSuccessHandler(response);
@@ -249,7 +251,7 @@ const Register = () => {
 						<div className="hstack gap-2 h-100">
 							<hr className="flex-grow-1 my-0" />
 							<span className="fs-5 text-capitalize flex-shrink-0">
-								<small>Or register with email</small>
+								<small>Or register by email</small>
 							</span>
 							<hr className="flex-grow-1 my-0" />
 						</div>

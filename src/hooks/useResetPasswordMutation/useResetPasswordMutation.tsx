@@ -1,7 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { type AxiosErrorProps, type AxiosRequestProps } from "config/axios";
-import { postResetPassword as mutationFn } from "services/api/e-shop.com/auth";
-import { type schemaType } from "views/forms/ResetPassword/schema";
+import {
+	type AxiosErrorProps,
+	type AxiosRequestProps,
+	type AxiosResponseProps,
+} from "config/axios";
+import {
+	postResetPassword as mutationFn,
+	PostResetPasswordDataType,
+	PostResetPasswordResponseType,
+} from "services/api/e-shop.com/auth";
 
 export const KEY_ARRAY = ["auth", "password", "reset"];
 
@@ -10,9 +17,11 @@ const useResetPasswordMutation = () => {
 
 	queryClient.setMutationDefaults(KEY_ARRAY, { mutationFn });
 
-	return useMutation<AxiosRequestProps<{}>, AxiosErrorProps, AxiosRequestProps<schemaType>>({
-		mutationKey: KEY_ARRAY,
-	});
+	return useMutation<
+		AxiosResponseProps<PostResetPasswordResponseType>,
+		AxiosErrorProps,
+		AxiosRequestProps<PostResetPasswordDataType>
+	>({ mutationKey: KEY_ARRAY });
 };
 
 export default useResetPasswordMutation;

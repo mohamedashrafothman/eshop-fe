@@ -1,7 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { type AxiosErrorProps, type AxiosRequestProps } from "config/axios";
-import { postForgotPassword as mutationFn } from "services/api/e-shop.com/auth";
-import { type schemaType } from "views/forms/ForgotPassword/schema";
+import {
+	type AxiosErrorProps,
+	type AxiosRequestProps,
+	type AxiosResponseProps,
+} from "config/axios";
+import {
+	postForgotPassword as mutationFn,
+	PostForgotPasswordDataType,
+	PostForgotPasswordResponseType,
+} from "services/api/e-shop.com/auth";
 
 export const KEY_ARRAY = ["auth", "password", "forgot"];
 
@@ -10,9 +17,11 @@ const useForgotPasswordMutation = () => {
 
 	queryClient.setMutationDefaults(KEY_ARRAY, { mutationFn });
 
-	return useMutation<AxiosRequestProps<{}>, AxiosErrorProps, AxiosRequestProps<schemaType>>({
-		mutationKey: KEY_ARRAY,
-	});
+	return useMutation<
+		AxiosResponseProps<PostForgotPasswordResponseType>,
+		AxiosErrorProps,
+		AxiosRequestProps<PostForgotPasswordDataType>
+	>({ mutationKey: KEY_ARRAY });
 };
 
 export default useForgotPasswordMutation;

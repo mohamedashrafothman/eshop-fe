@@ -1,20 +1,55 @@
 "use client";
 
 import { FocusError } from "focus-formik-error";
-import { FormikHelpers, useFormik } from "formik";
-import { useParams } from "next/navigation";
+import { FormikErrors, FormikHelpers, useFormik } from "formik";
+import useResetPasswordMutation from "hooks/useResetPasswordMutation";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { apiFormErrorExtractor } from "utils/helpers";
 import PasswordField from "views/components/PasswordField";
 import resetPasswordValidationSchema, { type schemaType } from "./schema";
 
 const ResetPassword = () => {
-	const params = useParams();
-	const { token: _token } = params as { token: string };
+	const { push } = useRouter();
+	const params = useParams<{ token: string }>();
+	const { token } = params;
+
+	// server state hooks
+	const resetPasswordMutation = useResetPasswordMutation();
+
+	// ref hook
+	const resetPasswordCancelRequestRef = useRef<AbortController | null>(null);
 
 	// event handlers
 	const onFormSubmitHandler = async (
-		values: schemaType,
-		actions: FormikHelpers<schemaType>
-	) => {};
+		data: schemaType,
+		formikHelpers: FormikHelpers<schemaType>
+	) => {
+		// Abort any previous request, and create a new abort controller.
+		if (resetPasswordCancelRequestRef.current?.signal)
+			resetPasswordCancelRequestRef.current?.abort();
+		resetPasswordCancelRequestRef.current = new AbortController();
+
+		// Call the reset password mutation.
+		await resetPasswordMutation.mutateAsync(
+			{ variables: { token }, data, signal: resetPasswordCancelRequestRef.current.signal },
+			{
+				onError: (responseError) => {
+					// Extract errors from the response error.
+					const errors = apiFormErrorExtractor(responseError) as FormikErrors<schemaType>;
+					// Set errors to the form.
+					if (errors) formikHelpers.setErrors(errors);
+				},
+				onSuccess: (response) => {
+					// Resetting formik.
+					formikHelpers.resetForm();
+					// Resetting reset password query mutation.
+					resetPasswordMutation.reset();
+					push("/auth/login");
+				},
+			}
+		);
+	};
 
 	// form state
 	const formState = useFormik<schemaType>({
@@ -22,6 +57,14 @@ const ResetPassword = () => {
 		validationSchema: resetPasswordValidationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
+
+	// effect hooks
+	useEffect(() => {
+		return () => {
+			if (resetPasswordCancelRequestRef.current?.signal)
+				resetPasswordCancelRequestRef.current?.abort();
+		};
+	}, []);
 
 	return (
 		<form onSubmit={formState.handleSubmit} noValidate>

@@ -1,17 +1,54 @@
 "use client";
 
 import { FocusError } from "focus-formik-error";
-import { FormikHelpers, useFormik } from "formik";
+import { FormikErrors, FormikHelpers, useFormik } from "formik";
+import useForgotPasswordMutation from "hooks/useForgotPasswordMutation";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { apiFormErrorExtractor } from "utils/helpers";
 import NextLink from "views/components/NextLink";
 import TextField from "views/components/TextField";
 import forgotPasswordValidationSchema, { type schemaType } from "./schema";
 
 const ForgotPassword = () => {
+	const { push } = useRouter();
+
+	// server state hooks
+	const forgotPasswordMutation = useForgotPasswordMutation();
+
+	// ref hook
+	const forgotPasswordCancelRequestRef = useRef<AbortController | null>(null);
+
 	// event handlers
 	const onFormSubmitHandler = async (
-		values: schemaType,
-		actions: FormikHelpers<schemaType>
-	) => {};
+		data: schemaType,
+		formikHelpers: FormikHelpers<schemaType>
+	) => {
+		// Abort any previous request, and create a new abort controller.
+		if (forgotPasswordCancelRequestRef.current?.signal)
+			forgotPasswordCancelRequestRef.current?.abort();
+		forgotPasswordCancelRequestRef.current = new AbortController();
+
+		// Call the forgot password mutation.
+		await forgotPasswordMutation.mutateAsync(
+			{ data, signal: forgotPasswordCancelRequestRef.current.signal },
+			{
+				onError: (responseError) => {
+					// Extract errors from the response error.
+					const errors = apiFormErrorExtractor(responseError) as FormikErrors<schemaType>;
+					// Set errors to the form.
+					if (errors) formikHelpers.setErrors(errors);
+				},
+				onSuccess: () => {
+					// Resetting formik.
+					formikHelpers.resetForm();
+					// Resetting forgot password query mutation.
+					forgotPasswordMutation.reset();
+					push("/auth/login");
+				},
+			}
+		);
+	};
 
 	// form state
 	const formState = useFormik<schemaType>({
@@ -19,6 +56,14 @@ const ForgotPassword = () => {
 		validationSchema: forgotPasswordValidationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
+
+	// effect hooks
+	useEffect(() => {
+		return () => {
+			if (forgotPasswordCancelRequestRef.current?.signal)
+				forgotPasswordCancelRequestRef.current?.abort();
+		};
+	}, []);
 
 	return (
 		<form onSubmit={formState.handleSubmit} noValidate>

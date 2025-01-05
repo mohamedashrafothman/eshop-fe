@@ -79,6 +79,8 @@ const Login = () => {
 					if (errors) formikHelpers.setErrors(errors);
 				},
 				onSuccess: (response) => {
+					// Resetting formik.
+					formikHelpers.resetForm();
 					// Resetting login query mutation.
 					loginMutation.reset();
 					onLoginSuccessHandler(response);
@@ -225,7 +227,7 @@ const Login = () => {
 						<div className="hstack gap-2 h-100">
 							<hr className="flex-grow-1 my-0" />
 							<span className="fs-5 text-capitalize flex-shrink-0">
-								<small>Or login with email</small>
+								<small>Or login by email</small>
 							</span>
 							<hr className="flex-grow-1 my-0" />
 						</div>
