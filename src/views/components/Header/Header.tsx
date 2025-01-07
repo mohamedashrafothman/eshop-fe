@@ -14,7 +14,6 @@ const Header = ({ type = "public" }: Props) => {
 	// effect hook
 	useEffect(() => {
 		let lastScrollTop: number = headerRef?.current?.offsetTop || 0;
-		let lastWindowWidth: number = window.innerWidth;
 		let headerHeight: number | Error;
 		let headerChangePoint: number;
 		const scrollingClassName: string = "app-header-scrolling";

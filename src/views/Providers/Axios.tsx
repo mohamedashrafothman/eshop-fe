@@ -1,27 +1,36 @@
 "use client";
 
-import axiosInstance, { isAxiosCancelError, type AxiosInstance } from "config/axios";
-import { useSession } from "next-auth/react";
+import { useQueryClient } from "@tanstack/react-query";
+import to from "await-to-js";
+import axiosInstance, {
+	isAxiosCancelError,
+	type AxiosInstance,
+	type AxiosResponseProps,
+} from "config/axios";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useCallback, useLayoutEffect } from "react";
 import { toast } from "react-toastify";
+import { postRefreshToken, type PostRefreshTokenResponseType } from "services/api/e-shop.com/auth";
 
 type Props = { children?: React.ReactNode; instance?: AxiosInstance };
 
 const Axios = ({ children, instance = axiosInstance }: Props) => {
+	const { push } = useRouter();
 	const { data: session } = useSession();
+	const queryClient = useQueryClient();
 
 	// event handlers
 	const requestSuccessInterceptor = useCallback(
-		(config: any) => ({
-			...config,
-			headers: {
-				...config.headers,
-				...(session?.accessToken && session?.tokenType
-					? { authorization: `${session.tokenType} ${session.accessToken}` }
-					: {}),
-			},
-		}),
-		[]
+		(request: any) => {
+			// Add the access token to the request headers
+			if (session?.tokenType && session?.accessToken)
+				request.headers["Authorization"] = `${session.tokenType} ${session.accessToken}`;
+
+			// Return modified request
+			return request;
+		},
+		[session?.accessToken, session?.tokenType]
 	);
 
 	const requestErrorInterceptor = useCallback((error: any) => Promise.reject(error), []);
@@ -52,34 +61,96 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 		return response;
 	}, []);
 
-	const responseErrorInterceptor = useCallback((responseError: any = {}) => {
-		if (isAxiosCancelError(responseError)) return Promise.reject(responseError);
+	const responseErrorInterceptor = useCallback(
+		async (responseError: any = {}) => {
+			if (isAxiosCancelError(responseError)) return Promise.reject(responseError);
 
-		// extract error response data.
-		const { response: { data: { message = null, error, flashes = {} } = {}, status } = {} } =
-			responseError;
+			// Extract error response data.
+			const {
+				response: { data: { message = null, error, flashes = {} } = {}, status } = {},
+				config: originalRequest,
+			} = responseError;
 
-		// handle flash messages
-		if (message) toast.error(message);
-		if (Object.keys(flashes).length)
-			Object.keys(flashes).forEach((messageType) =>
-				flashes[messageType].forEach((singleMessage: string) => {
-					if (typeof singleMessage !== "string") return;
-					toast(singleMessage, {
-						type:
-							messageType === "success"
-								? "success"
-								: messageType === "danger"
-									? "error"
-									: messageType === "info"
-										? "info"
-										: "warning",
-					});
-				})
-			);
+			// Handle flash messages
+			if (![status, originalRequest.status].includes(401)) {
+				if (error?.message || message) toast.error(error?.message || message);
+				if (Object.keys(flashes).length)
+					Object.keys(flashes).forEach((messageType) =>
+						flashes[messageType].forEach((singleMessage: string) => {
+							if (typeof singleMessage !== "string") return;
+							toast(singleMessage, {
+								type:
+									messageType === "success"
+										? "success"
+										: messageType === "danger"
+											? "error"
+											: messageType === "info"
+												? "info"
+												: "warning",
+							});
+						})
+					);
+			}
 
-		return Promise.reject(responseError);
-	}, []);
+			// Handle 401 status code error.
+			if (status === 401 && !originalRequest._retry && session?.refreshToken) {
+				// Mark the request as retried to avoid infinite loops.
+				originalRequest._retry = true;
+
+				// Make a request to your auth server to refresh the token.
+				const [refreshTokenError, refreshTokenResponse] = await to(
+					postRefreshToken({ data: { refreshToken: session.refreshToken } })
+				);
+
+				// Handle refresh token errors by signing out and redirecting to the login page.
+				if (refreshTokenError || !refreshTokenResponse) {
+					await signOut({ redirect: false });
+					push("/auth/login");
+					return Promise.reject(responseError);
+				}
+
+				// Extract tokens data from the response.
+				const {
+					accessToken = "",
+					refreshToken = "",
+					tokenType = "",
+				} = (
+					refreshTokenResponse as unknown as AxiosResponseProps<PostRefreshTokenResponseType>
+				)?.entities?.data || {};
+
+				// Update next-auth session tokens.
+				const result = await signIn("credentials", {
+					...(accessToken && { accessToken: JSON.stringify(accessToken) }),
+					...(refreshToken && { refreshToken: JSON.stringify(refreshToken) }),
+					...(tokenType && { tokenType: JSON.stringify(tokenType) }),
+					...(session?.user && { user: JSON.stringify(session.user) }),
+					redirect: false,
+				});
+
+				// Handle sign in errors by signing out and redirecting to the login page.
+				if (!result?.ok) {
+					await signOut({ redirect: false });
+					push("/auth/login");
+					return Promise.reject(responseError);
+				}
+
+				// Retry the original request with the new access token or invalidate the query.
+				return setTimeout(() => {
+					if (originalRequest?.queryKey)
+						return queryClient.invalidateQueries({
+							queryKey: originalRequest.queryKey,
+						});
+					return instance(originalRequest);
+				}, 0);
+			}
+
+			// Handling 404 status code error.
+			if ([404].includes(status)) push("/not-found");
+
+			return Promise.reject(responseError);
+		},
+		[instance, push, session?.refreshToken, session?.user]
+	);
 
 	// layout effects
 	useLayoutEffect(() => {
@@ -93,7 +164,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 		return () => {
 			instance.interceptors.request.eject(requestInterceptor);
 		};
-	}, [requestErrorInterceptor, requestSuccessInterceptor]);
+	}, [instance.interceptors.request, requestErrorInterceptor, requestSuccessInterceptor]);
 
 	useLayoutEffect(() => {
 		// add response interceptors
@@ -106,7 +177,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 		return () => {
 			instance.interceptors.response.eject(responseInterceptor);
 		};
-	}, [responseErrorInterceptor, responseSuccessInterceptor]);
+	}, [instance.interceptors.response, responseErrorInterceptor, responseSuccessInterceptor]);
 
 	return <>{children}</>;
 };

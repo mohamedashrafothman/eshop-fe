@@ -1,7 +1,7 @@
 "use client";
 
 import { FocusError } from "focus-formik-error";
-import { FormikErrors, FormikHelpers, useFormik } from "formik";
+import { FormikHelpers, useFormik } from "formik";
 import useForgotPasswordMutation from "hooks/useForgotPasswordMutation";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -35,7 +35,7 @@ const ForgotPassword = () => {
 			{
 				onError: (responseError) => {
 					// Extract errors from the response error.
-					const errors = apiFormErrorExtractor(responseError) as FormikErrors<schemaType>;
+					const errors = apiFormErrorExtractor(responseError);
 					// Set errors to the form.
 					if (errors) formikHelpers.setErrors(errors);
 				},

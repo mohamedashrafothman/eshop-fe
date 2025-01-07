@@ -1,7 +1,7 @@
 "use client";
 
 import { FocusError } from "focus-formik-error";
-import { FormikErrors, FormikHelpers, useFormik } from "formik";
+import { FormikHelpers, useFormik } from "formik";
 import useResetPasswordMutation from "hooks/useResetPasswordMutation";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -36,11 +36,11 @@ const ResetPassword = () => {
 			{
 				onError: (responseError) => {
 					// Extract errors from the response error.
-					const errors = apiFormErrorExtractor(responseError) as FormikErrors<schemaType>;
+					const errors = apiFormErrorExtractor(responseError);
 					// Set errors to the form.
 					if (errors) formikHelpers.setErrors(errors);
 				},
-				onSuccess: (response) => {
+				onSuccess: () => {
 					// Resetting formik.
 					formikHelpers.resetForm();
 					// Resetting reset password query mutation.
@@ -80,7 +80,7 @@ const ResetPassword = () => {
 							isValid={Boolean(
 								formState.values?.password &&
 									!!formState.touched?.password &&
-									!!!formState.errors?.password
+									!formState.errors?.password
 							)}
 							isInvalid={Boolean(
 								!!formState.touched?.password && !!formState.errors?.password
@@ -101,7 +101,7 @@ const ResetPassword = () => {
 							isValid={Boolean(
 								formState.values?.passwordConfirmation &&
 									!!formState.touched?.passwordConfirmation &&
-									!!!formState.errors?.passwordConfirmation
+									!formState.errors?.passwordConfirmation
 							)}
 							isInvalid={Boolean(
 								!!formState.touched?.passwordConfirmation &&

@@ -1,4 +1,4 @@
-import axios from "config/axios";
+import axiosInstance from "config/axios";
 import { type NextAuthOptions, getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import vars from "utils/vars";
@@ -9,19 +9,30 @@ const authOptions = {
 	pages: { signIn: "/auth/login", signOut: "/", error: "/auth/login" },
 	providers: [
 		CredentialsProvider({
-			name: "email-password-credentials",
+			name: "credentials",
 			credentials: {},
-			authorize: async (credentials: any) =>
-				(credentials?.user &&
-					credentials?.accessToken &&
-					credentials?.refreshToken &&
-					credentials?.tokenType && {
-						accessToken: credentials.accessToken,
-						refreshToken: credentials.refreshToken,
-						tokenType: credentials.tokenType,
-						user: JSON.parse(JSON.stringify(credentials.user)),
-					}) ||
-				null,
+			authorize: async (credentials: any) => {
+				if (
+					credentials?.user ||
+					credentials?.accessToken ||
+					credentials?.refreshToken ||
+					credentials?.tokenType
+				)
+					return {
+						...(credentials?.accessToken && {
+							accessToken: JSON.parse(credentials.accessToken),
+						}),
+						...(credentials?.refreshToken && {
+							refreshToken: JSON.parse(credentials.refreshToken),
+						}),
+						...(credentials?.tokenType && {
+							tokenType: JSON.parse(credentials.tokenType),
+						}),
+						...(credentials?.user && { user: JSON.parse(credentials.user) }),
+					};
+
+				return null;
+			},
 		}),
 	],
 	callbacks: {
@@ -32,7 +43,7 @@ const authOptions = {
 		// The returned value will be encrypted, and it is stored in a cookie.
 		jwt: ({ token, user: tokenUser }) => {
 			if (!tokenUser) return token;
-			const { accessToken, refreshToken, tokenType, ...user } = (tokenUser as any) || {};
+			const { accessToken, refreshToken, tokenType, user } = (tokenUser as any) || {};
 			return {
 				...token,
 				...(user && { user }),
@@ -47,7 +58,8 @@ const authOptions = {
 			if (!token) return session;
 			const { accessToken, tokenType } = (token as any) || {};
 			if (accessToken && tokenType)
-				axios.defaults.headers.common["authorization"] = `${tokenType} ${accessToken}`;
+				axiosInstance.defaults.headers.common["Authorization"] =
+					`${tokenType} ${accessToken}`;
 			return { ...session, ...token };
 		},
 	},

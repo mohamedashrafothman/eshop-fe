@@ -5,7 +5,7 @@ import { login, logout } from "store/session/actions";
 
 export type Session = {
 	isAuthenticated: boolean;
-	user: IUser | {};
+	user: IUser | object;
 	accessToken: string;
 	refreshToken: string;
 	tokenType: string;

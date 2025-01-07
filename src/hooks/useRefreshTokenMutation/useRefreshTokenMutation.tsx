@@ -1,7 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { type AxiosErrorProps, type AxiosRequestProps } from "config/axios";
-import { postLogin as mutationFn } from "services/api/e-shop.com/auth";
-import { type Session } from "store/session";
+import {
+	type AxiosErrorProps,
+	type AxiosRequestProps,
+	type AxiosResponseProps,
+} from "config/axios";
+import {
+	postRefreshToken as mutationFn,
+	type PostRefreshTokenDataType,
+	type PostRefreshTokenResponseType,
+} from "services/api/e-shop.com/auth";
 
 export const KEY_ARRAY = ["auth", "refreshToken"];
 
@@ -11,9 +18,9 @@ const useRefreshTokenMutation = () => {
 	queryClient.setMutationDefaults(KEY_ARRAY, { mutationFn });
 
 	return useMutation<
-		AxiosRequestProps<Omit<Session, "isAuthenticated" | "user">>,
+		AxiosResponseProps<PostRefreshTokenResponseType>,
 		AxiosErrorProps,
-		AxiosRequestProps<{ refreshToken: string }>
+		AxiosRequestProps<PostRefreshTokenDataType>
 	>({ mutationKey: KEY_ARRAY });
 };
 

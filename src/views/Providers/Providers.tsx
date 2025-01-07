@@ -16,24 +16,26 @@ type Props = {
 };
 
 const Providers = ({ children, session, hydrationBoundaryState }: Props) => (
-	<ReduxProvider>
-		<AuthProvider session={session}>
-			<AxiosProvider>
-				<NextTopLoader color="var(--e-shop-primary)" />
-				<ToastContainer
-					position="bottom-right"
-					autoClose={5000}
-					theme="dark"
-					transition={Slide}
-					closeButton={false}
-					pauseOnHover
-					hideProgressBar
-					closeOnClick
-				/>
-				<ReactQueryProvider state={hydrationBoundaryState}>{children}</ReactQueryProvider>
-			</AxiosProvider>
-		</AuthProvider>
-	</ReduxProvider>
+	<AuthProvider session={session}>
+		<ReduxProvider>
+			<ReactQueryProvider state={hydrationBoundaryState}>
+				<AxiosProvider>
+					<NextTopLoader color="var(--e-shop-primary)" />
+					<ToastContainer
+						position="bottom-right"
+						autoClose={5000}
+						theme="dark"
+						transition={Slide}
+						closeButton={false}
+						pauseOnHover
+						hideProgressBar
+						closeOnClick
+					/>
+					{children}
+				</AxiosProvider>
+			</ReactQueryProvider>
+		</ReduxProvider>
+	</AuthProvider>
 );
 
 export default Providers;

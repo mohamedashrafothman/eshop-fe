@@ -1,7 +1,7 @@
 "use client";
 
 import { FocusError } from "focus-formik-error";
-import { FormikErrors, FormikHelpers, useFormik } from "formik";
+import { FormikHelpers, useFormik } from "formik";
 import useLoginBySocialMutation from "hooks/useLoginBySocialMutation";
 import useLoginMutation from "hooks/useLoginMutation";
 import { signIn } from "next-auth/react";
@@ -47,13 +47,13 @@ const Login = () => {
 			refreshToken = "",
 			tokenType = "",
 			...user
-		} = response?.data?.entities?.data || {};
+		} = response?.entities?.data || {};
 		// Call the signIn function from next-auth.
 		await signIn("credentials", {
-			...(accessToken && { accessToken }),
-			...(refreshToken && { refreshToken }),
-			...(tokenType && { tokenType }),
-			...(user && { user }),
+			...(accessToken && { accessToken: JSON.stringify(accessToken) }),
+			...(refreshToken && { refreshToken: JSON.stringify(refreshToken) }),
+			...(tokenType && { tokenType: JSON.stringify(tokenType) }),
+			...(user && { user: JSON.stringify(user) }),
 			redirect: false,
 		});
 		// Redirect to the dashboard after success login.
@@ -74,7 +74,7 @@ const Login = () => {
 			{
 				onError: (responseError) => {
 					// Extract errors from the response error.
-					const errors = apiFormErrorExtractor(responseError) as FormikErrors<schemaType>;
+					const errors = apiFormErrorExtractor(responseError);
 					// Set errors to the form.
 					if (errors) formikHelpers.setErrors(errors);
 				},

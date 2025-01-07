@@ -1,7 +1,7 @@
 "use client";
 
 import { FocusError } from "focus-formik-error";
-import { FormikErrors, FormikHelpers, useFormik } from "formik";
+import { FormikHelpers, useFormik } from "formik";
 import useLoginBySocialMutation from "hooks/useLoginBySocialMutation";
 import useRegisterMutation from "hooks/useRegisterMutation";
 import { signIn } from "next-auth/react";
@@ -50,13 +50,13 @@ const Register = () => {
 			refreshToken = "",
 			tokenType = "",
 			...user
-		} = response?.data?.entities?.data || {};
+		} = response?.entities?.data || {};
 		// Call the signIn function from next-auth.
 		await signIn("credentials", {
-			...(accessToken && { accessToken }),
-			...(refreshToken && { refreshToken }),
-			...(tokenType && { tokenType }),
-			...(user && { user }),
+			...(accessToken && { accessToken: JSON.stringify(accessToken) }),
+			...(refreshToken && { refreshToken: JSON.stringify(refreshToken) }),
+			...(tokenType && { tokenType: JSON.stringify(tokenType) }),
+			...(user && { user: JSON.stringify(user) }),
 			redirect: false,
 		});
 		// Redirect to the dashboard after success register.
@@ -77,7 +77,7 @@ const Register = () => {
 			{
 				onError: async (responseError) => {
 					// Extract errors from the response error.
-					const errors = apiFormErrorExtractor(responseError) as FormikErrors<schemaType>;
+					const errors = apiFormErrorExtractor(responseError);
 					// Set errors to the form.
 					if (errors) formikHelpers.setErrors(errors);
 					// Reset recaptcha.
@@ -269,7 +269,7 @@ const Register = () => {
 									isValid={Boolean(
 										formState.values?.name &&
 											!!formState.touched?.name &&
-											!!!formState.errors?.name
+											!formState.errors?.name
 									)}
 									isInvalid={Boolean(
 										!!formState.touched?.name && !!formState.errors?.name
@@ -291,7 +291,7 @@ const Register = () => {
 									isValid={Boolean(
 										formState.values?.email &&
 											!!formState.touched?.email &&
-											!!!formState.errors?.email
+											!formState.errors?.email
 									)}
 									isInvalid={Boolean(
 										!!formState.touched?.email && !!formState.errors?.email
@@ -312,7 +312,7 @@ const Register = () => {
 									isValid={Boolean(
 										formState.values?.password &&
 											!!formState.touched?.password &&
-											!!!formState.errors?.password
+											!formState.errors?.password
 									)}
 									isInvalid={Boolean(
 										!!formState.touched?.password &&
@@ -334,7 +334,7 @@ const Register = () => {
 									isValid={Boolean(
 										formState.values?.passwordConfirmation &&
 											!!formState.touched?.passwordConfirmation &&
-											!!!formState.errors?.passwordConfirmation
+											!formState.errors?.passwordConfirmation
 									)}
 									isInvalid={Boolean(
 										!!formState.touched?.passwordConfirmation &&
