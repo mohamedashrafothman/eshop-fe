@@ -1,10 +1,13 @@
-import NavLink from "views/components/Nav/NavLink";
+"use client";
 
-type Props = { link: { href: string; title: string } };
+import classNames from "classnames";
+import { HTMLAttributes, ReactNode } from "react";
 
-const NavListItem = ({ link: { href, title } }: Props) => (
-	<li className="nav-item" role="menuitem">
-		<NavLink title={title} href={href} />
+type Props = { children?: ReactNode | undefined } & HTMLAttributes<HTMLLIElement>;
+
+const NavListItem = ({ children, className = "", role = "menuitem", ...props }: Props) => (
+	<li className={classNames("nav-item", className)} role={role} {...props}>
+		{children}
 	</li>
 );
 

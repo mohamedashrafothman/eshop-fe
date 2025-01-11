@@ -1,13 +1,22 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import classNames from "classnames";
+import { useSession } from "next-auth/react";
+import { HTMLAttributes, useEffect, useRef } from "react";
 import { getNodeHeight, getWindowScrollingValue } from "utils/helpers";
 import Logo from "views/components/Logo";
+import Nav, { PROPS_TYPES as NAV_PROPS_TYPES } from "views/components/Nav";
+import { default as PublicHeaderOffcanvas } from "views/offcanvas/PublicHeader";
+import { default as SearchOffcanvas } from "views/offcanvas/Search";
 
 export const PROPS_TYPES = { PUBLIC: "public", DASHBOARD: "dashboard" } as const;
-type Props = { type?: (typeof PROPS_TYPES)[keyof typeof PROPS_TYPES] };
+type Props = {
+	type?: (typeof PROPS_TYPES)[keyof typeof PROPS_TYPES];
+} & HTMLAttributes<HTMLElement>;
 
-const Header = ({ type = "public" }: Props) => {
+const Header = ({ type = "public", className = "", ...props }: Props) => {
+	const { data: session } = useSession();
+
 	// ref hook
 	const headerRef = useRef<HTMLElement | null>(null);
 
@@ -81,27 +90,102 @@ const Header = ({ type = "public" }: Props) => {
 	}, [headerRef]);
 
 	return (
-		<header className={`app-header app-header-${type} sticky-top bg-white`} ref={headerRef}>
-			<div className="app-header-content py-22px py-lg-32px">
-				<div className="container">
-					<div className="row justify-content-between align-items-center flex-nowrap w-100">
-						<div className="col-auto">
-							<Logo />
+		<header
+			className={classNames(
+				"app-header sticky-top",
+				{
+					"app-header-public": type === PROPS_TYPES.PUBLIC,
+					"app-header-dashboard": type === PROPS_TYPES.DASHBOARD,
+				},
+				className
+			)}
+			ref={headerRef}
+			{...props}>
+			<div className="app-header-content">
+				{type === PROPS_TYPES.PUBLIC && (
+					<div className="container">
+						<div className="row justify-content-between align-items-center flex-nowrap">
+							<div className="col-auto">
+								<Logo />
+							</div>
+							<div className="col d-none d-lg-block">
+								<div className="text-bg-dark text-center p-3">search form</div>
+							</div>
+							<div className="col-auto">
+								<div className="hstack gap-1 flex-nowrap">
+									<Nav
+										type={NAV_PROPS_TYPES.MENUBAR}
+										className="d-none d-lg-block"
+										role="menubar">
+										<Nav.List>
+											<Nav.ListItem>
+												<Nav.Link
+													href="/dashboard"
+													className="link-dark"
+													title={!session ? "Login" : "Go to dashboard"}>
+													<svg
+														className="bi w-22px h-22px"
+														width="22"
+														height="22">
+														<use href="#icon-person" />
+													</svg>
+												</Nav.Link>
+											</Nav.ListItem>
+											<Nav.ListItem>
+												<Nav.Link
+													href="/cart"
+													className="link-dark"
+													title="Cart">
+													<svg
+														className="bi w-22px h-22px"
+														width="22"
+														height="22">
+														<use href="#icon-cart" />
+													</svg>
+												</Nav.Link>
+											</Nav.ListItem>
+										</Nav.List>
+									</Nav>
+									<button
+										className="btn btn-link link-dark rounded-0 text-decoration-none border-0 d-lg-none"
+										type="button"
+										data-bs-toggle="offcanvas"
+										data-bs-target="#search-offcanvas">
+										<svg className="bi" width="16" height="16">
+											<use href="#icon-search" />
+										</svg>
+									</button>
+									<SearchOffcanvas />
+									<button
+										className="btn btn-link link-dark rounded-0 text-decoration-none border-0 d-lg-none"
+										type="button"
+										data-bs-toggle="offcanvas"
+										data-bs-target="#public-header-offcanvas">
+										<svg className="bi w-22px h-22px" width="22" height="22">
+											<use href="#icon-menu" />
+										</svg>
+									</button>
+									<PublicHeaderOffcanvas />
+								</div>
+							</div>
 						</div>
-						<div className="col-12 col-lg-7 col-xxl-5">
-							<div className="text-bg-dark text-center p-3">search form</div>
-						</div>
-						<div className="col-auto">
-							<div className="text-bg-dark text-center p-3">nav</div>
+					</div>
+				)}
+				{type === PROPS_TYPES.DASHBOARD && <>Dashboard header</>}
+			</div>
+			{type === PROPS_TYPES.PUBLIC && (
+				<div className="app-header-categories py-lg-16px d-none d-lg-block">
+					<div className="container">
+						<div className="row">
+							<div className="col-12">
+								<div className="text-bg-dark text-center p-3">
+									Categories nav list
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div className="app-header-categories py-10px py-lg-16px bg-gray-400">
-				<div className="container">
-					<div className="text-bg-dark text-center p-3">Categories nav list</div>
-				</div>
-			</div>
+			)}
 		</header>
 	);
 };

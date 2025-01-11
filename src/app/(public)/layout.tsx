@@ -8,7 +8,7 @@ const PublicLayout = async ({ children }: Props) => (
 	<>
 		<Header />
 		<Main>{children}</Main>
-		<Footer />
+		<Footer className="bg-white" />
 	</>
 );
 

@@ -1,22 +1,21 @@
 "use client";
 
-import NavList from "views/components/Nav/NavList";
+import classNames from "classnames";
+import { HTMLAttributes, ReactNode } from "react";
+import NavLink from "./NavLink";
+import NavList from "./NavList";
+import NavListItem from "./NavListItem";
 
 export const PROPS_TYPES = { MENUBAR: "menubar" } as const;
 type Props = {
+	children?: ReactNode | undefined;
 	type: (typeof PROPS_TYPES)[keyof typeof PROPS_TYPES];
-	navList: Array<{ title: string; href: string }>;
-	labelledby?: string;
-	label?: string;
-};
+} & HTMLAttributes<HTMLDivElement>;
 
-const Nav = ({ type, navList = [], labelledby = undefined, label = undefined }: Props) => (
-	<nav
-		className={`app-nav app-nav-${type}`}
-		aria-labelledby={labelledby}
-		aria-label={(!labelledby && label) || undefined}>
-		{navList.length > 0 && <NavList navList={navList} />}
+const Nav = ({ children, type = PROPS_TYPES.MENUBAR, className = "", ...props }: Props) => (
+	<nav className={classNames("app-nav", `app-nav-${type}`, className)} {...props}>
+		{children}
 	</nav>
 );
 
-export default Nav;
+export default Object.assign(Nav, { List: NavList, ListItem: NavListItem, Link: NavLink });

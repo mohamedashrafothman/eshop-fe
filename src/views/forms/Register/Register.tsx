@@ -39,6 +39,7 @@ const Register = () => {
 	const recaptchaRef = useRef<ReCAPTCHA | null>(null);
 
 	// state hook
+	const [isRegisterLoadingState, setIsRegisterLoadingState] = useState(false);
 	const [facebookOAuthLoadingState, setFacebookOAuthLoadingState] = useState(false);
 	const [googleOAuthLoadingState, setGoogleOAuthLoadingState] = useState(false);
 
@@ -61,12 +62,17 @@ const Register = () => {
 		});
 		// Redirect to the dashboard after success register.
 		push("/dashboard");
+		// Reset register loading state.
+		setIsRegisterLoadingState(false);
 	};
 
 	const onFormSubmitHandler = async (
 		data: schemaType,
 		formikHelpers: FormikHelpers<schemaType>
 	) => {
+		// Set register loading state.
+		setIsRegisterLoadingState(true);
+
 		// Abort any previous request, and create a new abort controller.
 		if (registerCancelRequestRef.current?.signal) registerCancelRequestRef.current?.abort();
 		registerCancelRequestRef.current = new AbortController();
@@ -82,6 +88,8 @@ const Register = () => {
 					if (errors) formikHelpers.setErrors(errors);
 					// Reset recaptcha.
 					await resetRecaptcha(formikHelpers);
+					// Reset register loading state.
+					setIsRegisterLoadingState(false);
 				},
 				onSuccess: (response) => {
 					// Resetting formik.
@@ -185,7 +193,7 @@ const Register = () => {
 	return (
 		<form onSubmit={formState.handleSubmit} noValidate>
 			<FocusError formik={formState} />
-			<fieldset disabled={formState.isSubmitting}>
+			<fieldset disabled={formState.isSubmitting || isRegisterLoadingState}>
 				<legend className="visually-hidden">Register form</legend>
 				<div className="row gy-4">
 					<div className="col-12">
@@ -373,7 +381,7 @@ const Register = () => {
 										className="btn btn-primary border-primary-dark w-100 text-capitalize"
 										disabled={!formState.isValid}>
 										<strong>Register</strong>
-										{formState.isSubmitting && (
+										{(formState.isSubmitting || isRegisterLoadingState) && (
 											<span
 												className="spinner-border spinner-border-sm ms-2"
 												role="status">

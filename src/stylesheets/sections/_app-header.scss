@@ -17,4 +17,19 @@
 			@include animate-prefixer(animation-name, slideOutUp);
 		}
 	}
+
+	&-public {
+		.app-header {
+			&-content {
+				@extend .py-22px !optional;
+				@extend .py-lg-32px !optional;
+				@extend .bg-white !optional;
+			}
+			&-categories {
+				@extend .bg-body !optional;
+			}
+		}
+	}
+	&-dashboard {
+	}
 }

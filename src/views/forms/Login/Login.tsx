@@ -36,6 +36,7 @@ const Login = () => {
 	const loginBySocialCancelRequestRef = useRef<AbortController | null>(null);
 
 	// state hook
+	const [isLoginLoadingState, setIsLoginLoadingState] = useState(false);
 	const [facebookOAuthLoadingState, setFacebookOAuthLoadingState] = useState(false);
 	const [googleOAuthLoadingState, setGoogleOAuthLoadingState] = useState(false);
 
@@ -58,12 +59,17 @@ const Login = () => {
 		});
 		// Redirect to the dashboard after success login.
 		push("/dashboard");
+		// Reset login loading state.
+		setIsLoginLoadingState(false);
 	};
 
 	const onFormSubmitHandler = async (
 		data: schemaType,
 		formikHelpers: FormikHelpers<schemaType>
 	) => {
+		// Set login loading state.
+		setIsLoginLoadingState(true);
+
 		// Abort any previous request, and create a new abort controller.
 		if (loginCancelRequestRef.current?.signal) loginCancelRequestRef.current?.abort();
 		loginCancelRequestRef.current = new AbortController();
@@ -77,6 +83,8 @@ const Login = () => {
 					const errors = apiFormErrorExtractor(responseError);
 					// Set errors to the form.
 					if (errors) formikHelpers.setErrors(errors);
+					// Reset login loading state.
+					setIsLoginLoadingState(false);
 				},
 				onSuccess: (response) => {
 					// Resetting formik.
@@ -161,7 +169,7 @@ const Login = () => {
 	return (
 		<form onSubmit={formState.handleSubmit} noValidate>
 			<FocusError formik={formState} />
-			<fieldset disabled={formState.isSubmitting}>
+			<fieldset disabled={formState.isSubmitting || isLoginLoadingState}>
 				<legend className="visually-hidden">Login form</legend>
 				<div className="row gy-4">
 					<div className="col-12">
@@ -298,7 +306,7 @@ const Login = () => {
 										className="btn btn-primary border-primary-dark w-100 text-capitalize"
 										disabled={!formState.isValid}>
 										<strong>Login</strong>
-										{formState.isSubmitting && (
+										{(formState.isSubmitting || isLoginLoadingState) && (
 											<span
 												className="spinner-border spinner-border-sm ms-2"
 												role="status">

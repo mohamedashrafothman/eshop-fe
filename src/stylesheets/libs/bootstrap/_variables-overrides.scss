@@ -303,7 +303,7 @@ $cyans: (
 // scss-docs-start theme-color-variables
 $primary: $green !default;
 $primary-dark: map-get($greens, "green-600") !default;
-$secondary: $gray-600 !default;
+$secondary: $gray-700 !default;
 $success: $green !default;
 $info: $cyan !default;
 $warning: $yellow !default;
@@ -427,8 +427,9 @@ $spacers: (
 	6: $spacer * 5,
 	7: $spacer * 7,
 	8: $spacer * 10,
-	gutter: 2rem,
+	gutter: 1rem,
 	"10px": 10px,
+	"16px": 16px,
 	"22px": 22px,
 	"32px": 32px,
 ) !default;
@@ -452,7 +453,7 @@ $position-values: (
 
 $body-text-align: null !default;
 $body-color: $gray-900 !default;
-$body-bg: $white !default;
+$body-bg: $gray-400 !default;
 
 $body-secondary-color: rgba($body-color, 0.75) !default;
 $body-secondary-bg: $gray-200 !default;
@@ -536,7 +537,7 @@ $container-max-widths: (
 // Set the number of columns and specify the width of the gutters.
 
 $grid-columns: 12 !default;
-$grid-gutter-width: map-get($spacers, gutter) !default;
+$grid-gutter-width: map-get($spacers, gutter) * 2 !default;
 $grid-row-columns: 6 !default;
 
 // Container padding
@@ -1212,10 +1213,10 @@ $zindex-levels: (
 // Navs
 
 // scss-docs-start nav-variables
-$nav-link-padding-y: 0.5rem !default;
-$nav-link-padding-x: 1rem !default;
-$nav-link-font-size: null !default;
-$nav-link-font-weight: null !default;
+$nav-link-padding-y: $btn-padding-y !default;
+$nav-link-padding-x: $btn-padding-x !default;
+$nav-link-font-size: $btn-font-size !default;
+$nav-link-font-weight: $btn-font-weight !default;
 $nav-link-color: var(--#{$prefix}link-color) !default;
 $nav-link-hover-color: var(--#{$prefix}link-hover-color) !default;
 $nav-link-transition:
@@ -1420,7 +1421,7 @@ $card-cap-bg: rgba(var(--#{$prefix}body-color-rgb), 0.03) !default;
 $card-cap-color: null !default;
 $card-height: null !default;
 $card-color: null !default;
-$card-bg: var(--#{$prefix}body-bg) !default;
+$card-bg: var(--#{$prefix}white) !default;
 $card-img-overlay-padding: $spacer !default;
 $card-group-margin: $grid-gutter-width * 0.5 !default;
 // scss-docs-end card-variables
@@ -1705,7 +1706,7 @@ $breadcrumb-margin-bottom: 0 !default;
 $breadcrumb-bg: null !default;
 $breadcrumb-divider-color: var(--#{$prefix}gray-700) !default;
 $breadcrumb-active-color: var(--#{$prefix}body-color) !default;
-$breadcrumb-divider: quote("/") !default;
+$breadcrumb-divider: quote("•") !default;
 $breadcrumb-divider-flipped: $breadcrumb-divider !default;
 $breadcrumb-border-radius: null !default;
 // scss-docs-end breadcrumb-variables
@@ -1757,7 +1758,7 @@ $spinner-vertical-align: -0.125em !default;
 $spinner-border-width: 0.25em !default;
 $spinner-animation-speed: 0.75s !default;
 
-$spinner-width-sm: 1.25rem !default;
+$spinner-width-sm: 1rem !default;
 $spinner-height-sm: $spinner-width-sm !default;
 $spinner-border-width-sm: 0.2em !default;
 // scss-docs-end spinner-variables

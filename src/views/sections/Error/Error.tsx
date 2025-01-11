@@ -11,7 +11,7 @@ type Props = {
 };
 
 const Error = ({ code = 500, title = "Internal Server Error", message, reset }: Props) => (
-	<section className="text-bg-gray-500 vh-100">
+	<section className="vh-100">
 		<div className="container h-100">
 			<div className="row justify-content-center align-items-center h-100">
 				<div className="col-11 col-sm-10 col-md-8 col-lg-6 col-xl-5">

@@ -1,12 +1,13 @@
 "use client";
 
-import NextLink from "views/components/NextLink";
+import classNames from "classnames";
+import NextLink, { type NextLinkProps } from "views/components/NextLink";
 
-type Props = { href: string; title: string };
+type Props = { href: string } & NextLinkProps;
 
-const NavLink = ({ title, href }: Props) => (
-	<NextLink href={href} className="nav-link text-capitalize">
-		{title}
+const NavLink = ({ children, className = "", ...props }: Props) => (
+	<NextLink className={classNames("nav-link text-capitalize", className)} {...props}>
+		{children}
 	</NextLink>
 );
 

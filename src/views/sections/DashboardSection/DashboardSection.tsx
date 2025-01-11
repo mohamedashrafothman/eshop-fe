@@ -7,7 +7,7 @@ const DashboardSection = () => {
 
 	if (isError && error?.status && error.status >= 500) throw error;
 	if (isLoading) return <>Loading...</>;
-	return <>{`Welcome ${me?.entities.data.name}`}</>;
+	return <>{JSON.stringify(me?.entities.data, null, 2)}</>;
 };
 
 export default DashboardSection;

@@ -499,5 +499,12 @@ $utilities: map-merge(
 					values: $height-values,
 				)
 			),
+		"max-height": map-merge(
+				map-get($utilities, "max-height"),
+				(
+					responsive: true,
+					values: $height-values,
+				)
+			),
 	)
 );

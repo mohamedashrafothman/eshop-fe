@@ -1,7 +1,11 @@
 "use client";
 
-type Props = { children: React.ReactNode };
+import classNames from "classnames";
 
-const Main = ({ children }: Props) => <main className="app-main">{children}</main>;
+type Props = { children?: React.ReactNode | undefined } & React.HTMLAttributes<HTMLDivElement>;
+
+const Main = ({ children, className = "" }: Props) => (
+	<main className={classNames("app-main bg-white", className)}>{children}</main>
+);
 
 export default Main;

@@ -1,7 +1,7 @@
 import { getSession } from "config/next-auth";
 import { redirect } from "next/navigation";
 
-type Props = { children: React.ReactNode };
+type Props = { children?: React.ReactNode | undefined };
 
 const NonPublicLayout = async ({ children }: Props) => {
 	// Check if the user is authenticated.
@@ -11,13 +11,7 @@ const NonPublicLayout = async ({ children }: Props) => {
 	if (!session) redirect("/auth/login");
 
 	// If the user is authenticated, let them stay on the page.
-	return (
-		<>
-			<header>Non Public Header</header>
-			<main>{children}</main>
-			<footer>Non Public Footer</footer>
-		</>
-	);
+	return children;
 };
 
 export default NonPublicLayout;
