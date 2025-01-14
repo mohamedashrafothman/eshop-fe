@@ -331,7 +331,7 @@ $theme-colors: map-merge(
 // scss-docs-end theme-colors-map
 
 // scss-docs-start theme-text-variables
-$primary-text-emphasis: shade-color($primary, 60%) !default;
+$primary-text-emphasis: shade-color($primary, 30%) !default;
 $secondary-text-emphasis: shade-color($secondary, 60%) !default;
 $success-text-emphasis: shade-color($success, 60%) !default;
 $info-text-emphasis: shade-color($info, 60%) !default;
@@ -430,6 +430,7 @@ $spacers: (
 	gutter: 1rem,
 	"10px": 10px,
 	"16px": 16px,
+	"20px": 20px,
 	"22px": 22px,
 	"32px": 32px,
 ) !default;
@@ -1463,10 +1464,10 @@ $accordion-icon-width: 1.25rem !default;
 $accordion-icon-color: $body-color !default;
 $accordion-icon-active-color: $primary-text-emphasis !default;
 $accordion-icon-transition: transform 0.2s ease-in-out !default;
-$accordion-icon-transform: rotate(-180deg) !default;
+$accordion-icon-transform: rotate(-0deg) !default;
 
-$accordion-button-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='#{$accordion-icon-color}' stroke-linecap='round' stroke-linejoin='round'><path d='M2 5L8 11L14 5'/></svg>") !default;
-$accordion-button-active-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='#{$accordion-icon-active-color}' stroke-linecap='round' stroke-linejoin='round'><path d='M2 5L8 11L14 5'/></svg>") !default;
+$accordion-button-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#{$accordion-icon-color}' viewBox='0 0 16 16'><path d='M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z'/><path d='M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4'/></svg>") !default;
+$accordion-button-active-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#{$accordion-icon-active-color}' class='bi bi-dash-square' viewBox='0 0 16 16'><path d='M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z'/><path d='M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8'/></svg>") !default;
 // scss-docs-end accordion-variables
 
 // Tooltips
@@ -1577,7 +1578,7 @@ $modal-dialog-margin-y-sm-up: 1.75rem !default;
 $modal-title-line-height: $line-height-base !default;
 
 $modal-content-color: null !default;
-$modal-content-bg: var(--#{$prefix}body-bg) !default;
+$modal-content-bg: var(--#{$prefix}white) !default;
 $modal-content-border-color: var(--#{$prefix}border-color-translucent) !default;
 $modal-content-border-width: var(--#{$prefix}border-width) !default;
 $modal-content-border-radius: var(--#{$prefix}border-radius-lg) !default;
@@ -1791,7 +1792,7 @@ $offcanvas-transition-duration: 0.3s !default;
 $offcanvas-border-color: $modal-content-border-color !default;
 $offcanvas-border-width: $modal-content-border-width !default;
 $offcanvas-title-line-height: $modal-title-line-height !default;
-$offcanvas-bg-color: var(--#{$prefix}body-bg) !default;
+$offcanvas-bg-color: var(--#{$prefix}white) !default;
 $offcanvas-color: var(--#{$prefix}body-color) !default;
 $offcanvas-box-shadow: $modal-content-box-shadow-xs !default;
 $offcanvas-backdrop-bg: $modal-backdrop-bg !default;

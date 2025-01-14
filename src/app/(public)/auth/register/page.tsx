@@ -12,7 +12,7 @@ const RegisterPage = () => (
 				<Breadcrumb items={[{ href: "/auth/register", title: PAGE_TITLE }]} />
 			</div>
 		</div>
-		<RegisterSection title={PAGE_TITLE} />;
+		<RegisterSection title={PAGE_TITLE} />
 	</>
 );
 

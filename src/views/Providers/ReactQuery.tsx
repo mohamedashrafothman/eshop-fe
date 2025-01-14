@@ -13,7 +13,7 @@ type Props = { children?: React.ReactNode; state: DehydratedState };
 const ReactQuery = ({ children, state }: Props) => (
 	<QueryClientProvider client={queryClient}>
 		<HydrationBoundary state={state}>{children}</HydrationBoundary>
-		<ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
+		<ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />
 	</QueryClientProvider>
 );
 
