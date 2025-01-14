@@ -3,53 +3,39 @@
 import Collapse from "bootstrap/js/dist/collapse";
 import classNames from "classnames";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import NextLink from "views/components/NextLink";
 
 type singleNavLinkProps = {
-	href?: string;
 	title: string;
-	icon?: () => JSX.Element;
+	href?: string | undefined;
+	icon?: string | undefined;
 };
-type NavLinkProps = (singleNavLinkProps & { children?: singleNavLinkProps[] })[];
+type navLinkProps = (singleNavLinkProps & {
+	children?: Omit<singleNavLinkProps, "icon">[] | undefined;
+})[];
 
 const DashboardSideNav = () => {
 	const pathname = usePathname();
 
-	// Constants
-	const navigationLinks: NavLinkProps = [
-		{
-			title: "Dashboard",
-			href: "/dashboard",
-			icon: () => (
-				<svg width="20" height="20" className="w-20px h-20px">
-					<use href="#icon-dashboard"></use>
-				</svg>
-			),
-		},
-		{
-			title: "Account",
-			icon: () => (
-				<svg width="20" height="20" className="w-20px h-20px">
-					<use href="#icon-person"></use>
-				</svg>
-			),
-			children: [
-				{ title: "Account overview", href: "/dashboard/users/me" },
-				{ title: "Account settings", href: "/dashboard/users/me/settings" },
-			],
-		},
-	];
+	// constants
+	const NAVIGATION_LINKS: navLinkProps = useMemo(
+		() => [
+			{ title: "Dashboard", href: "/dashboard", icon: "icon-dashboard" },
+			{
+				title: "Users",
+				icon: "icon-people",
+				children: [{ title: "Users overview", href: "/dashboard/users" }],
+			},
+		],
+		[]
+	);
+	const NAVIGATION_LINKS_WITH_CHILDREN_LENGTH: number =
+		NAVIGATION_LINKS.filter(({ children }) => children && children.length > 0).length || 0;
 
 	// ref hook
 	const collapseRefs = useRef<(HTMLButtonElement | null)[]>(
-		Array.from(
-			{
-				length: navigationLinks.filter(({ children }) => children && children.length > 0)
-					.length,
-			},
-			() => null
-		)
+		Array.from({ length: NAVIGATION_LINKS_WITH_CHILDREN_LENGTH }, () => null)
 	);
 
 	// effect hooks
@@ -76,7 +62,7 @@ const DashboardSideNav = () => {
 						<strong>Skip to content</strong>
 					</a>
 				</li>
-				{navigationLinks.map(({ href, icon: Icon, title, children = [] }, index) => (
+				{NAVIGATION_LINKS.map(({ href, icon, title, children = [] }, index) => (
 					<li
 						className={classNames(
 							"nav-item list-group-item text-reset bg-transparent mt-2 p-0 border-0 w-100",
@@ -103,9 +89,11 @@ const DashboardSideNav = () => {
 									ref={(el) => {
 										collapseRefs.current[index] = el;
 									}}>
-									{Icon && (
+									{icon && (
 										<span className="flex-shrink-0">
-											<Icon />
+											<svg width="20" height="20" className="w-20px h-20px">
+												<use href={`#${icon}`}></use>
+											</svg>
 										</span>
 									)}
 									<strong className="flex-grow-1"> {title}</strong>
@@ -121,23 +109,17 @@ const DashboardSideNav = () => {
 										}
 									)}>
 									<ul className="nav flex-column">
-										{children.map(({ href, icon: Icon, title }) => (
+										{children.map(({ href: childHref, title: childTitle }) => (
 											<li
 												className="nav-item list-group-item px-2 py-0 text-reset bg-transparent mt-2 border-0 w-100"
 												role="menuitem"
-												key={href || title}>
-												{href && (
+												key={childHref || childTitle}>
+												{childHref && (
 													<NextLink
 														className="nav-link text-capitalize text-decoration-none lh-1 rounded text-reset py-3 px-gutter hstack gap-2 align-items-center flex-nowrap"
-														href={href}
-														exact>
-														{Icon && (
-															<span className="flex-shrink-0">
-																<Icon />
-															</span>
-														)}
+														href={childHref}>
 														<strong className="flex-grow-1">
-															{title}
+															{childTitle}
 														</strong>
 													</NextLink>
 												)}
@@ -152,10 +134,10 @@ const DashboardSideNav = () => {
 									className="nav-link text-capitalize text-decoration-none lh-1 text-reset py-3 px-gutter hstack gap-2 align-items-center flex-nowrap"
 									href={href}
 									exact={children?.length === 0}>
-									{Icon && (
-										<span className="flex-shrink-0">
-											<Icon />
-										</span>
+									{icon && (
+										<svg width="20" height="20" className="w-20px h-20px">
+											<use href={`#${icon}`}></use>
+										</svg>
 									)}
 									<strong className="flex-grow-1"> {title}</strong>
 								</NextLink>

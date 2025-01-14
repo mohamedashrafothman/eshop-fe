@@ -114,3 +114,22 @@
 .icon-link-hover-rotate {
 	--#{$prefix}icon-link-transform: rotate(90deg);
 }
+
+.dropdown {
+	&-toggle {
+		&.dropdown-toggle-with-rotate-icon {
+			&,
+			&.show {
+				svg:not(.no-rotate) {
+					@include transition($transition-base);
+				}
+			}
+
+			&.show {
+				svg:not(.no-rotate) {
+					transform: rotate(-180deg);
+				}
+			}
+		}
+	}
+}

@@ -57,10 +57,10 @@ const Login = () => {
 			...(user && { user: JSON.stringify(user) }),
 			redirect: false,
 		});
-		// Redirect to the dashboard after success login.
-		push("/dashboard");
 		// Reset login loading state.
 		setIsLoginLoadingState(false);
+		// Redirect to the dashboard after success login.
+		push("/dashboard");
 	};
 
 	const onFormSubmitHandler = async (

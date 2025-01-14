@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 import Breadcrumb from "views/components/Breadcrumb";
 
-const PAGE_TITLE = "Account Settings";
+const PAGE_TITLE = "Profile Settings";
 export const metadata: Metadata = { title: PAGE_TITLE };
 
-const DashboardProfile = () => (
+const ProfileSettings = () => (
 	<>
 		<div className="py-2">
 			<Breadcrumb
@@ -18,4 +18,4 @@ const DashboardProfile = () => (
 	</>
 );
 
-export default DashboardProfile;
+export default ProfileSettings;

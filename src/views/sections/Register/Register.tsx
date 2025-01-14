@@ -12,7 +12,7 @@ const Register = ({ title = "" }: Props) => (
 					</h1>
 				</div>
 				<div className="col-12 m-0"></div>
-				<div className="col-12 col-xl-8 col-xxl-7 col-3xl-6">
+				<div className="col-12 col-md-10 col-lg-9 col-xl-8 col-xxl-7 col-3xl-6">
 					<RegisterForm />
 				</div>
 			</div>

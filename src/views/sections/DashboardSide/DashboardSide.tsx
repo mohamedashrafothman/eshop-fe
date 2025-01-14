@@ -1,6 +1,7 @@
 "use client";
 
 import Logo from "views/components/Logo";
+import UserDropdown from "views/components/UserDropdown";
 import DashboardSideNav from "views/sections/DashboardSideNav";
 
 const DashboardSide = () => (
@@ -13,7 +14,7 @@ const DashboardSide = () => (
 				<DashboardSideNav />
 			</div>
 			<div className="flex-shrink-0 px-gutter">
-				{/* TODO: Add "need help?" card with contact us link */}
+				<UserDropdown />
 			</div>
 		</div>
 	</section>

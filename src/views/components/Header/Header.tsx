@@ -121,7 +121,7 @@ const Header = ({ type = "public", className = "", ...props }: Props) => {
 										<Nav.List>
 											<Nav.ListItem>
 												<Nav.Link
-													href="/dashboard"
+													href={!session ? "/auth/login" : "/dashboard"}
 													className="link-dark"
 													title={!session ? "Login" : "Go to dashboard"}>
 													<svg

@@ -60,10 +60,10 @@ const Register = () => {
 			...(user && { user: JSON.stringify(user) }),
 			redirect: false,
 		});
-		// Redirect to the dashboard after success register.
-		push("/dashboard");
 		// Reset register loading state.
 		setIsRegisterLoadingState(false);
+		// Redirect to the dashboard after success register.
+		push("/dashboard");
 	};
 
 	const onFormSubmitHandler = async (

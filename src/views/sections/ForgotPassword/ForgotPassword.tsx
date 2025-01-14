@@ -16,7 +16,7 @@ const ForgotPassword = ({ title = "" }: Props) => (
 					</p>
 				</div>
 				<div className="col-12 m-0"></div>
-				<div className="col-12 col-xl-6 col-xxl-5 col-3xl-4">
+				<div className="col-12 col-md-10 col-lg-8 col-xl-6 col-xxl-5 col-3xl-4">
 					<ForgotPasswordForm />
 				</div>
 			</div>

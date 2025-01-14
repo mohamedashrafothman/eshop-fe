@@ -1,15 +1,15 @@
 import { Metadata } from "next";
 import Breadcrumb from "views/components/Breadcrumb";
 
-const PAGE_TITLE = "Profile";
+const PAGE_TITLE = "Users";
 export const metadata: Metadata = { title: PAGE_TITLE };
 
-const Profile = () => (
+const Users = () => (
 	<>
 		<div className="py-2">
 			<Breadcrumb
 				home={{ href: "/dashboard", title: "Dashboard" }}
-				items={[{ href: "/dashboard/users/me", title: PAGE_TITLE }]}
+				items={[{ href: "/dashboard/users", title: PAGE_TITLE }]}
 			/>
 		</div>
 		<h1 className="text-capitalize">
@@ -18,4 +18,4 @@ const Profile = () => (
 	</>
 );
 
-export default Profile;
+export default Users;

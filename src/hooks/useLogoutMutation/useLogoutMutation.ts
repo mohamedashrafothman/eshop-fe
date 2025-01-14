@@ -10,7 +10,7 @@ import {
 	type PostLogoutResponseType,
 } from "services/api/e-shop.com/auth";
 
-export const KEY_ARRAY = ["auth", "login"];
+export const KEY_ARRAY = ["auth", "logout"];
 
 const useLogoutMutation = () => {
 	const queryClient = useQueryClient();
