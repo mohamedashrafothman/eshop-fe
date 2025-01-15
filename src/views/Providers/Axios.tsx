@@ -104,8 +104,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 
 				// Handle refresh token errors by signing out and redirecting to the login page.
 				if (refreshTokenError || !refreshTokenResponse) {
-					await signOut({ redirect: false });
-					push("/auth/login");
+					await signOut({ callbackUrl: "/auth/login" });
 					return Promise.reject(responseError);
 				}
 
@@ -129,8 +128,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 
 				// Handle sign in errors by signing out and redirecting to the login page.
 				if (!result?.ok) {
-					await signOut({ redirect: false });
-					push("/auth/login");
+					await signOut({ callbackUrl: "/auth/login" });
 					return Promise.reject(responseError);
 				}
 
@@ -149,7 +147,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 
 			return Promise.reject(responseError);
 		},
-		[instance, push, session?.refreshToken, session?.user]
+		[instance, push, queryClient, session?.refreshToken, session?.user]
 	);
 
 	// layout effects

@@ -1,5 +1,6 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
 import useLoginBySocialMutation from "hooks/useLoginBySocialMutation";
@@ -27,6 +28,7 @@ import registerValidationSchema, { type schemaType } from "./schema";
 
 const Register = () => {
 	const { push } = useRouter();
+	const queryClient = useQueryClient();
 	const searchParams = useSearchParams();
 
 	// server state hooks
@@ -45,6 +47,8 @@ const Register = () => {
 
 	// Handle form submission.
 	const onRegisterSuccessHandler = async (response: any) => {
+		// Remove the me query from the cache.
+		queryClient.removeQueries({ queryKey: ["users", "me"], exact: true });
 		// Extract user, and tokens data from the response.
 		const {
 			accessToken = "",

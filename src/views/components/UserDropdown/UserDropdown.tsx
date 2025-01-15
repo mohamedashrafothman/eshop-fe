@@ -1,19 +1,15 @@
 "use client";
 
-import { useQueryClient } from "@tanstack/react-query";
 import Dropdown from "bootstrap/js/dist/dropdown";
 import useLogoutMutation from "hooks/useLogoutMutation";
 import useMeQuery from "hooks/useMeQuery";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import NextLink from "views/components/NextLink";
 
 const UserDropdown = () => {
-	const { push } = useRouter();
 	const { data: me } = useMeQuery();
-	const queryClient = useQueryClient();
 	const postLogoutMutation = useLogoutMutation();
 
 	// ref hook
@@ -35,16 +31,12 @@ const UserDropdown = () => {
 			{
 				onError: () => setIsLogoutLoadingState(false),
 				onSuccess: async () => {
+					// Call the signOut function from next-auth.
+					await signOut({ callbackUrl: "/auth/login" });
 					// Resetting logout query mutation.
 					postLogoutMutation.reset();
-					// Call the signOut function from next-auth.
-					await signOut({ redirect: false });
 					// Reset logout loading state.
 					setIsLogoutLoadingState(false);
-					// Redirect to the home after success login.
-					push("/");
-					// Remove the me query from the cache.
-					queryClient.removeQueries({ queryKey: ["users", "me"], exact: true });
 				},
 			}
 		);
