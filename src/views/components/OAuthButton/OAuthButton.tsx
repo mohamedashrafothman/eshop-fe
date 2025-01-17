@@ -1,5 +1,6 @@
 "use client";
 
+import classNames from "classnames";
 import { type ComponentPropsWithoutRef, type ReactNode } from "react";
 
 export type Props = {
@@ -8,10 +9,13 @@ export type Props = {
 	isLoading?: boolean | undefined;
 } & ComponentPropsWithoutRef<"button">;
 
-const OAuthButton = ({ title, icon: Icon, onClick, isLoading }: Props) => (
+const OAuthButton = ({ title, icon: Icon, onClick, isLoading, className }: Props) => (
 	<button
 		type="button"
-		className="btn btn-outline-primary border-primary-dark text-dark text-white-hover text-white-focus-visible w-100 text-capitalize icon-link gap-2 justify-content-center"
+		className={classNames(
+			"btn btn-outline-primary border-primary-dark text-dark text-white-hover text-white-focus-visible text-capitalize icon-link gap-2",
+			className
+		)}
 		onClick={onClick}
 		disabled={isLoading}>
 		{isLoading ? (

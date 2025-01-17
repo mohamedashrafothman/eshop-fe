@@ -6,13 +6,11 @@ export const metadata: Metadata = { title: PAGE_TITLE };
 
 const Users = () => (
 	<>
-		<div className="py-2">
-			<Breadcrumb
-				home={{ href: "/dashboard", title: "Dashboard" }}
-				items={[{ href: "/dashboard/users", title: PAGE_TITLE }]}
-			/>
-		</div>
-		<h1 className="text-capitalize">
+		<Breadcrumb
+			home={{ href: "/dashboard", title: "Dashboard" }}
+			items={[{ href: "/dashboard/users", title: PAGE_TITLE }]}
+		/>
+		<h1 className="text-capitalize mb-0">
 			<strong>{PAGE_TITLE}</strong>
 		</h1>
 	</>

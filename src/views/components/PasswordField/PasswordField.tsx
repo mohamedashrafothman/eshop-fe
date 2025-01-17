@@ -3,6 +3,7 @@
 import { ComponentPropsWithoutRef, useState } from "react";
 import { percentage } from "utils/helpers";
 import isStrongPassword from "validator/lib/isStrongPassword";
+import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 import NextLink from "views/components/NextLink";
 
 type Props = {
@@ -78,7 +79,8 @@ const PasswordField = ({
 			<div className="hstack gap-2 align-items-center justify-content-between mb-1">
 				{label && (
 					<label htmlFor={id} className="form-label text-capitalize mb-0">
-						{label} {required && <span className="text-danger">*</span>}
+						{label}
+						{required && <FieldRequiredLabel />}
 					</label>
 				)}
 				{allowForgotPasswordLink && (
@@ -125,7 +127,7 @@ const PasswordField = ({
 					<span className="input-group-text" id="passwordToggleButton">
 						<button
 							type="button"
-							className="btn btn-link link-dark bg-secondary-hover bg-secondary-focus-visible p-1 rounded-3 text-decoration-none lh-1"
+							className="btn btn-link link-dark bg-gray-500-hover bg-gray-500-focus-visible p-1 rounded-3 text-decoration-none lh-1"
 							onClick={onPasswordVisibilityTogglerButtonClickHandler}
 							title={isPasswordVisibleState ? "Hide Password" : "Show Password"}>
 							<svg className="bi w-22px h-22px" width="22" height="22">

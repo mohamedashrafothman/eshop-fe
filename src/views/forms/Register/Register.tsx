@@ -3,20 +3,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import useLoginBySocialMutation from "hooks/useLoginBySocialMutation";
 import useRegisterMutation from "hooks/useRegisterMutation";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import qs from "qs";
 import { useEffect, useRef, useState } from "react";
-import { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from "react-facebook-login";
-import { GoogleLoginResponseOffline, type GoogleLoginResponse } from "react-google-login";
 import ReCAPTCHA from "react-google-recaptcha";
-import { toast } from "react-toastify";
-import {
-	type OAuthProviderNamesType,
-	type PostLoginBySocialMediaDataType,
-} from "services/api/e-shop.com/auth";
 import { apiFormErrorExtractor } from "utils/helpers";
 import FacebookOAuthButton from "views/components/FacebookOAuthButton";
 import GoogleOAuthButton from "views/components/GoogleOAuthButton";
@@ -24,7 +15,7 @@ import NextLink from "views/components/NextLink";
 import PasswordField from "views/components/PasswordField";
 import RecaptchaField from "views/components/RecaptchaField";
 import TextField from "views/components/TextField";
-import registerValidationSchema, { type schemaType } from "./schema";
+import formValidationSchema, { type schemaType } from "./schema";
 
 const Register = () => {
 	const { push } = useRouter();
@@ -33,20 +24,16 @@ const Register = () => {
 
 	// server state hooks
 	const registerMutation = useRegisterMutation();
-	const loginBySocialMutation = useLoginBySocialMutation();
 
 	// ref hook
 	const registerCancelRequestRef = useRef<AbortController | null>(null);
-	const loginBySocialCancelRequestRef = useRef<AbortController | null>(null);
 	const recaptchaRef = useRef<ReCAPTCHA | null>(null);
 
 	// state hook
 	const [isRegisterLoadingState, setIsRegisterLoadingState] = useState(false);
-	const [facebookOAuthLoadingState, setFacebookOAuthLoadingState] = useState(false);
-	const [googleOAuthLoadingState, setGoogleOAuthLoadingState] = useState(false);
 
 	// Handle form submission.
-	const onRegisterSuccessHandler = async (response: any) => {
+	const onRegisterSuccessHandler = async (response: any): Promise<void> => {
 		// Remove the me query from the cache.
 		queryClient.removeQueries({ queryKey: ["users", "me"], exact: true });
 		// Extract user, and tokens data from the response.
@@ -57,13 +44,14 @@ const Register = () => {
 			...user
 		} = response?.entities?.data || {};
 		// Call the signIn function from next-auth.
-		await signIn("credentials", {
-			...(accessToken && { accessToken: JSON.stringify(accessToken) }),
-			...(refreshToken && { refreshToken: JSON.stringify(refreshToken) }),
-			...(tokenType && { tokenType: JSON.stringify(tokenType) }),
-			...(user && { user: JSON.stringify(user) }),
-			redirect: false,
-		});
+		if (accessToken || refreshToken || tokenType || user)
+			await signIn("credentials", {
+				...(accessToken && { accessToken: JSON.stringify(accessToken) }),
+				...(refreshToken && { refreshToken: JSON.stringify(refreshToken) }),
+				...(tokenType && { tokenType: JSON.stringify(tokenType) }),
+				...(user && { user: JSON.stringify(user) }),
+				redirect: false,
+			});
 		// Reset register loading state.
 		setIsRegisterLoadingState(false);
 		// Redirect to the dashboard after success register.
@@ -106,59 +94,6 @@ const Register = () => {
 		);
 	};
 
-	const onOAuthLoginHandler = async (
-		providerName: OAuthProviderNamesType,
-		providerData: Partial<PostLoginBySocialMediaDataType>
-	) => {
-		// Check if email, or name not found, then redirect user to use email, and password method.
-		if (!providerData?.email || !providerData?.name) {
-			setFacebookOAuthLoadingState(false);
-			setGoogleOAuthLoadingState(false);
-			toast(
-				"Your social account is missing the email or name. Please register a new account instead!",
-				{ type: "error" }
-			);
-			push(
-				`/auth/register?${qs.stringify({
-					...(providerData?.email ? { email: providerData.email } : {}),
-					...(providerData?.name ? { name: providerData.name } : {}),
-				})}`
-			);
-			return;
-		}
-
-		// Abort any previous request, and create a new abort controller.
-		if (loginBySocialCancelRequestRef.current?.signal)
-			loginBySocialCancelRequestRef.current?.abort();
-		loginBySocialCancelRequestRef.current = new AbortController();
-
-		// Call the login by social mutation.
-		await loginBySocialMutation.mutateAsync(
-			{
-				variables: { providerName },
-				data: providerData as PostLoginBySocialMediaDataType,
-				signal: loginBySocialCancelRequestRef.current.signal,
-			},
-			{
-				onError: () => {
-					// Reset Oauth loading state
-					setFacebookOAuthLoadingState(false);
-					setGoogleOAuthLoadingState(false);
-				},
-				onSuccess: async (response) => {
-					// Reset Oauth loading state
-					setFacebookOAuthLoadingState(false);
-					setGoogleOAuthLoadingState(false);
-
-					// Resetting login by social query mutation.
-					loginBySocialMutation.reset();
-
-					onRegisterSuccessHandler(response);
-				},
-			}
-		);
-	};
-
 	// Resets the recaptcha value and touched state.
 	const resetRecaptcha = (formikHelpers: FormikHelpers<schemaType>): Promise<void> =>
 		new Promise((resolve) => {
@@ -181,7 +116,7 @@ const Register = () => {
 			passwordConfirmation: "",
 			"g-recaptcha-response": "",
 		},
-		validationSchema: registerValidationSchema,
+		validationSchema: formValidationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
 
@@ -189,8 +124,6 @@ const Register = () => {
 	useEffect(() => {
 		return () => {
 			if (registerCancelRequestRef.current?.signal) registerCancelRequestRef.current?.abort();
-			if (loginBySocialCancelRequestRef.current?.signal)
-				loginBySocialCancelRequestRef.current?.abort();
 		};
 	}, []);
 
@@ -204,57 +137,14 @@ const Register = () => {
 						<div className="row gy-3">
 							<div className="col-12 col-xl-6">
 								<GoogleOAuthButton
-									onSuccess={(
-										res: GoogleLoginResponseOffline | GoogleLoginResponse
-									) => {
-										const { profileObj, accessToken: providerToken = "" } =
-											res as GoogleLoginResponse;
-										const {
-											name: fullName = "",
-											familyName = "",
-											givenName = "",
-											email = "",
-											googleId: providerId = "",
-										} = profileObj;
-										const name =
-											fullName || `${givenName} ${familyName}`.trim() || "";
-
-										setGoogleOAuthLoadingState(true);
-
-										onOAuthLoginHandler("google", {
-											name,
-											email,
-											providerToken,
-											providerId,
-										});
-									}}
-									isLoading={googleOAuthLoadingState}
+									className="w-100 justify-content-center"
+									onSuccess={onRegisterSuccessHandler}
 								/>
 							</div>
 							<div className="col-12 col-xl-6">
 								<FacebookOAuthButton
-									callback={(
-										userInfo:
-											| ReactFacebookLoginInfo
-											| ReactFacebookFailureResponse
-									) => {
-										const {
-											name = "",
-											email = "",
-											accessToken: providerToken = "",
-											id: providerId = "",
-										} = userInfo as ReactFacebookLoginInfo;
-
-										setFacebookOAuthLoadingState(true);
-
-										onOAuthLoginHandler("facebook", {
-											name,
-											email,
-											providerToken,
-											providerId,
-										});
-									}}
-									isLoading={facebookOAuthLoadingState}
+									className="w-100 justify-content-center"
+									onSuccess={onRegisterSuccessHandler}
 								/>
 							</div>
 						</div>

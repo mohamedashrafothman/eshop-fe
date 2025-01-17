@@ -1,6 +1,7 @@
 "use client";
 
 import { ComponentPropsWithoutRef } from "react";
+import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 
 type Props = {
 	isValid?: boolean;
@@ -24,7 +25,8 @@ const TextField = ({
 	<>
 		{label && (
 			<label htmlFor={id || undefined} className="form-label text-capitalize">
-				{label} {required && <span className="text-danger">*</span>}
+				{label}
+				{required && <FieldRequiredLabel />}
 			</label>
 		)}
 		<input

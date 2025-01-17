@@ -8,7 +8,7 @@ import {
 	postLoginBySocialMedia as mutationFn,
 	type PostLoginBySocialMediaDataType,
 	type PostLoginBySocialMediaResponseType,
-} from "services/api/e-shop.com/auth";
+} from "services/api/e-shop/auth";
 
 export const KEY_ARRAY = ["auth", "login", "social"];
 

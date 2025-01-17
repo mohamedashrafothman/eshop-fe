@@ -7,10 +7,8 @@ export const metadata: Metadata = { title: PAGE_TITLE };
 
 const LoginPage = () => (
 	<>
-		<div className="pt-4">
-			<div className="container">
-				<Breadcrumb items={[{ href: "/auth/login", title: PAGE_TITLE }]} />
-			</div>
+		<div className="container">
+			<Breadcrumb items={[{ href: "/auth/login", title: PAGE_TITLE }]} />
 		</div>
 		<LoginSection title={PAGE_TITLE} />
 	</>

@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { type AxiosErrorProps, type AxiosResponseProps } from "config/axios";
-import { getMe as queryFn, type GetMeResponseType } from "services/api/e-shop.com/users";
+import { getMe as queryFn, type GetMeResponseType } from "services/api/e-shop/users";
 
 export const KEY_ARRAY = ["users", "me"];
 

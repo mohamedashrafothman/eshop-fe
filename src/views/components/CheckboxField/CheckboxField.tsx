@@ -1,6 +1,7 @@
 "use client";
 
 import { ComponentPropsWithoutRef } from "react";
+import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 
 type Props = {
 	isValid?: boolean;
@@ -31,6 +32,7 @@ const CheckboxField = ({
 		{label && (
 			<label className="form-check-label text-capitalize" htmlFor={id || undefined}>
 				<strong>{label}</strong>
+				{required && <FieldRequiredLabel />}
 			</label>
 		)}
 		{isInvalid && error && (

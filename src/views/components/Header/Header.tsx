@@ -6,6 +6,7 @@ import { HTMLAttributes, useEffect, useRef } from "react";
 import { getNodeHeight, getWindowScrollingValue } from "utils/helpers";
 import Logo from "views/components/Logo";
 import Nav, { PROPS_TYPES as NAV_PROPS_TYPES } from "views/components/Nav";
+import UserDropdown from "views/components/UserDropdown";
 import { default as DashboardSideOffcanvas } from "views/offcanvas/DashboardSide";
 import { default as PublicHeaderOffcanvas } from "views/offcanvas/PublicHeader";
 import { default as SearchOffcanvas } from "views/offcanvas/Search";
@@ -173,37 +174,36 @@ const Header = ({ type = "public", className = "", ...props }: Props) => {
 					</div>
 				)}
 				{type === PROPS_TYPES.DASHBOARD && (
-					<div className="ps-lg-gutter">
-						<div className="row flex-nowrap align-items-center">
-							<div className="col-auto d-lg-none">
-								<Logo />
-							</div>
-							<div className="col col-lg-5 d-none d-lg-block">
-								<div className="text-bg-dark text-center p-3">search</div>
-							</div>
-							<div className="col-auto d-lg-none ms-auto">
-								<div className="hstack gap-1 flex-nowrap">
-									<button
-										className="btn btn-link link-dark rounded-0 text-decoration-none border-0 d-lg-none"
-										type="button"
-										data-bs-toggle="offcanvas"
-										data-bs-target="#search-offcanvas">
-										<svg className="bi" width="16" height="16">
-											<use href="#icon-search" />
-										</svg>
-									</button>
-									<SearchOffcanvas />
-									<button
-										className="btn btn-link link-dark rounded-0 text-decoration-none border-0 d-lg-none"
-										type="button"
-										data-bs-toggle="offcanvas"
-										data-bs-target="#dashboard-side-offcanvas">
-										<svg className="bi w-22px h-22px" width="22" height="22">
-											<use href="#icon-menu" />
-										</svg>
-									</button>
-									<DashboardSideOffcanvas />
-								</div>
+					<div className="row flex-nowrap align-items-center">
+						<div className="col-auto d-lg-none">
+							<Logo />
+						</div>
+						<div className="col col-lg-5 d-none d-lg-block">
+							<div className="text-bg-dark text-center p-3">search</div>
+						</div>
+						<div className="col-auto d-lg-none ms-auto">
+							<div className="hstack gap-1 flex-nowrap">
+								<button
+									className="btn btn-link link-dark rounded-0 text-decoration-none border-0 d-lg-none"
+									type="button"
+									data-bs-toggle="offcanvas"
+									data-bs-target="#search-offcanvas">
+									<svg className="bi" width="16" height="16">
+										<use href="#icon-search" />
+									</svg>
+								</button>
+								<SearchOffcanvas />
+								<button
+									className="btn btn-link link-dark rounded-0 text-decoration-none border-0 d-lg-none"
+									type="button"
+									data-bs-toggle="offcanvas"
+									data-bs-target="#dashboard-side-offcanvas">
+									<svg className="bi w-22px h-22px" width="22" height="22">
+										<use href="#icon-menu" />
+									</svg>
+								</button>
+								<DashboardSideOffcanvas />
+								<UserDropdown />
 							</div>
 						</div>
 					</div>

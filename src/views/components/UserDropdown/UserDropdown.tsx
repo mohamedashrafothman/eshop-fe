@@ -58,7 +58,7 @@ const UserDropdown = () => {
 	return (
 		<div className="dropdown">
 			<button
-				className="dropdown-toggle dropdown-toggle-with-rotate-icon btn btn-primary p-2 pe-3 w-100 border-0 hstack gap-2 align-items-center flex-nowrap"
+				className="btn btn-primary border-primary-dark dropdown-toggle dropdown-toggle-with-rotate-icon rounded-pill p-1 w-100 hstack gap-2 align-items-center flex-nowrap"
 				type="button"
 				data-bs-toggle="dropdown"
 				aria-expanded="false"
@@ -69,35 +69,41 @@ const UserDropdown = () => {
 							me?.entities.data.name
 								?.split(" ")
 								.map((item) => item.slice(0, 1).toUpperCase())
+								.slice(0, 2)
 								.join("")) ||
 						""
 					}&font=roboto`}
-					className="rounded-circle w-50px h-50px object-fit-cover flex-shrink-0"
+					className="rounded-circle w-34px h-34px w-lg-50px h-lg-50px object-fit-cover flex-shrink-0"
 					width={50}
 					height={50}
 					alt={`${me?.entities.data.name} - ${me?.entities.data.email}`}
 					priority={true}
 				/>
-				<div className="vstack gap-0 text-start align-items-start justify-content-center text-truncate flex-grow-1">
-					<strong className="text-nowrap text-capitalize text-truncate d-block w-100">
+				<div className="d-none d-lg-flex vstack gap-0 text-start align-items-start justify-content-center text-truncate flex-grow-1">
+					<strong className="fs-5 text-nowrap text-capitalize text-truncate d-block w-100 mb-n1">
 						{me?.entities.data.name}
 					</strong>
 					<small className="op-50 text-nowrap text-lowercase text-truncate d-block w-100">
 						{me?.entities.data.email}
 					</small>
 				</div>
-				<svg width="20" height="20" className="w-20px h-20px flex-shrink-0">
-					<use href="#icon-chevron-down"></use>
-				</svg>
+				<div className="rounded-circle w-34px h-34px w-lg-50px h-lg-50px object-fit-cover flex-shrink-0 d-flex align-items-center justify-content-center">
+					<svg
+						width="20"
+						height="20"
+						className="w-16px h-16px w-lg-20px h-lg-20px flex-shrink-0">
+						<use href="#icon-chevron-down"></use>
+					</svg>
+				</div>
 			</button>
 			<ul className="dropdown-menu w-100 shadow my-2">
 				<li>
-					<NextLink className="dropdown-item text-capitalize" href="/dashboard/users/me">
-						Profile
+					<NextLink className="dropdown-item text-capitalize" href="/dashboard/me">
+						Account information
 					</NextLink>
 				</li>
 				<li>
-					<hr className="dropdown-divider border" />
+					<hr className="dropdown-divider border border-top-0 bg-transparent" />
 				</li>
 				<li>
 					<button

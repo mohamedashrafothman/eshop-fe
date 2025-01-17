@@ -8,7 +8,7 @@ import {
 	postRegister as mutationFn,
 	type PostRegisterDataType,
 	type PostRegisterResponseType,
-} from "services/api/e-shop.com/auth";
+} from "services/api/e-shop/auth";
 
 export const KEY_ARRAY = ["auth", "register"];
 

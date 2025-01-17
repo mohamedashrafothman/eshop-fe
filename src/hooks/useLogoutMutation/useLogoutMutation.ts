@@ -8,7 +8,7 @@ import {
 	postLogout as mutationFn,
 	type PostLogoutDataType,
 	type PostLogoutResponseType,
-} from "services/api/e-shop.com/auth";
+} from "services/api/e-shop/auth";
 
 export const KEY_ARRAY = ["auth", "logout"];
 

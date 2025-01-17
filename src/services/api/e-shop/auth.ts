@@ -30,8 +30,8 @@ export type PostLoginBySocialMediaDataType = {
 	providerId: string;
 };
 export type PostLoginBySocialMediaResponseType = TokensType & IUser;
-export type GetUnlinkSocialMediaDataType = object;
-export type GetUnlinkSocialMediaResponseType = object;
+export type PostUnlinkSocialMediaDataType = object;
+export type PostUnlinkSocialMediaResponseType = object;
 export type PostForgotPasswordDataType = { email: string };
 export type PostForgotPasswordResponseType = object;
 export type PostResetPasswordDataType = { password: string; passwordConfirmation: string };
@@ -76,12 +76,13 @@ export const postLoginBySocialMedia = ({
 		url: `/v1/auth/${variables?.providerName}`,
 	});
 
-export const getUnlinkSocialMedia = ({
+export const postUnlinkSocialMedia = ({
 	variables,
 	...options
-}: AxiosRequestProps<GetUnlinkSocialMediaDataType, { providerName: OAuthProviderNamesType }>) =>
-	axiosRequest<GetUnlinkSocialMediaDataType, GetUnlinkSocialMediaResponseType>({
+}: AxiosRequestProps<PostUnlinkSocialMediaDataType, { providerName: OAuthProviderNamesType }>) =>
+	axiosRequest<PostUnlinkSocialMediaDataType, PostUnlinkSocialMediaResponseType>({
 		...options,
+		method: "post",
 		url: `/v1/auth/${variables?.providerName}/unlink`,
 	});
 

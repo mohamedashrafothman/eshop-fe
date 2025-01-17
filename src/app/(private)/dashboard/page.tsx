@@ -10,7 +10,7 @@ const DashboardHome = async () => {
 
 	return (
 		<>
-			<h1 className="text-capitalize">
+			<h1 className="text-capitalize mb-0">
 				<span className="fs-3">
 					<small>Hello, </small>
 				</span>

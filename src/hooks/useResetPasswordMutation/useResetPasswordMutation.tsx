@@ -8,7 +8,7 @@ import {
 	postResetPassword as mutationFn,
 	PostResetPasswordDataType,
 	PostResetPasswordResponseType,
-} from "services/api/e-shop.com/auth";
+} from "services/api/e-shop/auth";
 
 export const KEY_ARRAY = ["auth", "password", "reset"];
 

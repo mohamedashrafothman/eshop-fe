@@ -8,7 +8,7 @@ import { useEffect, useRef } from "react";
 import { apiFormErrorExtractor } from "utils/helpers";
 import NextLink from "views/components/NextLink";
 import TextField from "views/components/TextField";
-import forgotPasswordValidationSchema, { type schemaType } from "./schema";
+import formValidationSchema, { type schemaType } from "./schema";
 
 const ForgotPassword = () => {
 	const { push } = useRouter();
@@ -53,7 +53,7 @@ const ForgotPassword = () => {
 	// form state
 	const formState = useFormik<schemaType>({
 		initialValues: { email: "" },
-		validationSchema: forgotPasswordValidationSchema,
+		validationSchema: formValidationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
 

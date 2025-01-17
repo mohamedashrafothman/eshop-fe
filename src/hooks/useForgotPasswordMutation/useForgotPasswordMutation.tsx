@@ -8,7 +8,7 @@ import {
 	postForgotPassword as mutationFn,
 	PostForgotPasswordDataType,
 	PostForgotPasswordResponseType,
-} from "services/api/e-shop.com/auth";
+} from "services/api/e-shop/auth";
 
 export const KEY_ARRAY = ["auth", "password", "forgot"];
 
