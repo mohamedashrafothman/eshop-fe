@@ -8,7 +8,7 @@ import axiosInstance, {
 	type AxiosResponseProps,
 } from "config/axios";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useTransitionRouter } from "next-view-transitions";
 import { useCallback, useLayoutEffect } from "react";
 import { toast } from "react-toastify";
 import { postRefreshToken, type PostRefreshTokenResponseType } from "services/api/e-shop/auth";
@@ -16,7 +16,7 @@ import { postRefreshToken, type PostRefreshTokenResponseType } from "services/ap
 type Props = { children?: React.ReactNode; instance?: AxiosInstance };
 
 const Axios = ({ children, instance = axiosInstance }: Props) => {
-	const { push } = useRouter();
+	const { push } = useTransitionRouter();
 	const { data: session } = useSession();
 	const queryClient = useQueryClient();
 
@@ -145,7 +145,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 			}
 
 			// Handling 404 status code error.
-			// if ([404].includes(status)) push("/not-found");
+			if ([404].includes(status)) push("/not-found");
 
 			return Promise.reject(responseError);
 		},

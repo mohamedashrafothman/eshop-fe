@@ -3,7 +3,7 @@
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
 import useForgotPasswordMutation from "hooks/useForgotPasswordMutation";
-import { useRouter } from "next/navigation";
+import { useTransitionRouter } from "next-view-transitions";
 import { useEffect, useRef } from "react";
 import { apiFormErrorExtractor } from "utils/helpers";
 import NextLink from "views/components/NextLink";
@@ -11,7 +11,7 @@ import TextField from "views/components/TextField";
 import formValidationSchema, { type schemaType } from "./schema";
 
 const ForgotPassword = () => {
-	const { push } = useRouter();
+	const { push } = useTransitionRouter();
 
 	// server state hooks
 	const forgotPasswordMutation = useForgotPasswordMutation();

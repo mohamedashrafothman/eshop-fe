@@ -4,7 +4,7 @@ import classNames from "classnames";
 import useLoginBySocialMutation from "hooks/useLoginBySocialMutation";
 import useUnlinkSocialMutation from "hooks/useUnlinkSocialMutation";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useTransitionRouter } from "next-view-transitions";
 import qs from "qs";
 import { useEffect, useRef, useState } from "react";
 import { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from "react-facebook-login";
@@ -22,7 +22,7 @@ type Props = { onSuccess?: (_x: any) => Promise<void> | undefined } & Omit<
 
 const FacebookOAuthButton = ({ onSuccess, className, ...props }: Props) => {
 	const session = useSession();
-	const { push } = useRouter();
+	const { push } = useTransitionRouter();
 
 	// server state hooks
 	const loginBySocialMutation = useLoginBySocialMutation();

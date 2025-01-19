@@ -5,7 +5,7 @@ import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
 import useLoginMutation from "hooks/useLoginMutation";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useTransitionRouter } from "next-view-transitions";
 import { useEffect, useRef, useState } from "react";
 import { apiFormErrorExtractor } from "utils/helpers";
 import CheckboxField from "views/components/CheckboxField";
@@ -17,7 +17,7 @@ import TextField from "views/components/TextField";
 import formValidationSchema, { type schemaType } from "./schema";
 
 const Login = () => {
-	const { push } = useRouter();
+	const { push } = useTransitionRouter();
 	const queryClient = useQueryClient();
 
 	// server state hooks
