@@ -1,6 +1,21 @@
 {
-	"extends": ["next/core-web-vitals", "@tanstack/eslint-plugin-query"],
+	"extends": [
+		"next",
+		"next/core-web-vitals",
+		"eslint:recommended",
+		"prettier",
+		"plugin:@typescript-eslint/recommended",
+		"plugin:@tanstack/query/recommended"
+	],
+	"plugins": ["@typescript-eslint", "@tanstack/query"],
+	"parserOptions": {
+		"ecmaVersion": 2021,
+		"sourceType": "module"
+	},
 	"rules": {
+		"react/no-unescaped-entities": "off",
+		"no-extra-boolean-cast": "off",
+		"@typescript-eslint/no-explicit-any": "off",
 		"no-unused-vars": [
 			1,
 			{

@@ -1,7 +1,17 @@
-import type { Metadata } from "next";
+import { Metadata } from "next";
+import Breadcrumb from "views/components/Breadcrumb";
+import { default as ForgotPasswordSection } from "views/sections/ForgotPassword";
 
-export const metadata: Metadata = { title: "Forgot Password" };
+const PAGE_TITLE = "Forgot Password";
+export const metadata: Metadata = { title: PAGE_TITLE };
 
-const ForgotPasswordPage = () => <div>forgot password page</div>;
+const ForgotPasswordPage = () => (
+	<>
+		<div className="container">
+			<Breadcrumb items={[{ href: "/auth/password/forgot", title: PAGE_TITLE }]} />
+		</div>
+		<ForgotPasswordSection title={PAGE_TITLE} />;
+	</>
+);
 
 export default ForgotPasswordPage;

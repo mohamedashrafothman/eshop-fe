@@ -1,1 +1,513 @@
-$utilities: map-merge($utilities, ());
+$width-values: (
+	0: 0%,
+	5: 5%,
+	10: 10%,
+	15: 15%,
+	20: 20%,
+	25: 25%,
+	30: 30%,
+	35: 35%,
+	40: 40%,
+	45: 45%,
+	50: 50%,
+	55: 55%,
+	60: 60%,
+	65: 65%,
+	70: 70%,
+	71: 71%,
+	75: 75%,
+	80: 80%,
+	85: 85%,
+	90: 90%,
+	95: 95%,
+	100: 100%,
+	auto: auto,
+	fit-content: fit-content,
+	"8px": 8px,
+	"14px": 14px,
+	"16px": 16px,
+	"18px": 18px,
+	"20px": 20px,
+	"22px": 22px,
+	"32px": 32px,
+	"34px": 34px,
+	"50px": 50px,
+	"100px": 100px,
+	"112px": 112px,
+	"150px": 150px,
+);
+$height-values: map-merge($width-values, ());
+
+$utilities: map-merge(
+	$utilities,
+	(
+		"line-height": (
+			responsive: true,
+			property: line-height,
+			class: lh,
+			rtl: false,
+			values: (
+				1: 1,
+				"1p2": 1.2,
+				"1p5": 1.5,
+				"1p7": 1.7,
+			),
+		),
+		"white-space": (
+			property: white-space,
+			class: white-space,
+			values: (
+				nowrap: nowrap,
+				pre-line: pre-line,
+				pre-wrap: pre-wrap,
+				pre: pre,
+			),
+		),
+		"word-break": (
+			property: word-break,
+			class: word-break,
+			values: (
+				word: break-word,
+			),
+		),
+		"rotate": (
+			property: transform,
+			class: rotate,
+			values: (
+				0: 0,
+				10: rotate(10deg),
+				45: rotate(45deg),
+				n45: rotate(-45deg),
+			),
+		),
+		"overflow-x": (
+			property: overflow-x,
+			values: auto hidden visible scroll,
+		),
+		"overflow-y": (
+			property: overflow-y,
+			values: auto hidden visible scroll,
+		),
+		"negative-rotate": (
+			property: transform,
+			class: rotate,
+			values: (
+				n10: rotate(-10deg),
+			),
+		),
+		"font-size": map-merge(
+				map-get($utilities, "font-size"),
+				(
+					responsive: true,
+				)
+			),
+		"rounded": map-merge(
+				map-get($utilities, "rounded"),
+				(
+					responsive: true,
+				)
+			),
+		"link-opacity": map-merge(
+				map-get($utilities, "link-opacity"),
+				(
+					state: hover focus active,
+					values: (
+						10: 0.1,
+						25: 0.25,
+						50: 0.5,
+						70: 0.7,
+						75: 0.75,
+						100: 1,
+					),
+				)
+			),
+		"page-break-after": (
+			property: page-break-after,
+			class: page-break-after,
+			print: true,
+			values: (
+				always: always,
+				auto: auto,
+			),
+		),
+		"object-fit": (
+			property: object-fit,
+			class: object-fit,
+			responsive: true,
+			values: (
+				contain: contain,
+				cover: cover,
+				scale-down: scale-down,
+			),
+		),
+		"object-position": (
+			property: object-position,
+			class: object-position,
+			responsive: true,
+			values: (
+				center: center,
+				start: left,
+				end: right,
+				top: top,
+				center-start: center left,
+			),
+		),
+		"negative-margin-start": map-merge(
+				map-get($utilities, "negative-margin-start"),
+				(
+					state: hover focus active,
+				)
+			),
+		"negative-margin-end": map-merge(
+				map-get($utilities, "negative-margin-end"),
+				(
+					state: hover focus active,
+				)
+			),
+		"padding-start": map-merge(
+				map-get($utilities, "padding-start"),
+				(
+					state: hover focus active,
+				)
+			),
+		"padding-end": map-merge(
+				map-get($utilities, "padding-end"),
+				(
+					state: hover focus active,
+				)
+			),
+		"color": map-merge(
+				map-get($utilities, "color"),
+				(
+					state: hover focus active focus-visible,
+				)
+			),
+		"background-color": map-merge(
+				map-get($utilities, "background-color"),
+				(
+					state: hover focus active focus-visible,
+				)
+			),
+		"position": map-merge(
+				map-get($utilities, "position"),
+				(
+					responsive: true,
+				)
+			),
+		"translate-middle": map-merge(
+				map-get($utilities, "translate-middle"),
+				(
+					responsive: true,
+				)
+			),
+		"scale": (
+			property: transform,
+			class: scale,
+			values: (
+				null: scale(1),
+				"1p1": scale(1.1),
+				"1p2": scale(1.2),
+				"1p3": scale(1.3),
+				"1p4": scale(1.4),
+				"1p5": scale(1.5),
+				"1p6": scale(1.6),
+				"1p7": scale(1.7),
+				"1p8": scale(1.8),
+				"1p9": scale(1.9),
+				"2": scale(2),
+			),
+			state: hover focus active,
+		),
+		"top": map-merge(
+				map-get($utilities, "top"),
+				(
+					responsive: true,
+					values: map-merge(
+							$position-values,
+							(
+								initial: initial,
+							)
+						),
+				)
+			),
+		"bottom": map-merge(
+				map-get($utilities, "bottom"),
+				(
+					responsive: true,
+					values: map-merge(
+							$position-values,
+							(
+								initial: initial,
+							)
+						),
+				)
+			),
+		"start": map-merge(
+				map-get($utilities, "start"),
+				(
+					responsive: true,
+					values: map-merge(
+							$position-values,
+							(
+								initial: initial,
+							)
+						),
+				)
+			),
+		"end": map-merge(
+				map-get($utilities, "end"),
+				(
+					responsive: true,
+					values: map-merge(
+							$position-values,
+							(
+								initial: initial,
+							)
+						),
+				)
+			),
+		"border-color": map-merge(
+				map-get($utilities, "border-color"),
+				(
+					responsive: true,
+					state: hover focus active,
+					values: map-merge(
+							$theme-colors,
+							(
+								"white": $white,
+								"body": $body-bg,
+							)
+						),
+				)
+			),
+		"border-start": map-merge(
+				map-get($utilities, "border-start"),
+				(
+					responsive: true,
+					values: (
+						0: 0,
+						2: 2px var(--#{$prefix}border-style) var(--#{$prefix}border-color),
+						3: 3px var(--#{$prefix}border-style) var(--#{$prefix}border-color),
+						4: 4px var(--#{$prefix}border-style) var(--#{$prefix}border-color),
+						5: 5px var(--#{$prefix}border-style) var(--#{$prefix}border-color),
+						6: 6px var(--#{$prefix}border-style) var(--#{$prefix}border-color),
+					),
+				)
+			),
+		"text-align": map-merge(
+				map-get($utilities, "text-align"),
+				(
+					values: (
+						start: left,
+						end: right,
+						center: center,
+						justify: justify,
+					),
+				)
+			),
+		"rounded-end": map-merge(
+				map-get($utilities, "rounded-end"),
+				(
+					responsive: true,
+					values: (
+						null: $border-radius,
+						0: 0,
+						1: $border-radius-sm,
+						2: $border-radius,
+						3: $border-radius-lg,
+						4: $border-radius-xl,
+						5: $border-radius-2xl,
+						circle: 50%,
+						pill: $border-radius-pill,
+					),
+				)
+			),
+		"rounded-start": map-merge(
+				map-get($utilities, "rounded-start"),
+				(
+					responsive: true,
+					values: (
+						null: $border-radius,
+						0: 0,
+						1: $border-radius-sm,
+						2: $border-radius,
+						3: $border-radius-lg,
+						4: $border-radius-xl,
+						5: $border-radius-2xl,
+						circle: 50%,
+						pill: $border-radius-pill,
+					),
+				)
+			),
+		"rounded-top": map-merge(
+				map-get($utilities, "rounded-top"),
+				(
+					responsive: true,
+					values: (
+						null: $border-radius,
+						0: 0,
+						1: $border-radius-sm,
+						2: $border-radius,
+						3: $border-radius-lg,
+						4: $border-radius-xl,
+						5: $border-radius-2xl,
+						circle: 50%,
+						pill: $border-radius-pill,
+					),
+				)
+			),
+		"rounded-top-start": (
+			property: border-top-left-radius,
+			class: rounded-top-start,
+			responsive: true,
+			values: (
+				null: $border-radius,
+				0: 0,
+				1: $border-radius-sm,
+				2: $border-radius,
+				3: $border-radius-lg,
+				4: $border-radius-xl,
+				5: $border-radius-2xl,
+				circle: 50%,
+				pill: $border-radius-pill,
+			),
+		),
+		"rounded-top-end": (
+			property: border-top-right-radius,
+			class: rounded-top-end,
+			responsive: true,
+			values: (
+				null: $border-radius,
+				0: 0,
+				1: $border-radius-sm,
+				2: $border-radius,
+				3: $border-radius-lg,
+				4: $border-radius-xl,
+				5: $border-radius-2xl,
+				circle: 50%,
+				pill: $border-radius-pill,
+			),
+		),
+		"rounded-bottom-start": (
+			property: border-bottom-left-radius,
+			class: rounded-bottom-start,
+			responsive: true,
+			values: (
+				null: $border-radius,
+				0: 0,
+				1: $border-radius-sm,
+				2: $border-radius,
+				3: $border-radius-lg,
+				4: $border-radius-xl,
+				5: $border-radius-2xl,
+				circle: 50%,
+				pill: $border-radius-pill,
+			),
+		),
+		"rounded-bottom-end": (
+			property: border-bottom-right-radius,
+			class: rounded-bottom-end,
+			responsive: true,
+			values: (
+				null: $border-radius,
+				0: 0,
+				1: $border-radius-sm,
+				2: $border-radius,
+				3: $border-radius-lg,
+				4: $border-radius-xl,
+				5: $border-radius-2xl,
+				circle: 50%,
+				pill: $border-radius-pill,
+			),
+		),
+		"rounded-bottom": map-merge(
+				map-get($utilities, "rounded-bottom"),
+				(
+					responsive: true,
+					values: (
+						null: $border-radius,
+						0: 0,
+						1: $border-radius-sm,
+						2: $border-radius,
+						3: $border-radius-lg,
+						4: $border-radius-xl,
+						5: $border-radius-2xl,
+						circle: 50%,
+						pill: $border-radius-pill,
+					),
+				)
+			),
+		"display": (
+			responsive: true,
+			print: true,
+			property: display,
+			class: d,
+			values: inline inline-block block grid table table-row table-cell flex inline-flex none
+				list-item,
+		),
+		"opacity": (
+			property: opacity,
+			class: op,
+			print: true,
+			responsive: true,
+			state: hover focus active,
+			values: (
+				0: 0,
+				5: 0.05,
+				10: 0.1,
+				15: 0.15,
+				20: 0.2,
+				25: 0.25,
+				30: 0.3,
+				35: 0.35,
+				40: 0.4,
+				45: 0.45,
+				50: 0.5,
+				55: 0.55,
+				60: 0.6,
+				65: 0.65,
+				70: 0.7,
+				75: 0.75,
+				80: 0.8,
+				85: 0.85,
+				90: 0.9,
+				95: 0.95,
+				100: 1,
+			),
+		),
+		"width": map-merge(
+				map-get($utilities, "width"),
+				(
+					responsive: true,
+					values: $width-values,
+				)
+			),
+		"max-width": map-merge(
+				map-get($utilities, "max-width"),
+				(
+					responsive: true,
+					values: $width-values,
+				)
+			),
+		"min-height": (
+			responsive: true,
+			property: min-height,
+			class: min-h,
+			values: $height-values,
+		),
+		"height": map-merge(
+				map-get($utilities, "height"),
+				(
+					responsive: true,
+					values: $height-values,
+				)
+			),
+		"max-height": map-merge(
+				map-get($utilities, "max-height"),
+				(
+					responsive: true,
+					values: $height-values,
+				)
+			),
+	)
+);

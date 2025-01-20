@@ -1,21 +1,42 @@
 "use client";
 
+import { type DehydratedState } from "@tanstack/react-query";
+import type { Session } from "next-auth";
+import { ViewTransitions } from "next-view-transitions";
 import NextTopLoader from "nextjs-toploader";
+import { Slide, ToastContainer } from "react-toastify";
+import { default as AuthProvider } from "./Auth";
 import { default as AxiosProvider } from "./Axios";
 import { default as ReactQueryProvider } from "./ReactQuery";
 import { default as ReduxProvider } from "./Redux";
 
-type Props = { children?: React.ReactNode };
+type Props = {
+	children?: React.ReactNode;
+	session: Session;
+	hydrationBoundaryState: DehydratedState;
+};
 
-const Providers = ({ children }: Props) => (
-	<ReduxProvider>
-		<AxiosProvider>
-			<ReactQueryProvider>
-				<NextTopLoader color="var(--bs-primary)" />
-				{children}
+const Providers = ({ children, session, hydrationBoundaryState }: Props) => (
+	<AuthProvider session={session}>
+		<ReduxProvider>
+			<ReactQueryProvider state={hydrationBoundaryState}>
+				<AxiosProvider>
+					<NextTopLoader color="var(--e-shop-primary)" />
+					<ToastContainer
+						position="bottom-right"
+						autoClose={5000}
+						theme="dark"
+						transition={Slide}
+						closeButton={false}
+						pauseOnHover
+						hideProgressBar
+						closeOnClick
+					/>
+					<ViewTransitions>{children}</ViewTransitions>
+				</AxiosProvider>
 			</ReactQueryProvider>
-		</AxiosProvider>
-	</ReduxProvider>
+		</ReduxProvider>
+	</AuthProvider>
 );
 
 export default Providers;

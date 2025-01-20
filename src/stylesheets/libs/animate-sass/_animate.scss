@@ -1,0 +1,124 @@
+////////////////////////////////////////////////////////////
+// Import everything to generate your animate sass module //
+////////////////////////////////////////////////////////////
+@import "~animate-sass/helpers/mixins.scss";
+@import "variables-overrides.scss";
+@import "~animate-sass/helpers/settings.scss";
+@import "~animate-sass/helpers/base.scss";
+
+// ATTENTION
+@import "~animate-sass/animations/attention-seekers/bounce.scss";
+@import "~animate-sass/animations/attention-seekers/flash.scss";
+@import "~animate-sass/animations/attention-seekers/pulse.scss";
+@import "~animate-sass/animations/attention-seekers/shake.scss";
+@import "~animate-sass/animations/attention-seekers/swing.scss";
+@import "~animate-sass/animations/attention-seekers/wiggle.scss";
+@import "~animate-sass/animations/attention-seekers/wobble.scss";
+@import "~animate-sass/animations/attention-seekers/tada.scss";
+
+// BOUNCE
+@import "~animate-sass/animations/bounce-enter/bounceIn.scss";
+@import "~animate-sass/animations/bounce-enter/bounceInDown.scss";
+@import "~animate-sass/animations/bounce-enter/bounceInLeft.scss";
+@import "~animate-sass/animations/bounce-enter/bounceInRight.scss";
+@import "~animate-sass/animations/bounce-enter/bounceInUp.scss";
+@import "~animate-sass/animations/bounce-exit/bounceOut.scss";
+@import "~animate-sass/animations/bounce-exit/bounceOutDown.scss";
+@import "~animate-sass/animations/bounce-exit/bounceOutLeft.scss";
+@import "~animate-sass/animations/bounce-exit/bounceOutRight.scss";
+@import "~animate-sass/animations/bounce-exit/bounceOutUp.scss";
+
+// FADE
+@import "~animate-sass/animations/fade-enter/fadeIn.scss";
+@import "~animate-sass/animations/fade-enter/fadeInDown.scss";
+@import "~animate-sass/animations/fade-enter/fadeInDownBig.scss";
+@import "~animate-sass/animations/fade-enter/fadeInLeft.scss";
+@import "~animate-sass/animations/fade-enter/fadeInLeftBig.scss";
+@import "~animate-sass/animations/fade-enter/fadeInRight.scss";
+@import "~animate-sass/animations/fade-enter/fadeInRightBig.scss";
+@import "~animate-sass/animations/fade-enter/fadeInUp.scss";
+@import "~animate-sass/animations/fade-enter/fadeInUpBig.scss";
+@import "~animate-sass/animations/fade-exit/fadeOut.scss";
+@import "~animate-sass/animations/fade-exit/fadeOutDown.scss";
+@import "~animate-sass/animations/fade-exit/fadeOutDownBig.scss";
+@import "~animate-sass/animations/fade-exit/fadeOutLeft.scss";
+@import "~animate-sass/animations/fade-exit/fadeOutLeftBig.scss";
+@import "~animate-sass/animations/fade-exit/fadeOutRight.scss";
+@import "~animate-sass/animations/fade-exit/fadeOutRightBig.scss";
+@import "~animate-sass/animations/fade-exit/fadeOutUp.scss";
+@import "~animate-sass/animations/fade-exit/fadeOutUpBig.scss";
+
+// FLIP
+@import "~animate-sass/animations/flippers/flip.scss";
+@import "~animate-sass/animations/flippers/flipInX.scss";
+@import "~animate-sass/animations/flippers/flipInY.scss";
+@import "~animate-sass/animations/flippers/flipOutX.scss";
+@import "~animate-sass/animations/flippers/flipOutY.scss";
+
+// LIGHTSPEED
+@import "~animate-sass/animations/lightspeed/lightSpeedIn.scss";
+@import "~animate-sass/animations/lightspeed/lightSpeedOut.scss";
+
+// ROTATE
+@import "~animate-sass/animations/rotate-enter/rotateIn.scss";
+@import "~animate-sass/animations/rotate-enter/rotateInDownLeft.scss";
+@import "~animate-sass/animations/rotate-enter/rotateInDownRight.scss";
+@import "~animate-sass/animations/rotate-enter/rotateInUpLeft.scss";
+@import "~animate-sass/animations/rotate-enter/rotateInUpRight.scss";
+@import "~animate-sass/animations/rotate-exit/rotateOut.scss";
+@import "~animate-sass/animations/rotate-exit/rotateOutDownLeft.scss";
+@import "~animate-sass/animations/rotate-exit/rotateOutDownRight.scss";
+@import "~animate-sass/animations/rotate-exit/rotateOutUpLeft.scss";
+@import "~animate-sass/animations/rotate-exit/rotateOutUpRight.scss";
+
+// SLIDE
+@import "~animate-sass/animations/slide-enter/slideInDown.scss";
+@import "~animate-sass/animations/slide-enter/slideInLeft.scss";
+@import "~animate-sass/animations/slide-enter/slideInRight.scss";
+@import "~animate-sass/animations/slide-enter/slideInUp.scss";
+@import "~animate-sass/animations/slide-exit/slideOutDown.scss";
+@import "~animate-sass/animations/slide-exit/slideOutLeft.scss";
+@import "~animate-sass/animations/slide-exit/slideOutRight.scss";
+@import "~animate-sass/animations/slide-exit/slideOutUp.scss";
+
+// SPECIAL
+@import "~animate-sass/animations/special/hinge.scss";
+@import "~animate-sass/animations/special/rollIn.scss";
+@import "~animate-sass/animations/special/rollOut.scss";
+
+// ZOOM
+@import "~animate-sass/animations/zoom-enter/zoomIn.scss";
+@import "~animate-sass/animations/zoom-enter/zoomInDown.scss";
+@import "~animate-sass/animations/zoom-enter/zoomInLeft.scss";
+@import "~animate-sass/animations/zoom-enter/zoomInRight.scss";
+@import "~animate-sass/animations/zoom-enter/zoomInUp.scss";
+@import "~animate-sass/animations/zoom-exit/zoomOut.scss";
+@import "~animate-sass/animations/zoom-exit/zoomOutDown.scss";
+@import "~animate-sass/animations/zoom-exit/zoomOutLeft.scss";
+@import "~animate-sass/animations/zoom-exit/zoomOutRight.scss";
+@import "~animate-sass/animations/zoom-exit/zoomOutUp.scss";
+
+@keyframes hangSlideOut {
+	0%,
+	5%,
+	95%,
+	100% {
+		transform: translateX(0);
+	}
+
+	45%,
+	55% {
+		transform: translateX(50px);
+	}
+}
+
+.hangSlideOutLeft,
+.hangSlideOutRight {
+	animation-duration: 0.75s;
+	animation-timing-function: ease-in-out;
+	@include animate-prefixer(animation-name, hangSlideOut);
+}
+
+.hangSlideOutLeft {
+	animation-direction: reverse;
+}

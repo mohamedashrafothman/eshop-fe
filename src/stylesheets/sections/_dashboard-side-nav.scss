@@ -1,0 +1,26 @@
+.dashboard-side-nav {
+	.nav {
+		&-link {
+			&:active,
+			&.active,
+			&:hover {
+				background-color: var(--#{$prefix}primary-bg-subtle) !important;
+				color: var(--#{$prefix}primary-text-emphasis) !important;
+			}
+		}
+		.accordion {
+			&-button:not(.collapsed) {
+				color: var(--#{$prefix}primary-text-emphasis) !important;
+			}
+			&-collapse {
+				.nav-item {
+					border-left: calc(#{$border-width} * 2) solid transparent !important;
+					margin-left: calc(-1px);
+					&:has(.nav-link.active) {
+						border-left-color: $primary !important;
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,32 +1,154 @@
 "use client";
 
-import axiosInstance, { isAxiosCancelError, isAxiosError, type AxiosInstance } from "config/axios";
+import { useQueryClient } from "@tanstack/react-query";
+import to from "await-to-js";
+import axiosInstance, {
+	isAxiosCancelError,
+	type AxiosInstance,
+	type AxiosResponseProps,
+} from "config/axios";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useTransitionRouter } from "next-view-transitions";
 import { useCallback, useLayoutEffect } from "react";
+import { toast } from "react-toastify";
+import { postRefreshToken, type PostRefreshTokenResponseType } from "services/api/e-shop/auth";
 
 type Props = { children?: React.ReactNode; instance?: AxiosInstance };
 
 const Axios = ({ children, instance = axiosInstance }: Props) => {
-	// event handlers
-	const requestSuccessInterceptor = useCallback((config: any) => {
-		// TODO: handle request headers to attach authentication, and other headers.
-		return config;
-	}, []);
+	const { push } = useTransitionRouter();
+	const { data: session } = useSession();
+	const queryClient = useQueryClient();
 
-	const requestErrorInterceptor = useCallback((error: any) => {
-		// TODO: handle request errors.
-		return Promise.reject(error);
-	}, []);
+	// event handlers
+	const requestSuccessInterceptor = useCallback(
+		(request: any) => {
+			// Add the access token to the request headers
+			if (session?.tokenType && session?.accessToken)
+				request.headers["Authorization"] = `${session.tokenType} ${session.accessToken}`;
+
+			// Return modified request
+			return request;
+		},
+		[session?.accessToken, session?.tokenType]
+	);
+
+	const requestErrorInterceptor = useCallback((error: any) => Promise.reject(error), []);
 
 	const responseSuccessInterceptor = useCallback((response: any) => {
-		// TODO: handle response and response global response handling.
+		// extract response data.
+		const { data: { message = null, flashes = {} } = {} } = response;
+
+		// handle flash messages
+		if (message) toast.error(message);
+		if (Object.keys(flashes).length)
+			Object.keys(flashes).forEach((messageType) =>
+				flashes[messageType].forEach((singleMessage: string) => {
+					if (typeof singleMessage !== "string") return;
+					toast(singleMessage, {
+						type:
+							messageType === "success"
+								? "success"
+								: messageType === "danger"
+									? "error"
+									: messageType === "info"
+										? "info"
+										: "warning",
+					});
+				})
+			);
+
 		return response;
 	}, []);
 
-	const responseErrorInterceptor = useCallback((error: any) => {
-		// TODO: handle response errors
-		if (isAxiosCancelError(error) || isAxiosError(error)) return Promise.reject(error);
-		return Promise.reject(error);
-	}, []);
+	const responseErrorInterceptor = useCallback(
+		async (responseError: any = {}) => {
+			if (isAxiosCancelError(responseError)) return Promise.reject(responseError);
+
+			// Extract error response data.
+			const {
+				response: { data: { message = null, error, flashes = {} } = {}, status } = {},
+				config: originalRequest,
+			} = responseError;
+
+			// Handle flash messages
+			if (![status, originalRequest.status].includes(401)) {
+				if (error?.message || message) toast.error(error?.message || message);
+				if (Object.keys(flashes).length)
+					Object.keys(flashes).forEach((messageType) =>
+						flashes[messageType].forEach((singleMessage: string) => {
+							if (typeof singleMessage !== "string") return;
+							toast(singleMessage, {
+								type:
+									messageType === "success"
+										? "success"
+										: messageType === "danger"
+											? "error"
+											: messageType === "info"
+												? "info"
+												: "warning",
+							});
+						})
+					);
+			}
+
+			// Handle 401 status code error.
+			if (status === 401 && !originalRequest._retry && session?.refreshToken) {
+				// Mark the request as retried to avoid infinite loops.
+				originalRequest._retry = true;
+
+				// Make a request to your auth server to refresh the token.
+				const [refreshTokenError, refreshTokenResponse] = await to(
+					postRefreshToken({ data: { refreshToken: session.refreshToken } })
+				);
+
+				// Handle refresh token errors by signing out and redirecting to the login page.
+				if (refreshTokenError || !refreshTokenResponse) {
+					await signOut({ callbackUrl: "/auth/login" });
+					return Promise.reject(responseError);
+				}
+
+				// Extract tokens data from the response.
+				const {
+					accessToken = "",
+					refreshToken = "",
+					tokenType = "",
+				} = (
+					refreshTokenResponse as unknown as AxiosResponseProps<PostRefreshTokenResponseType>
+				)?.entities?.data || {};
+
+				// Update next-auth session tokens.
+				const result = await signIn("credentials", {
+					...(accessToken && { accessToken: JSON.stringify(accessToken) }),
+					...(refreshToken && { refreshToken: JSON.stringify(refreshToken) }),
+					...(tokenType && { tokenType: JSON.stringify(tokenType) }),
+					...(session?.user && { user: JSON.stringify(session.user) }),
+					redirect: false,
+				});
+
+				// Handle sign in errors by signing out and redirecting to the login page.
+				if (!result?.ok) {
+					await signOut({ callbackUrl: "/auth/login" });
+					return Promise.reject(responseError);
+				}
+
+				// Retry the original request with the new access token or invalidate the query.
+				return setTimeout(() => {
+					if (originalRequest?.queryKey)
+						return queryClient.invalidateQueries({
+							queryKey: originalRequest.queryKey,
+						});
+					return instance(originalRequest);
+				}, 0);
+			}
+
+			// Handling 404 status code error.
+			if ([404].includes(status)) push("/not-found");
+
+			return Promise.reject(responseError);
+		},
+		[instance, push, queryClient, session?.refreshToken, session?.user]
+	);
 
 	// layout effects
 	useLayoutEffect(() => {
@@ -36,11 +158,11 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 			requestErrorInterceptor
 		);
 
+		// clean up request interceptors
 		return () => {
-			// clean up request interceptors
 			instance.interceptors.request.eject(requestInterceptor);
 		};
-	}, [requestErrorInterceptor, requestSuccessInterceptor]);
+	}, [instance.interceptors.request, requestErrorInterceptor, requestSuccessInterceptor]);
 
 	useLayoutEffect(() => {
 		// add response interceptors
@@ -49,11 +171,11 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 			responseErrorInterceptor
 		);
 
+		// clean up response interceptors
 		return () => {
-			// clean up response interceptors
 			instance.interceptors.response.eject(responseInterceptor);
 		};
-	}, [responseErrorInterceptor, responseSuccessInterceptor]);
+	}, [instance.interceptors.response, responseErrorInterceptor, responseSuccessInterceptor]);
 
 	return <>{children}</>;
 };

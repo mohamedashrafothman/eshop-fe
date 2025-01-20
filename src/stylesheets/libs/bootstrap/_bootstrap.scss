@@ -52,3 +52,84 @@
 // Utilities
 @import "~bootstrap/scss/utilities/api";
 // scss-docs-end import-stack
+
+[dir="rtl"] {
+	.icon-link {
+		& > .bi {
+			&.rtl-mirror {
+				--#{$prefix}icon-link-transform: scale(-1, 1);
+			}
+		}
+
+		&.icon-link-hover {
+			&:not(.icon-link-hover-reversed) {
+				&:hover {
+					& > .bi {
+						&.rtl-mirror {
+							--#{$prefix}icon-link-transform: scale(-1, 1)
+								#{$icon-link-icon-transform};
+						}
+					}
+				}
+			}
+
+			&.icon-link-hover-reversed {
+				&:hover {
+					& > .bi {
+						&.rtl-mirror {
+							--#{$prefix}icon-link-transform: scale(-1, 1)
+								translate3d(-#{$icon-link-gap}, 0, 0);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+[dir="ltr"] {
+	.icon-link {
+		&.icon-link-hover-reversed {
+			--#{$prefix}icon-link-transform: translate3d(-#{$icon-link-gap}, 0, 0);
+		}
+	}
+}
+
+.icon-link-hover-scale-sm {
+	--#{$prefix}icon-link-transform: scale(1.125);
+}
+
+.icon-link-hover-scale {
+	--#{$prefix}icon-link-transform: scale(1.5);
+}
+
+.icon-link-hover-up {
+	--#{$prefix}icon-link-transform: translate3d(0, -#{$icon-link-gap}, 0);
+}
+
+.icon-link-hover-down {
+	--#{$prefix}icon-link-transform: translate3d(0, #{$icon-link-gap}, 0);
+}
+
+.icon-link-hover-rotate {
+	--#{$prefix}icon-link-transform: rotate(90deg);
+}
+
+.dropdown {
+	&-toggle {
+		&.dropdown-toggle-with-rotate-icon {
+			&,
+			&.show {
+				svg:not(.no-rotate) {
+					@include transition($transition-base);
+				}
+			}
+
+			&.show {
+				svg:not(.no-rotate) {
+					transform: rotate(-180deg);
+				}
+			}
+		}
+	}
+}

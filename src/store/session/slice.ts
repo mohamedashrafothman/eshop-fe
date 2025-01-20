@@ -3,14 +3,26 @@ import { default as IUser } from "interfaces/User.interface";
 import { type RootState } from "store";
 import { login, logout } from "store/session/actions";
 
-type Session = { user: IUser; token: string; isAuthenticated: boolean };
-type SliceState = Session & {};
+export type Session = {
+	isAuthenticated: boolean;
+	user: IUser | object;
+	accessToken: string;
+	refreshToken: string;
+	tokenType: string;
+};
+export type SliceState = Session & {};
 
-const initialState: SliceState = { user: {}, token: "", isAuthenticated: false };
+export const initialState: SliceState = {
+	isAuthenticated: false,
+	user: {},
+	accessToken: "",
+	refreshToken: "",
+	tokenType: "",
+};
 const slice = createSlice({ name: "session", initialState, reducers: { login, logout } });
 
-const isAuthenticatedSelector = (state: RootState) => state.session.isAuthenticated;
-const userSelector = (state: RootState) => state.session.user;
+export const userSelector = (state: RootState) => state.session.user;
+export const sessionSelector = (state: RootState) => state.session;
+export const isAuthenticatedSelector = (state: RootState) => state.session.isAuthenticated;
 
-export { initialState, isAuthenticatedSelector, userSelector, type Session, type SliceState };
 export default slice;

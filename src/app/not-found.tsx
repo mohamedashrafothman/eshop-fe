@@ -1,12 +1,5 @@
-import Link from "next/link";
+import { default as ErrorSection } from "views/sections/Error";
 
-// TODO: Not Found Error UI Skeleton
-const NotFound = () => (
-	<div>
-		<h2>Not Found</h2>
-		<p>Could not find requested resource</p>
-		<Link href="/">Return Home</Link>
-	</div>
-);
+const NotFound = () => <ErrorSection code={404} title="Resources not found!" />;
 
 export default NotFound;

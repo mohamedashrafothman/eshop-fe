@@ -1,7 +1,17 @@
-import type { Metadata } from "next";
+import { Metadata } from "next";
+import Breadcrumb from "views/components/Breadcrumb";
+import { default as LoginSection } from "views/sections/Login";
 
-export const metadata: Metadata = { title: "Login" };
+const PAGE_TITLE = "Login";
+export const metadata: Metadata = { title: PAGE_TITLE };
 
-const LoginPage = () => <div>auth/login page</div>;
+const LoginPage = () => (
+	<>
+		<div className="container">
+			<Breadcrumb items={[{ href: "/auth/login", title: PAGE_TITLE }]} />
+		</div>
+		<LoginSection title={PAGE_TITLE} />
+	</>
+);
 
 export default LoginPage;

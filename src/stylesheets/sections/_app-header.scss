@@ -1,0 +1,35 @@
+.app-header {
+	z-index: $zindex-fixed;
+	@include transition($transition-base);
+
+	&-scrolling {
+		animation-duration: 0.5s;
+		@extend .animated !optional;
+
+		&-up,
+		&:focus-within {
+			@extend .shadow !optional;
+			@include animate-prefixer(animation-name, slideInDown);
+		}
+
+		&-down {
+			@extend .shadow-none !optional;
+			@include animate-prefixer(animation-name, slideOutUp);
+		}
+	}
+
+	&-public {
+		.app-header {
+			&-content {
+				@extend .py-22px !optional;
+				@extend .py-lg-32px !optional;
+				@extend .bg-white !optional;
+			}
+			&-categories {
+				@extend .bg-body !optional;
+			}
+		}
+	}
+	&-dashboard {
+	}
+}

@@ -1,19 +1,27 @@
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
-// import { type AxiosErrorProps, type AxiosRequestProps } from "config/axios";
-// import { postLogin } from "services/api/auth";
-// import { type Session } from "store/session";
-// import { type LoginData } from "views/forms/Login";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+	type AxiosErrorProps,
+	type AxiosRequestProps,
+	type AxiosResponseProps,
+} from "config/axios";
+import {
+	postLogin as mutationFn,
+	type PostLoginDataType,
+	type PostLoginResponseType,
+} from "services/api/e-shop/auth";
+
+export const KEY_ARRAY = ["auth", "login"];
 
 const useLoginMutation = () => {
-	// const queryClient = useQueryClient();
-	// queryClient.setMutationDefaults(["auth", "login"], {
-	// 	mutationFn: (params) => postLogin(params),
-	// });
-	// return useMutation<
-	// 	AxiosRequestProps<Omit<Session, "isAuthenticated">>,
-	// 	AxiosErrorProps,
-	// 	AxiosRequestProps<LoginData>
-	// >(["auth", "login"]);
+	const queryClient = useQueryClient();
+
+	queryClient.setMutationDefaults(KEY_ARRAY, { mutationFn });
+
+	return useMutation<
+		AxiosResponseProps<PostLoginResponseType>,
+		AxiosErrorProps,
+		AxiosRequestProps<PostLoginDataType>
+	>({ mutationKey: KEY_ARRAY });
 };
 
 export default useLoginMutation;

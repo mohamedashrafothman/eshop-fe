@@ -1,37 +1,27 @@
-import axios, {
-	AxiosError,
-	AxiosInstance,
-	AxiosRequestConfig,
-	AxiosResponse,
-	isCancel,
-} from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import vars from "utils/vars";
 
-type AxiosRequestProps<D = any> = AxiosRequestConfig<D> & { query?: { [key: string]: any } };
-type AxiosErrorProps = AxiosError<{ error: any; errors: any; message: string; data: any }>;
-type IsAxiosCancelError = typeof isCancel;
-type IsAxiosError = typeof axios.isAxiosError;
+export type AxiosRequestProps<D = any, v = any> = AxiosRequestConfig<D> & { variables?: v };
+export type AxiosResponseProps<T = any, D = any> = Pick<
+	AxiosResponse<{ entities: { data: T } }, D>,
+	"data"
+>["data"];
+export type AxiosErrorProps = AxiosError<{
+	error?: any | undefined;
+	flashes?: { [key: string]: { [key: string]: string }[] } | undefined;
+	message?: string | undefined;
+	entities?: never | undefined;
+}>;
+export type IsAxiosCancelError = typeof axios.isCancel;
+export type IsAxiosError = typeof axios.isAxiosError;
 
-const config: AxiosRequestConfig = {
-	baseURL: vars.app.baseUrl,
-	headers: vars.api.headers,
-	timeout: 10000,
-};
-
+const config: AxiosRequestConfig = { baseURL: vars.app.baseUrl, headers: vars.api.headers };
 const axiosInstance: AxiosInstance = axios.create(config);
-const axiosRequest = (options: AxiosRequestProps) =>
-	axiosInstance(options).then(({ data }) => ({ data }));
-const isAxiosCancelError: IsAxiosCancelError = axios.isCancel;
-const isAxiosError: IsAxiosError = axios.isAxiosError;
 
-export {
-	axiosRequest,
-	isAxiosCancelError,
-	isAxiosError,
-	type AxiosErrorProps,
-	type AxiosInstance,
-	type AxiosRequestConfig,
-	type AxiosRequestProps,
-	type AxiosResponse,
-};
+export const axiosRequest = <D = any, v = any>(options: AxiosRequestProps<D, v>) =>
+	axiosInstance(options).then(({ data }) => data);
+export const isAxiosCancelError: IsAxiosCancelError = axios.isCancel;
+export const isAxiosError: IsAxiosError = axios.isAxiosError;
+
+export { type AxiosInstance, type AxiosRequestConfig };
 export default axiosInstance;
