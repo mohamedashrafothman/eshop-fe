@@ -20,8 +20,6 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 	const { data: session } = useSession();
 	const queryClient = useQueryClient();
 
-	console.log("session:", session);
-
 	// event handlers
 	const requestSuccessInterceptor = useCallback(
 		(request: any) => {

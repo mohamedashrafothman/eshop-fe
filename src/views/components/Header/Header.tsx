@@ -175,7 +175,7 @@ const Header = ({ type = "public", className = "", ...props }: Props) => {
 				)}
 				{type === PROPS_TYPES.DASHBOARD && (
 					<div className="row flex-nowrap align-items-center">
-						<div className="col-auto d-lg-none">
+						<div className="col col-md-auto d-lg-none">
 							<Logo />
 						</div>
 						<div className="col col-lg-5 d-none d-lg-block">
@@ -183,8 +183,9 @@ const Header = ({ type = "public", className = "", ...props }: Props) => {
 						</div>
 						<div className="col-auto d-lg-none ms-auto">
 							<div className="hstack gap-1 flex-nowrap">
+								<UserDropdown />
 								<button
-									className="btn btn-link link-dark rounded-0 text-decoration-none border-0 d-lg-none"
+									className="btn btn-link link-dark px-2 px-lg-3 rounded-0 text-decoration-none border-0 d-lg-none"
 									type="button"
 									data-bs-toggle="offcanvas"
 									data-bs-target="#search-offcanvas">
@@ -194,7 +195,7 @@ const Header = ({ type = "public", className = "", ...props }: Props) => {
 								</button>
 								<SearchOffcanvas />
 								<button
-									className="btn btn-link link-dark rounded-0 text-decoration-none border-0 d-lg-none"
+									className="btn btn-link link-dark px-2 px-lg-3 rounded-0 text-decoration-none border-0 d-lg-none"
 									type="button"
 									data-bs-toggle="offcanvas"
 									data-bs-target="#dashboard-side-offcanvas">
@@ -203,7 +204,6 @@ const Header = ({ type = "public", className = "", ...props }: Props) => {
 									</svg>
 								</button>
 								<DashboardSideOffcanvas />
-								<UserDropdown />
 							</div>
 						</div>
 					</div>

@@ -150,6 +150,8 @@ const GoogleOAuthButton = ({ onSuccess, className, ...props }: Props) => {
 				<GoogleLogin
 					clientId={vars.secrets.OAuth.google.appId}
 					cookiePolicy="single_host_origin"
+					scope="profile email"
+					onFailure={(err) => console.log(err)}
 					onSuccess={(res: GoogleLoginResponseOffline | GoogleLoginResponse) => {
 						const { profileObj, accessToken: providerToken = "" } =
 							res as GoogleLoginResponse;

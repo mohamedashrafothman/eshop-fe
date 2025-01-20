@@ -79,26 +79,35 @@ const UserDropdown = () => {
 					alt={`${me?.entities.data.name} - ${me?.entities.data.email}`}
 					priority={true}
 				/>
-				<div className="d-none d-lg-flex vstack gap-0 text-start align-items-start justify-content-center text-truncate flex-grow-1">
+				<span className="vstack gap-0 text-start align-items-start justify-content-center text-truncate flex-grow-1">
 					<strong className="fs-5 text-nowrap text-capitalize text-truncate d-block w-100 mb-n1">
-						{me?.entities.data.name}
+						<span className="d-none d-md-inline">{me?.entities.data.name}</span>
+						<span className="d-md-none">
+							{me?.entities.data.name
+								?.split(" ")
+								.map((item) => item.slice(0, 1).toUpperCase())
+								.slice(0, 2)
+								.join("")}
+						</span>
 					</strong>
-					<small className="op-50 text-nowrap text-lowercase text-truncate d-block w-100">
+					<small className="op-50 text-nowrap text-lowercase text-truncate d-none d-md-block w-100">
 						{me?.entities.data.email}
 					</small>
-				</div>
-				<div className="rounded-circle w-34px h-34px w-lg-50px h-lg-50px object-fit-cover flex-shrink-0 d-flex align-items-center justify-content-center">
+				</span>
+				<span className="rounded-circle w-34px h-34px w-lg-50px h-lg-50px object-fit-cover flex-shrink-0 d-flex align-items-center justify-content-center">
 					<svg
 						width="20"
 						height="20"
 						className="w-16px h-16px w-lg-20px h-lg-20px flex-shrink-0">
 						<use href="#icon-chevron-down"></use>
 					</svg>
-				</div>
+				</span>
 			</button>
 			<ul className="dropdown-menu w-100 shadow my-2">
 				<li>
-					<NextLink className="dropdown-item text-capitalize" href="/dashboard/me">
+					<NextLink
+						className="dropdown-item text-capitalize white-space-pre-line"
+						href="/dashboard/me">
 						Account information
 					</NextLink>
 				</li>
@@ -108,7 +117,7 @@ const UserDropdown = () => {
 				<li>
 					<button
 						type="button"
-						className="dropdown-item text-capitalize"
+						className="dropdown-item text-capitalize white-space-pre-line"
 						onClick={() => onLogoutButtonClickHandler()}
 						disabled={isLogoutLoadingState}>
 						Logout
