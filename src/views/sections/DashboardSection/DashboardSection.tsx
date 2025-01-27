@@ -9,23 +9,23 @@ const DashboardSection = () => {
 	if (isLoading) return <>Loading...</>;
 	return (
 		<>
-			{JSON.stringify(me?.entities.data, null, 2)} Lorem ipsum dolor sit amet consectetur
-			adipisicing elit. Culpa illum impedit molestiae dolores. Ullam pariatur saepe quidem ad
-			enim perspiciatis quia natus quas nisi atque nobis iure libero alias aut illo beatae
-			culpa dolore officiis illum ut, in adipisci praesentium repellat quasi! Tempora eum
-			debitis nemo possimus voluptatum tempore quas sunt. Labore voluptate distinctio quas
-			perspiciatis repudiandae dolorum commodi eos incidunt minima necessitatibus, atque
-			asperiores quia eligendi modi. Ipsum quia nam nihil officiis dicta! Ratione doloribus ut
-			aliquid ipsam facilis nesciunt omnis consequatur excepturi dolorum, officiis architecto
-			officia et numquam nam reprehenderit eaque fugit non inventore quas voluptatem
-			voluptatibus? Enim nobis, laudantium numquam molestias quisquam in, corporis minima
-			aliquam illo, temporibus mollitia vero. Ipsa exercitationem blanditiis totam quia
-			temporibus, culpa similique nam unde! Animi aut quibusdam repellat id exercitationem
-			accusamus culpa distinctio sapiente, eligendi officia saepe qui tempore placeat
-			doloribus! Earum ducimus, perspiciatis accusantium sint, rerum pariatur aliquam modi
-			recusandae, aspernatur eveniet exercitationem fuga. Autem expedita eaque dolorem
-			distinctio, magnam eum laudantium perspiciatis eius a officiis facilis sed dicta est eos
-			ipsam minima, animi reiciendis adipisci obcaecati error soluta doloribus ipsa
+			{JSON.stringify(me?.data?.entities.data, null, 2)} Lorem ipsum dolor sit amet
+			consectetur adipisicing elit. Culpa illum impedit molestiae dolores. Ullam pariatur
+			saepe quidem ad enim perspiciatis quia natus quas nisi atque nobis iure libero alias aut
+			illo beatae culpa dolore officiis illum ut, in adipisci praesentium repellat quasi!
+			Tempora eum debitis nemo possimus voluptatum tempore quas sunt. Labore voluptate
+			distinctio quas perspiciatis repudiandae dolorum commodi eos incidunt minima
+			necessitatibus, atque asperiores quia eligendi modi. Ipsum quia nam nihil officiis
+			dicta! Ratione doloribus ut aliquid ipsam facilis nesciunt omnis consequatur excepturi
+			dolorum, officiis architecto officia et numquam nam reprehenderit eaque fugit non
+			inventore quas voluptatem voluptatibus? Enim nobis, laudantium numquam molestias
+			quisquam in, corporis minima aliquam illo, temporibus mollitia vero. Ipsa exercitationem
+			blanditiis totam quia temporibus, culpa similique nam unde! Animi aut quibusdam repellat
+			id exercitationem accusamus culpa distinctio sapiente, eligendi officia saepe qui
+			tempore placeat doloribus! Earum ducimus, perspiciatis accusantium sint, rerum pariatur
+			aliquam modi recusandae, aspernatur eveniet exercitationem fuga. Autem expedita eaque
+			dolorem distinctio, magnam eum laudantium perspiciatis eius a officiis facilis sed dicta
+			est eos ipsam minima, animi reiciendis adipisci obcaecati error soluta doloribus ipsa
 			consequuntur? Ex repellendus quos ea illo ipsam sint. Accusantium consequatur molestiae
 			suscipit veritatis molestias vitae quos repudiandae eos quas voluptatum voluptatibus,
 			laboriosam dicta quisquam nemo asperiores enim iusto doloribus placeat. Neque non libero

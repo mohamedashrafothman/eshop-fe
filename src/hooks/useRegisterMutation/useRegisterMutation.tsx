@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
 	type AxiosErrorProps,
-	type AxiosRequestProps,
+	type AxiosRequestConfig,
 	type AxiosResponseProps,
 } from "config/axios";
 import {
@@ -20,7 +20,7 @@ const useRegisterMutation = () => {
 	return useMutation<
 		AxiosResponseProps<PostRegisterResponseType>,
 		AxiosErrorProps,
-		AxiosRequestProps<PostRegisterDataType>
+		AxiosRequestConfig<PostRegisterDataType>
 	>({ mutationKey: KEY_ARRAY });
 };
 

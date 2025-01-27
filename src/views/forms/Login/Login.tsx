@@ -39,7 +39,7 @@ const Login = () => {
 			refreshToken = "",
 			tokenType = "",
 			...user
-		} = response?.entities?.data || {};
+		} = response?.data?.entities?.data || {};
 		// Call the signIn function from next-auth.
 		if (accessToken || refreshToken || tokenType || user)
 			await signIn("credentials", {

@@ -30,7 +30,7 @@ const AccountPassword = () => {
 		// Call the forgot password mutation.
 		await patchUserMutation.mutateAsync(
 			{
-				variables: { id: me?.entities.data._id },
+				variables: { id: me?.data?.entities.data._id },
 				data,
 				signal: patchUserCancelRequestRef.current.signal,
 			},

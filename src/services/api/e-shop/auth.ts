@@ -1,4 +1,4 @@
-import { axiosRequest, type AxiosRequestProps } from "config/axios";
+import axiosInstance, { type AxiosRequestConfig, type AxiosResponseProps } from "config/axios";
 import IUser from "interfaces/User.interface";
 import vars from "utils/vars";
 
@@ -38,67 +38,78 @@ export type PostResetPasswordDataType = { password: string; passwordConfirmation
 export type PostResetPasswordResponseType = object;
 
 // requests methods
-export const postRegister = ({ ...options }: AxiosRequestProps<PostRegisterDataType>) =>
-	axiosRequest<PostRegisterDataType, PostRegisterResponseType>({
-		...options,
+export const postRegister = ({ ...options }: AxiosRequestConfig<PostRegisterDataType>) =>
+	axiosInstance<PostRegisterDataType, AxiosResponseProps<PostRegisterDataType>>({
 		method: "post",
 		url: "/v1/auth/register",
+		...options,
 	});
 
-export const postLogin = ({ ...options }: AxiosRequestProps<PostLoginDataType>) =>
-	axiosRequest<PostLoginDataType, PostLoginResponseType>({
-		...options,
+export const postLogin = ({ ...options }: AxiosRequestConfig<PostLoginDataType>) =>
+	axiosInstance<PostLoginDataType, AxiosResponseProps<PostLoginDataType>>({
 		method: "post",
 		url: "/v1/auth/login",
+		...options,
 	});
 
-export const postLogout = ({ ...options }: AxiosRequestProps<PostLogoutDataType>) =>
-	axiosRequest<PostLogoutDataType, PostLogoutResponseType>({
-		...options,
+export const postLogout = ({ ...options }: AxiosRequestConfig<PostLogoutDataType>) =>
+	axiosInstance<PostLogoutDataType, AxiosResponseProps<PostLogoutDataType>>({
 		method: "post",
 		url: "/v1/auth/logout",
+		...options,
 	});
 
-export const postRefreshToken = ({ ...options }: AxiosRequestProps<PostRefreshTokenDataType>) =>
-	axiosRequest<PostRefreshTokenDataType, PostRefreshTokenResponseType>({
-		...options,
+export const postRefreshToken = ({ ...options }: AxiosRequestConfig<PostRefreshTokenDataType>) =>
+	axiosInstance<PostRefreshTokenDataType, AxiosResponseProps<PostRefreshTokenDataType>>({
 		method: "post",
 		url: "/v1/auth/refresh-token",
+		...options,
 	});
 
 export const postLoginBySocialMedia = ({
 	variables,
 	...options
-}: AxiosRequestProps<PostLoginBySocialMediaDataType, { providerName: OAuthProviderNamesType }>) =>
-	axiosRequest<PostLoginBySocialMediaDataType, PostLoginBySocialMediaResponseType>({
-		...options,
+}: AxiosRequestConfig<PostLoginBySocialMediaDataType> & {
+	variables: { providerName: OAuthProviderNamesType };
+}) =>
+	axiosInstance<
+		PostLoginBySocialMediaDataType,
+		AxiosResponseProps<PostLoginBySocialMediaDataType>
+	>({
 		method: "post",
-		url: `/v1/auth/${variables?.providerName}`,
+		url: `/v1/auth/${variables.providerName}`,
+		...options,
 	});
 
 export const postUnlinkSocialMedia = ({
 	variables,
 	...options
-}: AxiosRequestProps<PostUnlinkSocialMediaDataType, { providerName: OAuthProviderNamesType }>) =>
-	axiosRequest<PostUnlinkSocialMediaDataType, PostUnlinkSocialMediaResponseType>({
-		...options,
-		method: "post",
-		url: `/v1/auth/${variables?.providerName}/unlink`,
-	});
+}: AxiosRequestConfig<PostUnlinkSocialMediaDataType> & {
+	variables: { providerName: OAuthProviderNamesType };
+}) =>
+	axiosInstance<PostUnlinkSocialMediaDataType, AxiosResponseProps<PostUnlinkSocialMediaDataType>>(
+		{
+			method: "post",
+			url: `/v1/auth/${variables.providerName}/unlink`,
+			...options,
+		}
+	);
 
-export const postForgotPassword = ({ ...options }: AxiosRequestProps<PostForgotPasswordDataType>) =>
-	axiosRequest<PostForgotPasswordDataType, PostForgotPasswordResponseType>({
-		...options,
+export const postForgotPassword = ({
+	...options
+}: AxiosRequestConfig<PostForgotPasswordDataType>) =>
+	axiosInstance<PostForgotPasswordDataType, AxiosResponseProps<PostForgotPasswordDataType>>({
 		method: "post",
 		url: "/v1/auth/password/forgot",
+		...options,
 	});
 
 export const postResetPassword = ({
 	variables,
 	...options
-}: AxiosRequestProps<PostResetPasswordDataType, { token: string }>) =>
-	axiosRequest<PostResetPasswordDataType, PostResetPasswordResponseType>({
-		...options,
+}: AxiosRequestConfig<PostResetPasswordDataType> & { variables: { token: string } }) =>
+	axiosInstance<PostResetPasswordDataType, AxiosResponseProps<PostResetPasswordDataType>>({
 		method: "post",
-		url: `/v1/auth/password/reset/${variables?.token}`,
+		url: `/v1/auth/password/reset/${variables.token}`,
+		...options,
 	});

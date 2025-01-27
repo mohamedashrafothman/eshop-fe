@@ -21,7 +21,7 @@ const AccountInformationConnections = () => {
 			refreshToken = "",
 			tokenType = "",
 			...user
-		} = response?.entities?.data || {};
+		} = response?.data?.entities?.data || {};
 
 		// Call the signIn function from next-auth.
 		if (accessToken || refreshToken || tokenType || Object.keys(user).length > 0)

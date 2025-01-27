@@ -65,8 +65,8 @@ const UserDropdown = () => {
 				ref={dropdownRef}>
 				<Image
 					src={`https://placehold.co/50x50/f5f5f5/6a983c.png?text=${
-						(me?.entities.data.name &&
-							me?.entities.data.name
+						(me?.data?.entities.data.name &&
+							me?.data?.entities.data.name
 								?.split(" ")
 								.map((item) => item.slice(0, 1).toUpperCase())
 								.slice(0, 2)
@@ -76,14 +76,14 @@ const UserDropdown = () => {
 					className="rounded-circle w-34px h-34px w-lg-50px h-lg-50px object-fit-cover flex-shrink-0"
 					width={50}
 					height={50}
-					alt={`${me?.entities.data.name} - ${me?.entities.data.email}`}
+					alt={`${me?.data?.entities.data.name} - ${me?.data?.entities.data.email}`}
 					priority={true}
 				/>
 				<span className="vstack gap-0 text-start align-items-start justify-content-center text-truncate flex-grow-1">
 					<strong className="fs-5 text-nowrap text-capitalize text-truncate d-block w-100 mb-n1">
-						<span className="d-none d-md-inline">{me?.entities.data.name}</span>
+						<span className="d-none d-md-inline">{me?.data?.entities.data.name}</span>
 						<span className="d-md-none">
-							{me?.entities.data.name
+							{me?.data?.entities.data.name
 								?.split(" ")
 								.map((item) => item.slice(0, 1).toUpperCase())
 								.slice(0, 2)
@@ -91,7 +91,7 @@ const UserDropdown = () => {
 						</span>
 					</strong>
 					<small className="op-50 text-nowrap text-lowercase text-truncate d-none d-md-block w-100">
-						{me?.entities.data.email}
+						{me?.data?.entities.data.email}
 					</small>
 				</span>
 				<span className="rounded-circle w-34px h-34px w-lg-50px h-lg-50px object-fit-cover flex-shrink-0 d-flex align-items-center justify-content-center">

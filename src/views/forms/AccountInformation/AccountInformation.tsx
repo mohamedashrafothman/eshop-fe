@@ -34,7 +34,7 @@ const AccountInformation = () => {
 		// Call the forgot password mutation.
 		await patchUserMutation.mutateAsync(
 			{
-				variables: { id: me?.entities.data._id },
+				variables: { id: me?.data?.entities.data._id },
 				data,
 				signal: patchUserCancelRequestRef.current.signal,
 			},
@@ -55,7 +55,7 @@ const AccountInformation = () => {
 					// Update next-auth session user data.
 					await signIn("credentials", {
 						...(session || {}),
-						user: JSON.stringify(response?.entities?.data),
+						user: JSON.stringify(response?.data?.entities?.data),
 						redirect: false,
 					});
 				},
@@ -67,8 +67,8 @@ const AccountInformation = () => {
 	const formState = useFormik<schemaType>({
 		enableReinitialize: true,
 		initialValues: {
-			name: me?.entities.data.name || "",
-			email: me?.entities.data.email || "",
+			name: me?.data?.entities.data.name || "",
+			email: me?.data?.entities.data.email || "",
 		},
 		validationSchema: formValidationSchema,
 		onSubmit: onFormSubmitHandler,

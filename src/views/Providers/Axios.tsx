@@ -115,7 +115,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 					tokenType = "",
 				} = (
 					refreshTokenResponse as unknown as AxiosResponseProps<PostRefreshTokenResponseType>
-				)?.entities?.data || {};
+				)?.data?.entities?.data || {};
 
 				// Update next-auth session tokens.
 				const result = await signIn("credentials", {
