@@ -10,7 +10,7 @@ import PasswordField from "views/components/PasswordField";
 import formValidationSchema, { type schemaType } from "./schema";
 
 const AccountPassword = () => {
-	const { data: me, isLoading: isMeLoading } = useMeQuery();
+	const { data: user, isLoading: isUserLoading } = useMeQuery();
 
 	// server state hooks
 	const patchUserMutation = usePatchUserMutation();
@@ -24,7 +24,7 @@ const AccountPassword = () => {
 		formikHelpers: FormikHelpers<schemaType>
 	) => {
 		// Prevent empty id.
-		if (!me?.data?.entities.data._id) return;
+		if (!user?.data?.entities.data._id) return;
 
 		// Abort any previous request, and create a new abort controller.
 		if (patchUserCancelRequestRef.current?.signal) patchUserCancelRequestRef.current?.abort();
@@ -33,7 +33,7 @@ const AccountPassword = () => {
 		// Call the forgot password mutation.
 		await patchUserMutation.mutateAsync(
 			{
-				variables: { id: me.data.entities.data._id },
+				variables: { id: user.data.entities.data._id },
 				data,
 				signal: patchUserCancelRequestRef.current.signal,
 			},
@@ -68,7 +68,7 @@ const AccountPassword = () => {
 	return (
 		<form onSubmit={formState.handleSubmit} onReset={formState.handleReset} noValidate>
 			<FocusError formik={formState} />
-			<fieldset disabled={formState.isSubmitting || isMeLoading}>
+			<fieldset disabled={formState.isSubmitting || isUserLoading}>
 				<legend className="visually-hidden">account password form</legend>
 				<div className="row gy-4">
 					<div className="col-12">

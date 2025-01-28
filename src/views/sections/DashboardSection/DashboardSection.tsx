@@ -3,13 +3,13 @@
 import useMeQuery from "hooks/useMeQuery";
 
 const DashboardSection = () => {
-	const { data: me, isLoading, isError, error } = useMeQuery();
+	const { data: user, isLoading, isError, error } = useMeQuery();
 
 	if (isError && error?.status && error.status >= 500) throw error;
 	if (isLoading) return <>Loading...</>;
 	return (
 		<>
-			{JSON.stringify(me?.data?.entities.data, null, 2)} Lorem ipsum dolor sit amet
+			{JSON.stringify(user?.data?.entities.data, null, 2)} Lorem ipsum dolor sit amet
 			consectetur adipisicing elit. Culpa illum impedit molestiae dolores. Ullam pariatur
 			saepe quidem ad enim perspiciatis quia natus quas nisi atque nobis iure libero alias aut
 			illo beatae culpa dolore officiis illum ut, in adipisci praesentium repellat quasi!

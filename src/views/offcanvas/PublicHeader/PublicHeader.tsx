@@ -8,7 +8,7 @@ import Logo from "views/components/Logo";
 import Nav, { PROPS_TYPES as NAV_PROPS_TYPES } from "views/components/Nav";
 
 const PublicHeader = () => {
-	const { data: session } = useSession();
+	const session = useSession();
 
 	// portal dom element
 	let portalsRoot = document.getElementById("portals") || null;
@@ -20,6 +20,9 @@ const PublicHeader = () => {
 
 	// ref hook
 	const offCanvasRef = useRef<HTMLDivElement | null>(null);
+
+	// constants
+	const isAuthenticated = session?.status === "authenticated";
 
 	// effect hook
 	useEffect(() => {
@@ -56,9 +59,13 @@ const PublicHeader = () => {
 									<Nav.List>
 										<Nav.ListItem>
 											<Nav.Link
-												href={!session ? "/auth/login" : "/dashboard"}
+												href={
+													!isAuthenticated ? "/auth/login" : "/dashboard"
+												}
 												className="link-dark"
-												title={!session ? "Login" : "Go to dashboard"}>
+												title={
+													!isAuthenticated ? "Login" : "Go to dashboard"
+												}>
 												<svg
 													className="bi w-22px h-22px"
 													width="22"

@@ -2,6 +2,7 @@
 
 import classNames from "classnames";
 import useLoginBySocialMutation from "hooks/useLoginBySocialMutation";
+import useMeQuery from "hooks/useMeQuery";
 import useUnlinkSocialMutation from "hooks/useUnlinkSocialMutation";
 import { useSession } from "next-auth/react";
 import { useTransitionRouter } from "next-view-transitions";
@@ -22,6 +23,7 @@ type Props = { onSuccess?: (_x: any) => Promise<void> | undefined } & Omit<
 
 const FacebookOAuthButton = ({ onSuccess, className, ...props }: Props) => {
 	const session = useSession();
+	const { data: user } = useMeQuery();
 	const { push } = useTransitionRouter();
 
 	// server state hooks
@@ -36,7 +38,7 @@ const FacebookOAuthButton = ({ onSuccess, className, ...props }: Props) => {
 
 	// constants
 	const isAuthenticated = session?.status === "authenticated";
-	const isConnectedToFacebook = Boolean(session?.data?.user?.facebook);
+	const isConnectedToFacebook = Boolean(user?.data?.entities?.data?.facebook);
 	const buttonTitle = isAuthenticated
 		? `${isConnectedToFacebook ? (facebookOAuthLoadingState ? "Unlinking from" : "Unlink from") : facebookOAuthLoadingState ? "Linking to" : "Link to"} Facebook`
 		: `${facebookOAuthLoadingState ? "Logging" : "Login"} by Facebook`;

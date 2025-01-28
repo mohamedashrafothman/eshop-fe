@@ -14,7 +14,7 @@ import formValidationSchema, { type schemaType } from "./schema";
 const AccountInformation = () => {
 	const queryClient = useQueryClient();
 	const { data: session } = useSession();
-	const { data: me, isLoading: isMeLoading } = useMeQuery();
+	const { data: user, isLoading: isUserLoading } = useMeQuery();
 
 	// server state hooks
 	const patchUserMutation = usePatchUserMutation();
@@ -28,7 +28,7 @@ const AccountInformation = () => {
 		formikHelpers: FormikHelpers<schemaType>
 	) => {
 		// Prevent empty id.
-		if (!me?.data?.entities.data._id) return;
+		if (!user?.data?.entities.data._id) return;
 
 		// Abort any previous request, and create a new abort controller.
 		if (patchUserCancelRequestRef.current?.signal) patchUserCancelRequestRef.current?.abort();
@@ -37,7 +37,7 @@ const AccountInformation = () => {
 		// Call the forgot password mutation.
 		await patchUserMutation.mutateAsync(
 			{
-				variables: { id: me.data.entities.data._id },
+				variables: { id: user.data.entities.data._id },
 				data,
 				signal: patchUserCancelRequestRef.current.signal,
 			},
@@ -53,8 +53,8 @@ const AccountInformation = () => {
 					formikHelpers.resetForm();
 					// Resetting forgot password query mutation.
 					patchUserMutation.reset();
-					// Remove the me query from the cache.
-					queryClient.removeQueries({ queryKey: ME_KEY_QUERY, exact: true });
+					// Invalidate the me query from the cache.
+					queryClient.invalidateQueries({ queryKey: ME_KEY_QUERY, exact: true });
 					// Update next-auth session user data.
 					await signIn("credentials", {
 						...(session || {}),
@@ -70,8 +70,8 @@ const AccountInformation = () => {
 	const formState = useFormik<schemaType>({
 		enableReinitialize: true,
 		initialValues: {
-			name: me?.data?.entities.data.name || "",
-			email: me?.data?.entities.data.email || "",
+			name: user?.data?.entities.data.name || "",
+			email: user?.data?.entities.data.email || "",
 		},
 		validationSchema: formValidationSchema,
 		onSubmit: onFormSubmitHandler,
@@ -88,7 +88,7 @@ const AccountInformation = () => {
 	return (
 		<form onSubmit={formState.handleSubmit} onReset={formState.handleReset} noValidate>
 			<FocusError formik={formState} />
-			<fieldset disabled={formState.isSubmitting || isMeLoading}>
+			<fieldset disabled={formState.isSubmitting || isUserLoading}>
 				<legend className="visually-hidden">account information form</legend>
 				<div className="row gy-4">
 					<div className="col-12">

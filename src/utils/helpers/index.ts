@@ -1,6 +1,7 @@
 export * from "./api";
 export * from "./dom";
 export * from "./server";
+export * from "./user";
 
 export const isFunction = (value: unknown) => typeof value === "function";
 

@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import NextLink from "views/components/NextLink";
 
 const UserDropdown = () => {
-	const { data: me } = useMeQuery();
+	const { data: user } = useMeQuery();
 	const postLogoutMutation = useLogoutMutation();
 
 	// ref hook
@@ -55,6 +55,8 @@ const UserDropdown = () => {
 		};
 	}, []);
 
+	console.log("user: ", user);
+
 	return (
 		<div className="dropdown">
 			<button
@@ -65,8 +67,8 @@ const UserDropdown = () => {
 				ref={dropdownRef}>
 				<Image
 					src={`https://placehold.co/50x50/f5f5f5/6a983c.png?text=${
-						(me?.data?.entities.data.name &&
-							me?.data?.entities.data.name
+						(user?.data?.entities.data.name &&
+							user?.data?.entities.data.name
 								?.split(" ")
 								.map((item) => item.slice(0, 1).toUpperCase())
 								.slice(0, 2)
@@ -76,14 +78,14 @@ const UserDropdown = () => {
 					className="rounded-circle w-34px h-34px w-lg-50px h-lg-50px object-fit-cover flex-shrink-0"
 					width={50}
 					height={50}
-					alt={`${me?.data?.entities.data.name} - ${me?.data?.entities.data.email}`}
+					alt={`${user?.data?.entities.data.name} - ${user?.data?.entities.data.email}`}
 					priority={true}
 				/>
 				<span className="vstack gap-0 text-start align-items-start justify-content-center text-truncate flex-grow-1">
 					<strong className="fs-5 text-nowrap text-capitalize text-truncate d-block w-100 mb-n1">
-						<span className="d-none d-md-inline">{me?.data?.entities.data.name}</span>
+						<span className="d-none d-md-inline">{user?.data?.entities.data.name}</span>
 						<span className="d-md-none">
-							{me?.data?.entities.data.name
+							{user?.data?.entities.data.name
 								?.split(" ")
 								.map((item) => item.slice(0, 1).toUpperCase())
 								.slice(0, 2)
@@ -91,7 +93,7 @@ const UserDropdown = () => {
 						</span>
 					</strong>
 					<small className="op-50 text-nowrap text-lowercase text-truncate d-none d-md-block w-100">
-						{me?.data?.entities.data.email}
+						{user?.data?.entities.data.email}
 					</small>
 				</span>
 				<span className="rounded-circle w-34px h-34px w-lg-50px h-lg-50px object-fit-cover flex-shrink-0 d-flex align-items-center justify-content-center">

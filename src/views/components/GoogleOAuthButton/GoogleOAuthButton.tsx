@@ -2,6 +2,7 @@
 
 import classNames from "classnames";
 import useLoginBySocialMutation from "hooks/useLoginBySocialMutation";
+import useMeQuery from "hooks/useMeQuery";
 import useUnlinkSocialMutation from "hooks/useUnlinkSocialMutation";
 import { useSession } from "next-auth/react";
 import { useTransitionRouter } from "next-view-transitions";
@@ -24,6 +25,7 @@ type Props = { onSuccess?: (_x: any) => Promise<void> | undefined } & Omit<
 
 const GoogleOAuthButton = ({ onSuccess, className, ...props }: Props) => {
 	const session = useSession();
+	const { data: user } = useMeQuery();
 	const { push } = useTransitionRouter();
 
 	// server state hooks
@@ -38,7 +40,7 @@ const GoogleOAuthButton = ({ onSuccess, className, ...props }: Props) => {
 
 	// constants
 	const isAuthenticated = session?.status === "authenticated";
-	const isConnectedToGoogle = Boolean(session?.data?.user?.google);
+	const isConnectedToGoogle = Boolean(user?.data?.entities?.data?.google);
 	const buttonTitle = isAuthenticated
 		? `${isConnectedToGoogle ? (googleOAuthLoadingState ? "Unlinking from" : "Unlink from") : googleOAuthLoadingState ? "Linking to" : "Link to"} Google`
 		: `${googleOAuthLoadingState ? "Logging" : "Login"} by Google`;

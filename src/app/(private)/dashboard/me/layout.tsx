@@ -7,7 +7,7 @@ type Props = { children?: React.ReactNode | undefined };
 
 const AccountInformationLayout = async ({ children }: Props) => (
 	<>
-		<h1 className="display-4 text-capitalize mb-0">
+		<h1 className="display-5 text-capitalize mb-0">
 			<strong>{PAGE_TITLE}</strong>
 		</h1>
 		{children}
