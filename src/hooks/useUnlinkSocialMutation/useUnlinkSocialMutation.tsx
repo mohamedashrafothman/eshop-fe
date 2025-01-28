@@ -6,6 +6,7 @@ import {
 } from "config/axios";
 import {
 	postUnlinkSocialMedia as mutationFn,
+	type OAuthProviderNamesType,
 	type PostUnlinkSocialMediaDataType,
 	type PostUnlinkSocialMediaResponseType,
 } from "services/api/e-shop/auth";
@@ -20,7 +21,9 @@ const useUnlinkSocialQuery = () => {
 	return useMutation<
 		AxiosResponseProps<PostUnlinkSocialMediaResponseType>,
 		AxiosErrorProps,
-		AxiosRequestConfig<PostUnlinkSocialMediaDataType>
+		AxiosRequestConfig<PostUnlinkSocialMediaDataType> & {
+			variables: { providerName: OAuthProviderNamesType };
+		}
 	>({ mutationKey: KEY_ARRAY });
 };
 

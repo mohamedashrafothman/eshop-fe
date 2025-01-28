@@ -20,7 +20,7 @@ const useResetPasswordMutation = () => {
 	return useMutation<
 		AxiosResponseProps<PostResetPasswordResponseType>,
 		AxiosErrorProps,
-		AxiosRequestConfig<PostResetPasswordDataType>
+		AxiosRequestConfig<PostResetPasswordDataType> & { variables: { token: string } }
 	>({ mutationKey: KEY_ARRAY });
 };
 

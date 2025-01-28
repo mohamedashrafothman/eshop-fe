@@ -3,7 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import useMeQuery from "hooks/useMeQuery";
+import useMeQuery, { KEY_ARRAY as ME_KEY_QUERY } from "hooks/useMeQuery";
 import usePatchUserMutation from "hooks/usePatchUserMutation";
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
@@ -27,6 +27,9 @@ const AccountInformation = () => {
 		data: schemaType,
 		formikHelpers: FormikHelpers<schemaType>
 	) => {
+		// Prevent empty id.
+		if (!me?.data?.entities.data._id) return;
+
 		// Abort any previous request, and create a new abort controller.
 		if (patchUserCancelRequestRef.current?.signal) patchUserCancelRequestRef.current?.abort();
 		patchUserCancelRequestRef.current = new AbortController();
@@ -34,7 +37,7 @@ const AccountInformation = () => {
 		// Call the forgot password mutation.
 		await patchUserMutation.mutateAsync(
 			{
-				variables: { id: me?.data?.entities.data._id },
+				variables: { id: me.data.entities.data._id },
 				data,
 				signal: patchUserCancelRequestRef.current.signal,
 			},
@@ -51,7 +54,7 @@ const AccountInformation = () => {
 					// Resetting forgot password query mutation.
 					patchUserMutation.reset();
 					// Remove the me query from the cache.
-					queryClient.removeQueries({ queryKey: ["users", "me"], exact: true });
+					queryClient.removeQueries({ queryKey: ME_KEY_QUERY, exact: true });
 					// Update next-auth session user data.
 					await signIn("credentials", {
 						...(session || {}),

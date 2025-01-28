@@ -42,9 +42,9 @@ export const getNodeWidth = (ele: HTMLElement): number | Error => {
  * @return {string} The value of the specified CSS property
  */
 export const getNodeCSSPropertyValue = (ele: HTMLElement, valueName: string): string | Error => {
+	if (!window) return "";
 	if (!isNode(ele)) return new Error("element isn't DOM node!");
 	if (!valueName) return new Error("you should pass css value name");
-	if (!window) return "";
 	return window.getComputedStyle(ele, null).getPropertyValue(valueName);
 };
 

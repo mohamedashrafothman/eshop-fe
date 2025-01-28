@@ -2,18 +2,15 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import to from "await-to-js";
-import axiosInstance, {
-	isAxiosCancelError,
-	type AxiosInstance,
-	type AxiosResponseProps,
-} from "config/axios";
+import axiosInstance, { isAxiosCancelError, type AxiosInstance } from "config/axios";
+import httpStatus from "http-status";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useTransitionRouter } from "next-view-transitions";
 import { useCallback, useLayoutEffect } from "react";
 import { toast } from "react-toastify";
 import { postRefreshToken, type PostRefreshTokenResponseType } from "services/api/e-shop/auth";
 
-type Props = { children?: React.ReactNode; instance?: AxiosInstance };
+type Props = { children?: React.ReactNode | undefined; instance?: AxiosInstance | undefined };
 
 const Axios = ({ children, instance = axiosInstance }: Props) => {
 	const { push } = useTransitionRouter();
@@ -36,10 +33,10 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 	const requestErrorInterceptor = useCallback((error: any) => Promise.reject(error), []);
 
 	const responseSuccessInterceptor = useCallback((response: any) => {
-		// extract response data.
+		// Extract response data.
 		const { data: { message = null, flashes = {} } = {} } = response;
 
-		// handle flash messages
+		// Handle flash messages
 		if (message) toast.error(message);
 		if (Object.keys(flashes).length)
 			Object.keys(flashes).forEach((messageType) =>
@@ -63,6 +60,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 
 	const responseErrorInterceptor = useCallback(
 		async (responseError: any = {}) => {
+			// Ignore axios cancel errors
 			if (isAxiosCancelError(responseError)) return Promise.reject(responseError);
 
 			// Extract error response data.
@@ -72,7 +70,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 			} = responseError;
 
 			// Handle flash messages
-			if (![status, originalRequest.status].includes(401)) {
+			if (![status, originalRequest.status].includes(httpStatus.UNAUTHORIZED)) {
 				if (error?.message || message) toast.error(error?.message || message);
 				if (Object.keys(flashes).length)
 					Object.keys(flashes).forEach((messageType) =>
@@ -93,7 +91,11 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 			}
 
 			// Handle 401 status code error.
-			if (status === 401 && !originalRequest._retry && session?.refreshToken) {
+			if (
+				status === httpStatus.UNAUTHORIZED &&
+				!originalRequest._retry &&
+				session?.refreshToken
+			) {
 				// Mark the request as retried to avoid infinite loops.
 				originalRequest._retry = true;
 
@@ -113,9 +115,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 					accessToken = "",
 					refreshToken = "",
 					tokenType = "",
-				} = (
-					refreshTokenResponse as unknown as AxiosResponseProps<PostRefreshTokenResponseType>
-				)?.data?.entities?.data || {};
+				} = refreshTokenResponse.data.entities.data as PostRefreshTokenResponseType;
 
 				// Update next-auth session tokens.
 				const result = await signIn("credentials", {
@@ -143,8 +143,9 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 			}
 
 			// Handling 404 status code error.
-			if ([404].includes(status)) push("/not-found");
+			if (status === httpStatus.NOT_FOUND) push("/not-found");
 
+			// Return rejected promise
 			return Promise.reject(responseError);
 		},
 		[instance, push, queryClient, session?.refreshToken, session?.user]

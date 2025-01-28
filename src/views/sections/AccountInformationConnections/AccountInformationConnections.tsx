@@ -42,8 +42,8 @@ const AccountInformationConnections = () => {
 
 	return (
 		<section className="account-information-connections py-4">
-			<div className="row gy-4 gy-lg-0">
-				<div className="col-12 col-lg-5 col-xxl-4">
+			<div className="row gy-4 gy-xl-0">
+				<div className="col-12 col-xl-5 col-3xl-4">
 					<div className="row gy-4">
 						<div className="col-12">
 							<h2 className="h3 text-capitalize">
@@ -52,7 +52,7 @@ const AccountInformationConnections = () => {
 								</strong>
 							</h2>
 						</div>
-						<div className="col-12 col-xxl-10">
+						<div className="col-12 col-3xl-10">
 							<div className="row gy-3">
 								<div className="col-12">
 									<GoogleOAuthButton

@@ -20,7 +20,7 @@ const usePatchUserMutation = () => {
 	return useMutation<
 		AxiosResponseProps<PatchUserResponseType>,
 		AxiosErrorProps,
-		AxiosRequestConfig<PatchUserDataType>
+		AxiosRequestConfig<PatchUserDataType> & { variables: { id: string } }
 	>({ mutationKey: KEY_ARRAY });
 };
 

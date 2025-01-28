@@ -6,6 +6,7 @@ import {
 } from "config/axios";
 import {
 	postLoginBySocialMedia as mutationFn,
+	type OAuthProviderNamesType,
 	type PostLoginBySocialMediaDataType,
 	type PostLoginBySocialMediaResponseType,
 } from "services/api/e-shop/auth";
@@ -20,7 +21,9 @@ const useLoginBySocialMutation = () => {
 	return useMutation<
 		AxiosResponseProps<PostLoginBySocialMediaResponseType>,
 		AxiosErrorProps,
-		AxiosRequestConfig<PostLoginBySocialMediaDataType>
+		AxiosRequestConfig<PostLoginBySocialMediaDataType> & {
+			variables: { providerName: OAuthProviderNamesType };
+		}
 	>({ mutationKey: KEY_ARRAY });
 };
 
