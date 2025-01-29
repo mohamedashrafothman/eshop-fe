@@ -81,16 +81,10 @@ const Login = () => {
 					<div className="col-12">
 						<div className="row gy-3">
 							<div className="col-12">
-								<GoogleOAuthButton
-									className="w-100 justify-content-center"
-									onSuccess={() => setIsLoginLoadingState(false)}
-								/>
+								<GoogleOAuthButton className="w-100 justify-content-center" />
 							</div>
 							<div className="col-12">
-								<FacebookOAuthButton
-									className="w-100 justify-content-center"
-									onSuccess={() => setIsLoginLoadingState(false)}
-								/>
+								<FacebookOAuthButton className="w-100 justify-content-center" />
 							</div>
 						</div>
 					</div>

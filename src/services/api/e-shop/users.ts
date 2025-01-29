@@ -8,6 +8,18 @@ export type PatchUserDataType =
 	| Partial<IUser>
 	| { oldPassword: string; password: string; passwordConfirmation: string };
 export type PatchUserResponseType = IUser;
+export type GetUsersDataType = {
+	page?: number | undefined;
+	limit?: number | undefined;
+	sort?: string | undefined;
+	offset?: number | undefined;
+	pagination?: boolean | undefined;
+	q?: string | undefined;
+	deleted?: boolean | number | undefined;
+	emailVerified?: boolean | number | undefined;
+	active?: boolean | number | undefined;
+};
+export type GetUsersResponseType = IUser[];
 
 // requests methods
 export const getMe = ({ ...options }: AxiosRequestConfig<GetMeDataType>) =>
@@ -24,5 +36,12 @@ export const patchUser = ({
 	axiosInstance<PatchUserResponseType, AxiosResponseProps<PatchUserResponseType>>({
 		method: "patch",
 		url: `/v1/users/${variables?.id}`,
+		...options,
+	});
+
+export const getUsers = ({ ...options }: AxiosRequestConfig<GetUsersDataType>) =>
+	axiosInstance<GetUsersResponseType, AxiosResponseProps<GetUsersResponseType>>({
+		method: "get",
+		url: "/v1/users",
 		...options,
 	});

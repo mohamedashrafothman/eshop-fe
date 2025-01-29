@@ -75,11 +75,7 @@ export const postLoginBySocialMedia = ({
 	axiosInstance<
 		PostLoginBySocialMediaResponseType,
 		AxiosResponseProps<PostLoginBySocialMediaResponseType>
-	>({
-		method: "post",
-		url: `/v1/auth/${variables.providerName}`,
-		...options,
-	});
+	>({ method: "post", url: `/v1/auth/${variables.providerName}`, ...options });
 
 export const postUnlinkSocialMedia = ({
 	variables,
@@ -90,11 +86,7 @@ export const postUnlinkSocialMedia = ({
 	axiosInstance<
 		PostUnlinkSocialMediaResponseType,
 		AxiosResponseProps<PostUnlinkSocialMediaResponseType>
-	>({
-		method: "post",
-		url: `/v1/auth/${variables.providerName}/unlink`,
-		...options,
-	});
+	>({ method: "post", url: `/v1/auth/${variables.providerName}/unlink`, ...options });
 
 export const postForgotPassword = ({
 	...options
@@ -102,20 +94,12 @@ export const postForgotPassword = ({
 	axiosInstance<
 		PostForgotPasswordResponseType,
 		AxiosResponseProps<PostForgotPasswordResponseType>
-	>({
-		method: "post",
-		url: "/v1/auth/password/forgot",
-		...options,
-	});
+	>({ method: "post", url: "/v1/auth/password/forgot", ...options });
 
 export const postResetPassword = ({
 	variables,
 	...options
 }: AxiosRequestConfig<PostResetPasswordDataType> & { variables: { token: string } }) =>
 	axiosInstance<PostResetPasswordResponseType, AxiosResponseProps<PostResetPasswordResponseType>>(
-		{
-			method: "post",
-			url: `/v1/auth/password/reset/${variables.token}`,
-			...options,
-		}
+		{ method: "post", url: `/v1/auth/password/reset/${variables.token}`, ...options }
 	);

@@ -18,7 +18,7 @@ const UsersLayout = async ({ children }: Props) => {
 	// If the user is super admin, let them stay on the page.
 	return (
 		<>
-			<h1 className="display-5 text-capitalize mb-0">
+			<h1 className="display-5 text-capitalize">
 				<strong>{PAGE_TITLE}</strong>
 			</h1>
 			{children}

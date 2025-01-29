@@ -6,7 +6,7 @@ import axiosInstance, { isAxiosCancelError, type AxiosInstance } from "config/ax
 import httpStatus from "http-status";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useTransitionRouter } from "next-view-transitions";
-import { useCallback, useLayoutEffect } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { postRefreshToken, type PostRefreshTokenResponseType } from "services/api/e-shop/auth";
 
@@ -16,6 +16,9 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 	const { push } = useTransitionRouter();
 	const { data: session } = useSession();
 	const queryClient = useQueryClient();
+
+	// ref hook
+	const refreshTokenCancelRequestRef = useRef<AbortController | null>(null);
 
 	// event handlers
 	const requestSuccessInterceptor = useCallback(
@@ -99,9 +102,17 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 				// Mark the request as retried to avoid infinite loops.
 				originalRequest._retry = true;
 
+				// Abort any previous request, and create a new abort controller.
+				if (refreshTokenCancelRequestRef.current?.signal)
+					refreshTokenCancelRequestRef.current?.abort();
+				refreshTokenCancelRequestRef.current = new AbortController();
+
 				// Make a request to your auth server to refresh the token.
 				const [refreshTokenError, refreshTokenResponse] = await to(
-					postRefreshToken({ data: { refreshToken: session.refreshToken } })
+					postRefreshToken({
+						data: { refreshToken: session.refreshToken },
+						signal: refreshTokenCancelRequestRef.current.signal,
+					})
 				);
 
 				// Handle refresh token errors by signing out and redirecting to the login page.
@@ -177,6 +188,13 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 			instance.interceptors.response.eject(responseInterceptor);
 		};
 	}, [instance.interceptors.response, responseErrorInterceptor, responseSuccessInterceptor]);
+
+	useEffect(() => {
+		return () => {
+			if (refreshTokenCancelRequestRef.current?.signal)
+				refreshTokenCancelRequestRef.current?.abort();
+		};
+	}, []);
 
 	return <>{children}</>;
 };
