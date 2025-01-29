@@ -9,10 +9,10 @@ const UsersList = () => {
 		isLoading: isUsersLoading,
 		hasNextPage: hasUsersNextPage,
 		fetchNextPage: fetchUsersNextPage,
-		isFetchingNextPage: isUsersFetchingNextPage,
+		// isFetchingNextPage: isUsersFetchingNextPage,
 		hasPreviousPage: hasUsersPreviousPage,
 		fetchPreviousPage: fetchUsersPreviousPage,
-		isFetchingPreviousPage: isUsersFetchingPreviousPage,
+		// isFetchingPreviousPage: isUsersFetchingPreviousPage,
 	} = useUsersInfinityQuery({ limit: 1 });
 
 	console.log("usersPages: ", usersPages);

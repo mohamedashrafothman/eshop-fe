@@ -159,7 +159,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 			// Return rejected promise
 			return Promise.reject(responseError);
 		},
-		[instance, push, queryClient, session?.refreshToken, session?.user]
+		[instance, push, queryClient, session]
 	);
 
 	// layout effects
