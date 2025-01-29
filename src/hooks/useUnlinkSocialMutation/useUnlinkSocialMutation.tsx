@@ -4,6 +4,8 @@ import {
 	type AxiosRequestConfig,
 	type AxiosResponseProps,
 } from "config/axios";
+import { KEY_ARRAY as ME_KEY_QUERY } from "hooks/useMeQuery";
+import { signIn, useSession } from "next-auth/react";
 import {
 	postUnlinkSocialMedia as mutationFn,
 	type OAuthProviderNamesType,
@@ -15,8 +17,24 @@ export const KEY_ARRAY = ["auth", "login", "social", "unlink"];
 
 const useUnlinkSocialQuery = () => {
 	const queryClient = useQueryClient();
+	const { data: session } = useSession();
 
-	queryClient.setMutationDefaults(KEY_ARRAY, { mutationFn });
+	queryClient.setMutationDefaults(KEY_ARRAY, {
+		mutationFn,
+		onSuccess: async (response) => {
+			// Remove the me query from the cache.
+			queryClient.removeQueries({ queryKey: ME_KEY_QUERY, exact: true });
+			// Extract user, and tokens data from the response.
+			const user = response?.data?.entities?.data || {};
+			// Call the signIn function from next-auth.
+			if (user)
+				await signIn("credentials", {
+					...(session || {}),
+					...(user && { user: JSON.stringify(user) }),
+					redirect: false,
+				});
+		},
+	});
 
 	return useMutation<
 		AxiosResponseProps<PostUnlinkSocialMediaResponseType>,

@@ -12,7 +12,7 @@ import { default as ReduxProvider } from "./Redux";
 
 type Props = {
 	children?: React.ReactNode;
-	session: Session;
+	session?: Session | null;
 	hydrationBoundaryState: DehydratedState;
 };
 

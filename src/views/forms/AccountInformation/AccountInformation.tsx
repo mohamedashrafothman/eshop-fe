@@ -28,7 +28,7 @@ const AccountInformation = () => {
 		formikHelpers: FormikHelpers<schemaType>
 	) => {
 		// Prevent empty id.
-		if (!user?.data?.entities.data._id) return;
+		if (!user?._id) return;
 
 		// Abort any previous request, and create a new abort controller.
 		if (patchUserCancelRequestRef.current?.signal) patchUserCancelRequestRef.current?.abort();
@@ -37,7 +37,7 @@ const AccountInformation = () => {
 		// Call the forgot password mutation.
 		await patchUserMutation.mutateAsync(
 			{
-				variables: { id: user.data.entities.data._id },
+				variables: { id: user._id },
 				data,
 				signal: patchUserCancelRequestRef.current.signal,
 			},
@@ -70,8 +70,8 @@ const AccountInformation = () => {
 	const formState = useFormik<schemaType>({
 		enableReinitialize: true,
 		initialValues: {
-			name: user?.data?.entities.data.name || "",
-			email: user?.data?.entities.data.email || "",
+			name: user?.name || "",
+			email: user?.email || "",
 		},
 		validationSchema: formValidationSchema,
 		onSubmit: onFormSubmitHandler,

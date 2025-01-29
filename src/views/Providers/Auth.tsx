@@ -3,7 +3,7 @@
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
-type Props = { children?: React.ReactNode; session: Session };
+type Props = { children?: React.ReactNode; session?: Session | null };
 
 const Auth = ({ children, session }: Props) => (
 	<SessionProvider session={session} refetchOnWindowFocus={false}>

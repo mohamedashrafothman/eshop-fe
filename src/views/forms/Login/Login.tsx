@@ -1,11 +1,8 @@
 "use client";
 
-import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
 import useLoginMutation from "hooks/useLoginMutation";
-import { signIn } from "next-auth/react";
-import { useTransitionRouter } from "next-view-transitions";
 import { useEffect, useRef, useState } from "react";
 import { apiFormErrorExtractor } from "utils/helpers";
 import CheckboxField from "views/components/CheckboxField";
@@ -17,9 +14,6 @@ import TextField from "views/components/TextField";
 import formValidationSchema, { type schemaType } from "./schema";
 
 const Login = () => {
-	const { push } = useTransitionRouter();
-	const queryClient = useQueryClient();
-
 	// server state hooks
 	const loginMutation = useLoginMutation();
 
@@ -28,32 +22,6 @@ const Login = () => {
 
 	// state hook
 	const [isLoginLoadingState, setIsLoginLoadingState] = useState(false);
-
-	// Handle form submission.
-	const onLoginSuccessHandler = async (response: any): Promise<void> => {
-		// Remove the me query from the cache.
-		queryClient.removeQueries({ queryKey: ["users", "me"], exact: true });
-		// Extract user, and tokens data from the response.
-		const {
-			accessToken = "",
-			refreshToken = "",
-			tokenType = "",
-			...user
-		} = response?.data?.entities?.data || {};
-		// Call the signIn function from next-auth.
-		if (accessToken || refreshToken || tokenType || user)
-			await signIn("credentials", {
-				...(accessToken && { accessToken: JSON.stringify(accessToken) }),
-				...(refreshToken && { refreshToken: JSON.stringify(refreshToken) }),
-				...(tokenType && { tokenType: JSON.stringify(tokenType) }),
-				...(user && { user: JSON.stringify(user) }),
-				redirect: false,
-			});
-		// Reset login loading state.
-		setIsLoginLoadingState(false);
-		// Redirect to the dashboard after success login.
-		push("/dashboard");
-	};
 
 	const onFormSubmitHandler = async (
 		data: schemaType,
@@ -78,12 +46,13 @@ const Login = () => {
 					// Reset login loading state.
 					setIsLoginLoadingState(false);
 				},
-				onSuccess: (response) => {
+				onSuccess: () => {
 					// Resetting formik.
 					formikHelpers.resetForm();
 					// Resetting login query mutation.
 					loginMutation.reset();
-					onLoginSuccessHandler(response);
+					// Reset login loading state.
+					setIsLoginLoadingState(false);
 				},
 			}
 		);
@@ -114,13 +83,13 @@ const Login = () => {
 							<div className="col-12">
 								<GoogleOAuthButton
 									className="w-100 justify-content-center"
-									onSuccess={onLoginSuccessHandler}
+									onSuccess={() => setIsLoginLoadingState(false)}
 								/>
 							</div>
 							<div className="col-12">
 								<FacebookOAuthButton
 									className="w-100 justify-content-center"
-									onSuccess={onLoginSuccessHandler}
+									onSuccess={() => setIsLoginLoadingState(false)}
 								/>
 							</div>
 						</div>

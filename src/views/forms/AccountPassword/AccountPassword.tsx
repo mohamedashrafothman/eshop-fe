@@ -24,7 +24,7 @@ const AccountPassword = () => {
 		formikHelpers: FormikHelpers<schemaType>
 	) => {
 		// Prevent empty id.
-		if (!user?.data?.entities.data._id) return;
+		if (!user?._id) return;
 
 		// Abort any previous request, and create a new abort controller.
 		if (patchUserCancelRequestRef.current?.signal) patchUserCancelRequestRef.current?.abort();
@@ -33,7 +33,7 @@ const AccountPassword = () => {
 		// Call the forgot password mutation.
 		await patchUserMutation.mutateAsync(
 			{
-				variables: { id: user.data.entities.data._id },
+				variables: { id: user._id },
 				data,
 				signal: patchUserCancelRequestRef.current.signal,
 			},

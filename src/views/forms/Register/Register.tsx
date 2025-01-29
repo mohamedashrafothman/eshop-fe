@@ -4,7 +4,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
 import useRegisterMutation from "hooks/useRegisterMutation";
-import { signIn } from "next-auth/react";
 import { useTransitionRouter } from "next-view-transitions";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -33,32 +32,6 @@ const Register = () => {
 	// state hook
 	const [isRegisterLoadingState, setIsRegisterLoadingState] = useState(false);
 
-	// Handle form submission.
-	const onRegisterSuccessHandler = async (response: any): Promise<void> => {
-		// Remove the me query from the cache.
-		queryClient.removeQueries({ queryKey: ["users", "me"], exact: true });
-		// Extract user, and tokens data from the response.
-		const {
-			accessToken = "",
-			refreshToken = "",
-			tokenType = "",
-			...user
-		} = response?.data?.entities?.data || {};
-		// Call the signIn function from next-auth.
-		if (accessToken || refreshToken || tokenType || user)
-			await signIn("credentials", {
-				...(accessToken && { accessToken: JSON.stringify(accessToken) }),
-				...(refreshToken && { refreshToken: JSON.stringify(refreshToken) }),
-				...(tokenType && { tokenType: JSON.stringify(tokenType) }),
-				...(user && { user: JSON.stringify(user) }),
-				redirect: false,
-			});
-		// Reset register loading state.
-		setIsRegisterLoadingState(false);
-		// Redirect to the dashboard after success register.
-		push("/dashboard");
-	};
-
 	const onFormSubmitHandler = async (
 		data: schemaType,
 		formikHelpers: FormikHelpers<schemaType>
@@ -84,12 +57,13 @@ const Register = () => {
 					// Reset register loading state.
 					setIsRegisterLoadingState(false);
 				},
-				onSuccess: (response) => {
+				onSuccess: () => {
 					// Resetting formik.
 					formikHelpers.resetForm();
 					// Resetting register query mutation.
 					registerMutation.reset();
-					onRegisterSuccessHandler(response);
+					// Reset login loading state.
+					setIsRegisterLoadingState(false);
 				},
 			}
 		);
@@ -137,16 +111,10 @@ const Register = () => {
 					<div className="col-12">
 						<div className="row gy-3">
 							<div className="col-12 col-xl-6">
-								<GoogleOAuthButton
-									className="w-100 justify-content-center"
-									onSuccess={onRegisterSuccessHandler}
-								/>
+								<GoogleOAuthButton className="w-100 justify-content-center" />
 							</div>
 							<div className="col-12 col-xl-6">
-								<FacebookOAuthButton
-									className="w-100 justify-content-center"
-									onSuccess={onRegisterSuccessHandler}
-								/>
+								<FacebookOAuthButton className="w-100 justify-content-center" />
 							</div>
 						</div>
 					</div>

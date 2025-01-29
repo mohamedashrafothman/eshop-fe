@@ -31,7 +31,7 @@ export type PostLoginBySocialMediaDataType = {
 };
 export type PostLoginBySocialMediaResponseType = TokensType & IUser;
 export type PostUnlinkSocialMediaDataType = object;
-export type PostUnlinkSocialMediaResponseType = object;
+export type PostUnlinkSocialMediaResponseType = IUser;
 export type PostForgotPasswordDataType = { email: string };
 export type PostForgotPasswordResponseType = object;
 export type PostResetPasswordDataType = { password: string; passwordConfirmation: string };
