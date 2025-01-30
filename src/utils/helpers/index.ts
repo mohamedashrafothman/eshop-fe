@@ -1,5 +1,6 @@
 export * from "./api";
 export * from "./dom";
+export * from "./form";
 export * from "./server";
 export * from "./user";
 
@@ -31,6 +32,9 @@ export const percentage = (
 		return "";
 	}
 };
+
+export const omit = (obj: { [key: string]: any }, keys: string[]) =>
+	Object.fromEntries(Object.entries(obj).filter(([k]) => !keys.includes(k)));
 
 /**
  * Picks specific properties from an object and returns a new object containing those properties.

@@ -1,10 +1,8 @@
 "use client";
 
-import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
 import useRegisterMutation from "hooks/useRegisterMutation";
-import { useTransitionRouter } from "next-view-transitions";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -18,8 +16,6 @@ import TextField from "views/components/TextField";
 import formValidationSchema, { type schemaType } from "./schema";
 
 const Register = () => {
-	const { push } = useTransitionRouter();
-	const queryClient = useQueryClient();
 	const searchParams = useSearchParams();
 
 	// server state hooks

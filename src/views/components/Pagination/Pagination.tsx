@@ -8,8 +8,10 @@ type Props = {
 	totalPages: PaginateResult["totalPages"];
 	hasNextPage: boolean;
 	fetchNextPage: () => void;
+	isFetchingNextPage: boolean;
 	hasPreviousPage: boolean;
 	fetchPreviousPage: () => void;
+	isFetchingPreviousPage: boolean;
 };
 
 const Pagination = ({
@@ -18,8 +20,10 @@ const Pagination = ({
 	totalPages = 1,
 	hasNextPage,
 	fetchNextPage,
+	isFetchingNextPage,
 	hasPreviousPage,
 	fetchPreviousPage,
+	isFetchingPreviousPage,
 }: Props) => (
 	<nav aria-label="Pagination Nav">
 		<ul className="pagination m-0 hstack gap-gutter justify-content-end align-items-center">
@@ -31,9 +35,15 @@ const Pagination = ({
 					onClick={() => fetchPreviousPage()}
 					disabled={!hasPreviousPage || disabled}
 					tabIndex={!hasPreviousPage || disabled ? -1 : 0}>
-					<svg className="bi w-16px h-16px" width="16" height="16">
-						<use href="#icon-chevron-left" />
-					</svg>
+					{isFetchingPreviousPage ? (
+						<span className="spinner-border spinner-border-sm" role="status">
+							<span className="visually-hidden">Loading...</span>
+						</span>
+					) : (
+						<svg className="bi w-16px h-16px" width="16" height="16">
+							<use href="#icon-chevron-left" />
+						</svg>
+					)}
 					<strong>Prev page</strong>
 				</button>
 			</li>
@@ -49,9 +59,15 @@ const Pagination = ({
 					disabled={!hasNextPage || disabled}
 					tabIndex={!hasNextPage || disabled ? -1 : 0}>
 					<strong>Next page</strong>
-					<svg className="bi w-16px h-16px" width="16" height="16">
-						<use href="#icon-chevron-right" />
-					</svg>
+					{isFetchingNextPage ? (
+						<span className="spinner-border spinner-border-sm" role="status">
+							<span className="visually-hidden">Loading...</span>
+						</span>
+					) : (
+						<svg className="bi w-16px h-16px" width="16" height="16">
+							<use href="#icon-chevron-right" />
+						</svg>
+					)}
 				</button>
 			</li>
 		</ul>
