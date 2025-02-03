@@ -133,10 +133,10 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 
 				// Update next-auth session tokens.
 				const result = await signIn("credentials", {
-					...session,
 					...(accessToken && { accessToken: JSON.stringify(accessToken) }),
 					...(refreshToken && { refreshToken: JSON.stringify(refreshToken) }),
 					...(tokenType && { tokenType: JSON.stringify(tokenType) }),
+					...(session?.user && { user: JSON.stringify(session.user) }),
 					redirect: false,
 				});
 
@@ -153,7 +153,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 							queryKey: originalRequest.queryKey,
 						});
 					return instance(originalRequest);
-				}, 0);
+				}, 100);
 			}
 
 			// Handling 404 status code error.

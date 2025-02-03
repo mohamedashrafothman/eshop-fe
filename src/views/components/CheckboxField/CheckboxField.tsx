@@ -1,11 +1,13 @@
 "use client";
 
+import classNames from "classnames";
 import { ComponentPropsWithoutRef } from "react";
 import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 
 type Props = {
 	isValid?: boolean;
 	isInvalid?: boolean;
+	isInline?: boolean;
 	error?: string;
 	label?: string;
 } & ComponentPropsWithoutRef<"input">;
@@ -13,17 +15,22 @@ type Props = {
 const CheckboxField = ({
 	isValid = false,
 	isInvalid = false,
+	isInline = false,
 	className,
 	label,
 	error,
 	required,
 	id,
+	type = "checkbox",
 	...restOfProps
 }: Props) => (
-	<div className="form-check">
+	<div className={classNames("form-check", { "form-check-inline": isInline })}>
 		<input
-			className={`form-check-input ${isInvalid ? "is-invalid" : isValid ? "is-valid" : ""} ${className}`}
-			type="checkbox"
+			className={classNames("form-check-input", className, {
+				"is-invalid": isInvalid,
+				"is-valid": isValid,
+			})}
+			type={type}
 			id={id || undefined}
 			required={required || undefined}
 			autoComplete="off"
@@ -31,8 +38,10 @@ const CheckboxField = ({
 		/>
 		{label && (
 			<label className="form-check-label text-capitalize" htmlFor={id || undefined}>
-				<strong>{label}</strong>
-				{required && <FieldRequiredLabel />}
+				<small>
+					{label}
+					{required && <FieldRequiredLabel />}
+				</small>
 			</label>
 		)}
 		{isInvalid && error && (

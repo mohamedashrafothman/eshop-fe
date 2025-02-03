@@ -1,10 +1,11 @@
-import { boolean, InferType, object, string } from "yup";
+import { InferType, number, object, string } from "yup";
 
 const schema = object().shape({
-	q: string().trim().default(""),
-	deleted: boolean().nullable().default(null),
-	emailVerified: boolean().nullable().default(null),
-	active: boolean().nullable().default(null),
+	q: string().optional().trim().nullable(),
+	deleted: number().optional().nullable(),
+	emailVerified: number().optional().nullable(),
+	active: number().optional().nullable(),
+	sort: string().optional().nullable(),
 });
 
 export type schemaType = InferType<typeof schema>;

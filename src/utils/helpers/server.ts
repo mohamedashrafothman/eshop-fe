@@ -39,7 +39,7 @@ export type SuccessStatusCodeType = (typeof SUCCESS_STATUS_CODE)[number];
 export type ErrorStatusCodeType = (typeof ERROR_STATUS_CODE)[number];
 export type SortItemType<T extends string = string> = {
 	name: string;
-	value: { [_K in T]?: 1 | -1 } & { [_K in Exclude<T, keyof any>]?: never };
+	value: { [_K in T]?: 1 | -1 | "desc" | "asc" } & { [_K in Exclude<T, keyof any>]?: never };
 };
 export type MetaDataType = {
 	pagination: PaginateResult;

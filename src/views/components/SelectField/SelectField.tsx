@@ -5,22 +5,24 @@ import { ComponentPropsWithoutRef } from "react";
 import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 
 type Props = {
-	isValid?: boolean;
-	isInvalid?: boolean;
-	error?: string;
-	label?: string;
-} & ComponentPropsWithoutRef<"input">;
+	isValid?: boolean | undefined;
+	isInvalid?: boolean | undefined;
+	error?: string | undefined;
+	label?: string | undefined;
+	options?: { value: string; text: string }[] | [];
+	placeholder?: string | undefined;
+} & ComponentPropsWithoutRef<"select">;
 
-const TextField = ({
+const SelectField = ({
 	isValid = false,
 	isInvalid = false,
-	id = "textField",
-	type = "text",
+	id = "selectField",
 	className,
 	label,
-	placeholder,
 	error,
 	required,
+	options = [],
+	placeholder = "",
 	...restOfProps
 }: Props) => (
 	<>
@@ -30,17 +32,23 @@ const TextField = ({
 				{required && <FieldRequiredLabel />}
 			</label>
 		)}
-		<input
-			type={type}
+		<select
 			id={id}
-			className={classNames("form-control text-truncate", className, {
+			className={classNames("form-select text-truncate", className, {
 				"is-invalid": isInvalid,
 				"is-valid": isValid,
 			})}
-			placeholder={placeholder || label || undefined}
 			required={required || undefined}
-			{...restOfProps}
-		/>
+			{...restOfProps}>
+			<option value="" selected>
+				- {placeholder} -
+			</option>
+			{options.map(({ value, text }) => (
+				<option value={value} key={value}>
+					{text}
+				</option>
+			))}
+		</select>
 		{isInvalid && error && (
 			<div className="invalid-feedback text-capitalize">
 				<strong>
@@ -51,4 +59,4 @@ const TextField = ({
 	</>
 );
 
-export default TextField;
+export default SelectField;

@@ -1,5 +1,6 @@
 "use client";
 
+import classNames from "classnames";
 import { ComponentPropsWithoutRef, useState } from "react";
 import { percentage } from "utils/helpers";
 import isStrongPassword from "validator/lib/isStrongPassword";
@@ -110,13 +111,17 @@ const PasswordField = ({
 					</span>
 				)}
 			</div>
-			<div className={`input-group ${isInvalid ? "has-validation" : ""}`}>
+			<div className={classNames("input-group", { "has-validation": isInvalid })}>
 				<input
 					type={isPasswordVisibleState ? "text" : "password"}
 					name={name}
 					id={id}
 					value={value}
-					className={`form-control text-truncate ${isInvalid ? "is-invalid" : isValid ? "is-valid" : "border-end-0"} ${className || ""}`}
+					className={classNames("form-control text-truncate", className, {
+						"is-invalid": isInvalid,
+						"is-valid": isValid,
+						"border-end-0": !isInvalid && !isValid,
+					})}
 					placeholder={placeholder || label}
 					autoComplete="password"
 					aria-describedby={allowToggleVisibility ? "passwordToggleButton" : undefined}
@@ -140,7 +145,9 @@ const PasswordField = ({
 				)}
 				{isInvalid && error && (
 					<div className="invalid-feedback text-capitalize">
-						<strong>{error}</strong>
+						<strong>
+							<small>{error}</small>
+						</strong>
 					</div>
 				)}
 			</div>

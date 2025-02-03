@@ -65,3 +65,9 @@ export const pick = (object: { [key: string]: any }, keys: string[]): object => 
 		return obj;
 	}, {});
 };
+
+export const filterObjectFalsyValues = (obj: { [key: string]: any }) =>
+	Object.keys(obj).reduce((acc: { [key: string]: any }, key) => {
+		if (obj[key]) acc[key] = obj[key];
+		return acc;
+	}, {});
