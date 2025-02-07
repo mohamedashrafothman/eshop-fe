@@ -9,12 +9,12 @@ const SearchField = ({
 	className = "",
 	...restOfParams
 }) => (
-	<div className={classNames("input-group", { "has-validation": isInvalid })}>
+	<div className={classNames("input-group", { "has-validation": isInvalid || isValid })}>
 		<TextField
 			type="search"
 			name={name}
-			id={name}
-			className={classNames(className, "border-end-0")}
+			id={id}
+			className={classNames(className, "rounded-end-0")}
 			isInvalid={isInvalid}
 			isValid={isValid}
 			{...restOfParams}

@@ -8,4 +8,7 @@ export default interface City {
 	state: string | IState;
 	createdAt: string;
 	updatedAt: string;
+	deleted?: boolean | undefined;
+	deletedAt?: Date | undefined;
+	deletedBy?: string | undefined;
 }

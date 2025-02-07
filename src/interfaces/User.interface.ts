@@ -14,4 +14,7 @@ export default interface User {
 	addresses: IAddress[] | string[] | [];
 	createdAt: string;
 	updatedAt: string;
+	deleted?: boolean | undefined;
+	deletedAt?: Date | undefined;
+	deletedBy?: string | undefined;
 }

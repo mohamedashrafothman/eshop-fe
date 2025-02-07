@@ -4,4 +4,7 @@ export default interface Country {
 	code: string;
 	createdAt: string;
 	updatedAt: string;
+	deleted?: boolean | undefined;
+	deletedAt?: Date | undefined;
+	deletedBy?: string | undefined;
 }

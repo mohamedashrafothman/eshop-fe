@@ -53,6 +53,19 @@
 @import "~bootstrap/scss/utilities/api";
 // scss-docs-end import-stack
 
+@each $state, $data in $form-validation-states {
+	@include form-validation-state-selector($state) {
+		$border-color: map-get($data, "border-color");
+		.input-group {
+			border-color: $border-color !important;
+			.form-control {
+				border-top-right-radius: 0 !important;
+				border-bottom-right-radius: 0 !important;
+			}
+		}
+	}
+}
+
 [dir="rtl"] {
 	.icon-link {
 		& > .bi {

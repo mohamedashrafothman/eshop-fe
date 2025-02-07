@@ -117,10 +117,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 
 				// Handle refresh token errors by signing out and redirecting to the login page.
 				if (refreshTokenError || !refreshTokenResponse) {
-					await signOut({
-						callbackUrl: "/auth/login",
-						redirect: false, // FIXME: remove this line to allow hard redirect.
-					});
+					await signOut({ callbackUrl: "/auth/login" });
 					return Promise.reject(responseError);
 				}
 

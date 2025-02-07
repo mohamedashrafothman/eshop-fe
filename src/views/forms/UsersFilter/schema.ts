@@ -5,7 +5,8 @@ const schema = object().shape({
 	deleted: number().optional().nullable(),
 	emailVerified: number().optional().nullable(),
 	active: number().optional().nullable(),
-	sort: string().optional().nullable(),
+	sort: object().optional().nullable(),
+	limit: number().optional().nullable(),
 });
 
 export type schemaType = InferType<typeof schema>;

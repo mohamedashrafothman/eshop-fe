@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
-import { isSameValueAsInitialValue, omit } from "utils/helpers";
+import { isFunction, isSameValueAsInitialValue, omit } from "utils/helpers";
 
 type Props = {
 	delay?: number | undefined;
@@ -21,12 +21,12 @@ const AutoSave = ({ delay = 400, formik, compareAgainstInitialValue = false }: P
 		}
 		const v = omit(values, Object.keys(errors));
 		if (
-			submitForm &&
+			isFunction(submitForm) &&
 			(!compareAgainstInitialValue ||
 				(compareAgainstInitialValue && !isSameValueAsInitialValue(v, initialValues)))
 		)
 			submitForm(v);
-	}, [values, errors, submitForm, initialValues]);
+	}, [values, errors, submitForm, compareAgainstInitialValue, initialValues]);
 
 	// effect hooks
 	useEffect(() => {

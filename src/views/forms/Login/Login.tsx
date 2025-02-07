@@ -60,7 +60,7 @@ const Login = () => {
 
 	// form state
 	const formState = useFormik<schemaType>({
-		initialValues: { email: "", password: "" },
+		initialValues: { email: "", password: "", remember: true },
 		validationSchema: formValidationSchema,
 		onSubmit: onFormSubmitHandler,
 	});

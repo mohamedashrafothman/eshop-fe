@@ -111,16 +111,15 @@ const PasswordField = ({
 					</span>
 				)}
 			</div>
-			<div className={classNames("input-group", { "has-validation": isInvalid })}>
+			<div className={classNames("input-group", { "has-validation": isInvalid || isValid })}>
 				<input
 					type={isPasswordVisibleState ? "text" : "password"}
 					name={name}
 					id={id}
 					value={value}
-					className={classNames("form-control text-truncate", className, {
+					className={classNames("form-control text-truncate rounded-end-0", className, {
 						"is-invalid": isInvalid,
 						"is-valid": isValid,
-						"border-end-0": !isInvalid && !isValid,
 					})}
 					placeholder={placeholder || label}
 					autoComplete="password"

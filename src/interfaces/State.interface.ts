@@ -7,4 +7,7 @@ export default interface State {
 	country: string | ICountry;
 	createdAt: string;
 	updatedAt: string;
+	deleted?: boolean | undefined;
+	deletedAt?: Date | undefined;
+	deletedBy?: string | undefined;
 }

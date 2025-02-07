@@ -20,4 +20,7 @@ export default interface Address {
 	user: string | IUser;
 	createdAt: string;
 	updatedAt: string;
+	deleted?: boolean | undefined;
+	deletedAt?: Date | undefined;
+	deletedBy?: string | undefined;
 }
