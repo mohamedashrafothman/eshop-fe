@@ -58,7 +58,7 @@ export const pick = (object: { [key: string]: any }, keys: string[]): object => 
 	// Use reduce to build a new object with the specified keys
 	return keys.reduce((obj: { [key: string]: any }, key) => {
 		// Check if the key exists in the object
-		if (object.hasOwnProperty(key)) {
+		if (Object.prototype.hasOwnProperty.call(object, key)) {
 			// Assign the value to the new object
 			obj[key] = object[key];
 		}
