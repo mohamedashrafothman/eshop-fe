@@ -71,9 +71,9 @@ const UsersFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 								<SelectField
 									className="mw-200px"
 									name="sort"
-									value={JSON.stringify(formState.values?.sort || "")}
-									onChange={({ target: { name = "", value = "" } }) =>
-										formState.setFieldValue(name, JSON.parse(value))
+									value={JSON.stringify(formState.values?.sort || {})}
+									onChange={({ target: { name = "", value } }) =>
+										formState.setFieldValue(name, JSON.parse(value || "{}"))
 									}
 									options={sort.map(({ name, value }) => ({
 										value: JSON.stringify(value),

@@ -1,10 +1,6 @@
 import { getSession } from "config/next-auth";
-import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import vars from "utils/vars";
-
-const PAGE_TITLE = "Users";
-export const metadata: Metadata = { title: PAGE_TITLE };
 
 type Props = { children?: React.ReactNode | undefined };
 
@@ -16,14 +12,7 @@ const UsersLayout = async ({ children }: Props) => {
 	if (session?.user?.role !== vars.roles.superAdmin) redirect("/dashboard");
 
 	// If the user is super admin, let them stay on the page.
-	return (
-		<>
-			<h1 className="display-5 text-capitalize">
-				<strong>{PAGE_TITLE}</strong>
-			</h1>
-			{children}
-		</>
-	);
+	return <>{children}</>;
 };
 
 export default UsersLayout;

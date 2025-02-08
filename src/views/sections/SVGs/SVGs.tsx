@@ -117,6 +117,13 @@ const SVGs = () => (
 				<title className="visually-hidden">Check</title>
 				<path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0" />
 			</symbol>
+			<symbol id="icon-plus" viewBox="0 0 16 16" fill="currentColor">
+				<title className="visually-hidden">Add</title>
+				<path
+					fillRule="evenodd"
+					d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"
+				/>
+			</symbol>
 		</defs>
 	</svg>
 );

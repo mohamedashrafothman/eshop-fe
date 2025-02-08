@@ -38,13 +38,6 @@ const UsersList = () => {
 	return (
 		<section className="users-list py-4">
 			<div className="row gy-4">
-				<div className="col-auto">
-					<NextLink
-						href="/dashboard/users/store"
-						className="btn btn-primary border-primary-dark text-capitalize">
-						<strong>Add new User</strong>
-					</NextLink>
-				</div>
 				<div className="col-12">
 					<UsersFilterForm
 						onSubmit={(value) => setUsersParamsState(filterObjectFalsyValues(value))}
