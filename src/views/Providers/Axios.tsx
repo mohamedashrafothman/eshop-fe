@@ -19,10 +19,10 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 
 	// Token refresh state
 	const isRefreshing = useRef(false);
-	const refreshSubscribers = useRef<((token: string) => void)[]>([]);
+	const refreshSubscribers = useRef<((_token: string) => void)[]>([]);
 
 	// Function to add subscribers (waiting requests)
-	const addRefreshSubscriber = (callback: (token: string) => void) => {
+	const addRefreshSubscriber = (callback: (_token: string) => void) => {
 		refreshSubscribers.current.push(callback);
 	};
 
@@ -136,10 +136,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 
 				// Handle refresh token errors by signing out and redirecting to the login page.
 				if (refreshTokenError || !refreshTokenResponse) {
-					await signOut({
-						callbackUrl: "/auth/login",
-						redirect: false, // FIXME: remove this line to allow hard redirect.
-					});
+					await signOut({ callbackUrl: "/auth/login" });
 					isRefreshing.current = false; // Reset refresh state
 					return Promise.reject(responseError);
 				}
@@ -162,10 +159,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 
 				// Handle sign in errors by signing out and redirecting to the login page.
 				if (!result?.ok) {
-					await signOut({
-						callbackUrl: "/auth/login",
-						redirect: false, // FIXME: remove this line to allow hard redirect.
-					});
+					await signOut({ callbackUrl: "/auth/login" });
 					isRefreshing.current = false; // Reset refresh state
 					return Promise.reject(responseError);
 				}

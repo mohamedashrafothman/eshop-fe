@@ -217,7 +217,7 @@ const UsersList = () => {
 																</td>
 																<td>
 																	<NextLink
-																		href={`/dashboard/users/${singleUser.slug}/edit`}
+																		href={`/dashboard/users/${singleUser?.slug || singleUser._id}/edit`}
 																		className="btn btn-sm btn-link link-primary">
 																		<svg
 																			className="bi w-20px h-20px"

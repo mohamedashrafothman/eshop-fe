@@ -4,6 +4,8 @@ import IUser from "interfaces/User.interface";
 // request and response types
 export type GetMeResponseType = IUser;
 export type GetMeDataType = object;
+export type PostUserDataType = Pick<IUser, "name" | "email" | "role">;
+export type PostUserResponseType = IUser;
 export type PatchUserDataType =
 	| Partial<IUser>
 	| { oldPassword: string; password: string; passwordConfirmation: string };
@@ -20,12 +22,20 @@ export type GetUsersDataType = {
 	active?: boolean | number | undefined;
 };
 export type GetUsersResponseType = IUser[];
+export type GetSingleUserDataType = object;
+export type GetSingleUserResponseType = IUser;
 
 // requests methods
 export const getMe = ({ ...options }: AxiosRequestConfig<GetMeDataType>) =>
 	axiosInstance<GetMeResponseType, AxiosResponseProps<GetMeResponseType>>({
-		method: "get",
 		url: "/v1/users/me",
+		...options,
+	});
+
+export const postUser = ({ ...options }: AxiosRequestConfig<PostUserDataType>) =>
+	axiosInstance<PostUserResponseType, AxiosResponseProps<PostUserResponseType>>({
+		method: "post",
+		url: "/v1/users",
 		...options,
 	});
 
@@ -41,7 +51,15 @@ export const patchUser = ({
 
 export const getUsers = ({ ...options }: AxiosRequestConfig<GetUsersDataType>) =>
 	axiosInstance<GetUsersResponseType, AxiosResponseProps<GetUsersResponseType>>({
-		method: "get",
 		url: "/v1/users",
+		...options,
+	});
+
+export const getSingleUser = ({
+	variables,
+	...options
+}: AxiosRequestConfig<GetSingleUserDataType> & { variables: { id: string } }) =>
+	axiosInstance<GetSingleUserResponseType, AxiosResponseProps<GetSingleUserResponseType>>({
+		url: `/v1/users/${variables?.id}`,
 		...options,
 	});

@@ -34,7 +34,7 @@ const AccountInformation = () => {
 		if (patchUserCancelRequestRef.current?.signal) patchUserCancelRequestRef.current?.abort();
 		patchUserCancelRequestRef.current = new AbortController();
 
-		// Call the forgot password mutation.
+		// Call the patch user mutation.
 		await patchUserMutation.mutateAsync(
 			{
 				variables: { id: user._id },
@@ -51,7 +51,7 @@ const AccountInformation = () => {
 				onSuccess: async (response) => {
 					// Resetting formik.
 					formikHelpers.resetForm();
-					// Resetting forgot password query mutation.
+					// Resetting patch user query mutation.
 					patchUserMutation.reset();
 					// Invalidate the me query from the cache.
 					queryClient.invalidateQueries({ queryKey: ME_KEY_QUERY, exact: true });
