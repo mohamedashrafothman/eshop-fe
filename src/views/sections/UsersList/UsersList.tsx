@@ -38,6 +38,13 @@ const UsersList = () => {
 	return (
 		<section className="users-list py-4">
 			<div className="row gy-4">
+				<div className="col-auto">
+					<NextLink
+						href="/dashboard/users/store"
+						className="btn btn-primary border-primary-dark text-capitalize">
+						<strong>Add new User</strong>
+					</NextLink>
+				</div>
 				<div className="col-12">
 					<UsersFilterForm
 						onSubmit={(value) => setUsersParamsState(filterObjectFalsyValues(value))}
@@ -54,8 +61,9 @@ const UsersList = () => {
 									<th scope="col">#</th>
 									<th scope="col">Name</th>
 									<th scope="col">Email</th>
-									<th scope="col">Registered at</th>
-									<th scope="col">Status</th>
+									<th scope="col">Register Date</th>
+									<th scope="col">Login Status</th>
+									<th scope="col">Email Verification</th>
 									<th scope="col">Actions</th>
 								</tr>
 							</thead>
@@ -142,6 +150,13 @@ const UsersList = () => {
 																		</span>
 																	</span>
 																</td>
+																<td>
+																	<span className="d-block placeholder-glow">
+																		<span className="placeholder placeholder-sm bg-secondary d-block w-100">
+																			&nbsp;
+																		</span>
+																	</span>
+																</td>
 															</tr>
 														) : (
 															<tr>
@@ -188,28 +203,36 @@ const UsersList = () => {
 																	</span>
 																</td>
 																<td>
-																	<div className="btn-group">
-																		<NextLink
-																			href={`/dashboard/users/${singleUser.slug}/edit`}
-																			className="btn btn-sm btn-link link-primary">
-																			<svg
-																				className="bi w-20px h-20px"
-																				height="20"
-																				width="20">
-																				<use href="#icon-pencil-square"></use>
-																			</svg>
-																		</NextLink>
-																		<button
-																			type="button"
-																			className="btn btn-sm btn-link link-danger">
-																			<svg
-																				className="bi w-20px h-20px"
-																				height="20"
-																				width="20">
-																				<use href="#icon-trash"></use>
-																			</svg>
-																		</button>
-																	</div>
+																	<span
+																		className={classNames(
+																			"badge",
+																			{
+																				"bg-success":
+																					singleUser.emailVerified,
+																				"text-success":
+																					singleUser.emailVerified,
+																				"bg-danger":
+																					!singleUser.emailVerified,
+																				"text-danger":
+																					!singleUser.emailVerified,
+																			}
+																		)}>
+																		{singleUser.emailVerified
+																			? "Verified"
+																			: "Not Verified"}
+																	</span>
+																</td>
+																<td>
+																	<NextLink
+																		href={`/dashboard/users/${singleUser.slug}/edit`}
+																		className="btn btn-sm btn-link link-primary">
+																		<svg
+																			className="bi w-20px h-20px"
+																			height="20"
+																			width="20">
+																			<use href="#icon-pencil-square"></use>
+																		</svg>
+																	</NextLink>
 																</td>
 															</tr>
 														)}
@@ -218,7 +241,7 @@ const UsersList = () => {
 											) : (
 												<tr>
 													<td
-														colSpan={6}
+														colSpan={7}
 														className="text-center text-capitalize">
 														<span className="vstack gap-2 align-items-center justify-content-center">
 															<svg

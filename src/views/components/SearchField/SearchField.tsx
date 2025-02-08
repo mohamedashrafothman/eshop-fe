@@ -9,7 +9,10 @@ const SearchField = ({
 	className = "",
 	...restOfParams
 }) => (
-	<div className={classNames("input-group", { "has-validation": isInvalid || isValid })}>
+	<div
+		className={classNames("input-group flex-nowrap", {
+			"has-validation": isInvalid || isValid,
+		})}>
 		<TextField
 			type="search"
 			name={name}

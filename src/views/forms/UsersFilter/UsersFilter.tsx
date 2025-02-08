@@ -64,7 +64,7 @@ const UsersFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 									className="min-w-200px"
 									onChange={formState.handleChange}
 									value={formState.values?.q || ""}
-									placeholder="Search..."
+									placeholder="Search By Name/Email"
 								/>
 							</div>
 							<div className="col-auto">

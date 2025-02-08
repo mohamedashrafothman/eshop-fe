@@ -6,7 +6,7 @@ import axiosInstance, { isAxiosCancelError, type AxiosInstance } from "config/ax
 import httpStatus from "http-status";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useTransitionRouter } from "next-view-transitions";
-import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
+import { useCallback, useLayoutEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { postRefreshToken, type PostRefreshTokenResponseType } from "services/api/e-shop/auth";
 
@@ -17,8 +17,20 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 	const { data: session } = useSession();
 	const queryClient = useQueryClient();
 
-	// ref hook
-	const refreshTokenCancelRequestRef = useRef<AbortController | null>(null);
+	// Token refresh state
+	const isRefreshing = useRef(false);
+	const refreshSubscribers = useRef<((token: string) => void)[]>([]);
+
+	// Function to add subscribers (waiting requests)
+	const addRefreshSubscriber = (callback: (token: string) => void) => {
+		refreshSubscribers.current.push(callback);
+	};
+
+	// Function to notify all subscribers with the new token
+	const notifySubscribers = (newAccessToken: string) => {
+		refreshSubscribers.current.forEach((callback) => callback(newAccessToken));
+		refreshSubscribers.current = [];
+	};
 
 	// event handlers
 	const requestSuccessInterceptor = useCallback(
@@ -102,22 +114,33 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 				// Mark the request as retried to avoid infinite loops.
 				originalRequest._retry = true;
 
-				// Abort any previous request, and create a new abort controller.
-				if (refreshTokenCancelRequestRef.current?.signal)
-					refreshTokenCancelRequestRef.current?.abort();
-				refreshTokenCancelRequestRef.current = new AbortController();
+				// Add the refresh token to subscribers queue
+				if (isRefreshing.current) {
+					// Wait for the refreshed token
+					return new Promise((resolve) => {
+						addRefreshSubscriber((newToken) => {
+							originalRequest.headers["Authorization"] =
+								`${session?.tokenType} ${newToken}`;
+							resolve(instance(originalRequest));
+						});
+					});
+				}
+
+				// Set refresh state
+				isRefreshing.current = true;
 
 				// Make a request to your auth server to refresh the token.
 				const [refreshTokenError, refreshTokenResponse] = await to(
-					postRefreshToken({
-						data: { refreshToken: session.refreshToken },
-						signal: refreshTokenCancelRequestRef.current.signal,
-					})
+					postRefreshToken({ data: { refreshToken: session.refreshToken } })
 				);
 
 				// Handle refresh token errors by signing out and redirecting to the login page.
 				if (refreshTokenError || !refreshTokenResponse) {
-					await signOut({ callbackUrl: "/auth/login" });
+					await signOut({
+						callbackUrl: "/auth/login",
+						redirect: false, // FIXME: remove this line to allow hard redirect.
+					});
+					isRefreshing.current = false; // Reset refresh state
 					return Promise.reject(responseError);
 				}
 
@@ -139,9 +162,21 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 
 				// Handle sign in errors by signing out and redirecting to the login page.
 				if (!result?.ok) {
-					await signOut({ callbackUrl: "/auth/login" });
+					await signOut({
+						callbackUrl: "/auth/login",
+						redirect: false, // FIXME: remove this line to allow hard redirect.
+					});
+					isRefreshing.current = false; // Reset refresh state
 					return Promise.reject(responseError);
 				}
+
+				// Notify all queued requests
+				notifySubscribers(accessToken);
+				isRefreshing.current = false; // Reset refresh state
+
+				// Set the new access token to the original request headers.
+				if (tokenType && accessToken)
+					originalRequest.headers["Authorization"] = `${tokenType} ${accessToken}`;
 
 				// Retry the original request with the new access token or invalidate the query.
 				return setTimeout(() => {
@@ -159,7 +194,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 			// Return rejected promise
 			return Promise.reject(responseError);
 		},
-		[instance, push, queryClient, session]
+		[instance, push, queryClient, session?.user, session?.refreshToken, session?.tokenType]
 	);
 
 	// layout effects
@@ -188,13 +223,6 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 			instance.interceptors.response.eject(responseInterceptor);
 		};
 	}, [instance.interceptors.response, responseErrorInterceptor, responseSuccessInterceptor]);
-
-	useEffect(() => {
-		return () => {
-			if (refreshTokenCancelRequestRef.current?.signal)
-				refreshTokenCancelRequestRef.current?.abort();
-		};
-	}, []);
 
 	return <>{children}</>;
 };
