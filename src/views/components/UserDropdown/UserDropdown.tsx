@@ -108,6 +108,16 @@ const UserDropdown = () => {
 				<li>
 					<NextLink
 						className="dropdown-item text-capitalize white-space-pre-line"
+						href="/dashboard">
+						Dashboard
+					</NextLink>
+				</li>
+				<li>
+					<hr className="dropdown-divider border border-top-0 bg-transparent" />
+				</li>
+				<li>
+					<NextLink
+						className="dropdown-item text-capitalize white-space-pre-line"
 						href="/dashboard/me">
 						Account information
 					</NextLink>

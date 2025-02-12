@@ -30,6 +30,13 @@
 			}
 		}
 	}
+
 	&-dashboard {
+		.app-header {
+			&-content {
+				@extend .py-gutter !optional;
+				@extend .px-4 !optional;
+			}
+		}
 	}
 }

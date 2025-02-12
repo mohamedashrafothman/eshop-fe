@@ -1,0 +1,12 @@
+.app-footer {
+	&-public {
+		@extend .py-22px !optional;
+		@extend .py-lg-32px !optional;
+		@extend .bg-white !optional;
+	}
+
+	&-dashboard {
+		@extend .py-gutter !optional;
+		@extend .px-4 !optional;
+	}
+}

@@ -24,6 +24,10 @@ export type GetUsersDataType = {
 export type GetUsersResponseType = IUser[];
 export type GetSingleUserDataType = object;
 export type GetSingleUserResponseType = IUser;
+export type GetUserEmailResendDataType = object;
+export type GetUserEmailResendResponseType = object;
+export type GetUserEmailVerifyDataType = object;
+export type GetUserEmailVerifyResponseType = object;
 
 // requests methods
 export const getMe = ({ ...options }: AxiosRequestConfig<GetMeDataType>) =>
@@ -63,3 +67,21 @@ export const getSingleUser = ({
 		url: `/v1/users/${variables?.id}`,
 		...options,
 	});
+
+export const getUserEmailResend = ({
+	variables,
+	...options
+}: AxiosRequestConfig<GetUserEmailResendDataType> & { variables: { id: string } }) =>
+	axiosInstance<
+		GetUserEmailResendResponseType,
+		AxiosResponseProps<GetUserEmailResendResponseType>
+	>({ url: `/v1/users/${variables?.id}/email/resend`, ...options });
+
+export const getUserEmailVerify = ({
+	variables,
+	...options
+}: AxiosRequestConfig<GetUserEmailVerifyDataType> & { variables: { id: string; token: string } }) =>
+	axiosInstance<
+		GetUserEmailVerifyResponseType,
+		AxiosResponseProps<GetUserEmailVerifyResponseType>
+	>({ url: `/v1/users/${variables?.id}/email/verify/${variables?.token}`, ...options });

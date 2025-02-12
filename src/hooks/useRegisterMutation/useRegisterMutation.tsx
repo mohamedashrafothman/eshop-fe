@@ -41,7 +41,7 @@ const useRegisterMutation = () => {
 					redirect: false,
 				});
 			// Redirect to the dashboard after success login.
-			push("/dashboard");
+			push(!user.emailVerified ? "/user/email/verify" : "/dashboard");
 		},
 	});
 
