@@ -19,6 +19,11 @@ export type varsTypes = {
 			facebook: { appId: string };
 		};
 	};
+	roles: {
+		user: string;
+		admin: string;
+		superAdmin: string;
+	};
 };
 
 export const vars: varsTypes = {
@@ -42,6 +47,11 @@ export const vars: varsTypes = {
 			},
 			facebook: { appId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || "" },
 		},
+	},
+	roles: {
+		user: "USER",
+		admin: "ADMIN",
+		superAdmin: "SUPER_ADMIN",
 	},
 };
 

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
 	type AxiosErrorProps,
-	type AxiosRequestProps,
+	type AxiosRequestConfig,
 	type AxiosResponseProps,
 } from "config/axios";
 import {
@@ -20,7 +20,7 @@ const useResetPasswordMutation = () => {
 	return useMutation<
 		AxiosResponseProps<PostResetPasswordResponseType>,
 		AxiosErrorProps,
-		AxiosRequestProps<PostResetPasswordDataType>
+		AxiosRequestConfig<PostResetPasswordDataType> & { variables: { token: string } }
 	>({ mutationKey: KEY_ARRAY });
 };
 

@@ -2,6 +2,7 @@
 
 import classNames from "classnames";
 import useLoginBySocialMutation from "hooks/useLoginBySocialMutation";
+import useMeQuery from "hooks/useMeQuery";
 import useUnlinkSocialMutation from "hooks/useUnlinkSocialMutation";
 import { useSession } from "next-auth/react";
 import { useTransitionRouter } from "next-view-transitions";
@@ -13,17 +14,14 @@ import GoogleLogin, {
 } from "react-google-login";
 import { toast } from "react-toastify";
 import { type PostLoginBySocialMediaDataType } from "services/api/e-shop/auth";
-import { isFunction } from "utils/helpers";
 import vars from "utils/vars";
 import OAuthButton, { type Props as OAuthButtonProps } from "views/components/OAuthButton";
 
-type Props = { onSuccess?: (_x: any) => Promise<void> | undefined } & Omit<
-	OAuthButtonProps,
-	"icon" | "title"
->;
+type Props = Omit<OAuthButtonProps, "icon" | "title">;
 
-const GoogleOAuthButton = ({ onSuccess, className, ...props }: Props) => {
+const GoogleOAuthButton = ({ className, ...props }: Props) => {
 	const session = useSession();
+	const { data: user } = useMeQuery();
 	const { push } = useTransitionRouter();
 
 	// server state hooks
@@ -38,7 +36,7 @@ const GoogleOAuthButton = ({ onSuccess, className, ...props }: Props) => {
 
 	// constants
 	const isAuthenticated = session?.status === "authenticated";
-	const isConnectedToGoogle = Boolean(session?.data?.user?.google);
+	const isConnectedToGoogle = Boolean(user?.google);
 	const buttonTitle = isAuthenticated
 		? `${isConnectedToGoogle ? (googleOAuthLoadingState ? "Unlinking from" : "Unlink from") : googleOAuthLoadingState ? "Linking to" : "Link to"} Google`
 		: `${googleOAuthLoadingState ? "Logging" : "Login"} by Google`;
@@ -49,13 +47,7 @@ const GoogleOAuthButton = ({ onSuccess, className, ...props }: Props) => {
 		if (!providerData?.email || !providerData?.name) {
 			setGoogleOAuthLoadingState(false);
 			toast("Your social account is missing the email or name.", { type: "error" });
-			if (!isAuthenticated)
-				push(
-					`/auth/register?${qs.stringify({
-						...(providerData?.email ? { email: providerData.email } : {}),
-						...(providerData?.name ? { name: providerData.name } : {}),
-					})}`
-				);
+			if (!isAuthenticated) push(`/auth/register?${qs.stringify(providerData)}`);
 			return;
 		}
 
@@ -76,14 +68,11 @@ const GoogleOAuthButton = ({ onSuccess, className, ...props }: Props) => {
 					// Reset Oauth loading state
 					setGoogleOAuthLoadingState(false);
 				},
-				onSuccess: async (response) => {
+				onSuccess: () => {
 					// Reset Oauth loading state
 					setGoogleOAuthLoadingState(false);
-
 					// Resetting login by social query mutation.
 					loginBySocialMutation.reset();
-
-					if (isFunction(onSuccess)) onSuccess(response);
 				},
 			}
 		);
@@ -106,14 +95,11 @@ const GoogleOAuthButton = ({ onSuccess, className, ...props }: Props) => {
 					// Reset Oauth loading state
 					setGoogleOAuthLoadingState(false);
 				},
-				onSuccess: async (response) => {
+				onSuccess: () => {
 					// Reset Oauth loading state
 					setGoogleOAuthLoadingState(false);
-
 					// Resetting login by social query mutation.
 					loginBySocialMutation.reset();
-
-					if (isFunction(onSuccess)) onSuccess(response);
 				},
 			}
 		);

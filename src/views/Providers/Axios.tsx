@@ -2,23 +2,35 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import to from "await-to-js";
-import axiosInstance, {
-	isAxiosCancelError,
-	type AxiosInstance,
-	type AxiosResponseProps,
-} from "config/axios";
+import axiosInstance, { isAxiosCancelError, type AxiosInstance } from "config/axios";
+import httpStatus from "http-status";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useTransitionRouter } from "next-view-transitions";
-import { useCallback, useLayoutEffect } from "react";
+import { useCallback, useLayoutEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { postRefreshToken, type PostRefreshTokenResponseType } from "services/api/e-shop/auth";
 
-type Props = { children?: React.ReactNode; instance?: AxiosInstance };
+type Props = { children?: React.ReactNode | undefined; instance?: AxiosInstance | undefined };
 
 const Axios = ({ children, instance = axiosInstance }: Props) => {
 	const { push } = useTransitionRouter();
 	const { data: session } = useSession();
 	const queryClient = useQueryClient();
+
+	// Token refresh state
+	const isRefreshing = useRef(false);
+	const refreshSubscribers = useRef<((_token: string) => void)[]>([]);
+
+	// Function to add subscribers (waiting requests)
+	const addRefreshSubscriber = (callback: (_token: string) => void) => {
+		refreshSubscribers.current.push(callback);
+	};
+
+	// Function to notify all subscribers with the new token
+	const notifySubscribers = (newAccessToken: string) => {
+		refreshSubscribers.current.forEach((callback) => callback(newAccessToken));
+		refreshSubscribers.current = [];
+	};
 
 	// event handlers
 	const requestSuccessInterceptor = useCallback(
@@ -36,10 +48,10 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 	const requestErrorInterceptor = useCallback((error: any) => Promise.reject(error), []);
 
 	const responseSuccessInterceptor = useCallback((response: any) => {
-		// extract response data.
+		// Extract response data.
 		const { data: { message = null, flashes = {} } = {} } = response;
 
-		// handle flash messages
+		// Handle flash messages
 		if (message) toast.error(message);
 		if (Object.keys(flashes).length)
 			Object.keys(flashes).forEach((messageType) =>
@@ -63,6 +75,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 
 	const responseErrorInterceptor = useCallback(
 		async (responseError: any = {}) => {
+			// Ignore axios cancel errors
 			if (isAxiosCancelError(responseError)) return Promise.reject(responseError);
 
 			// Extract error response data.
@@ -72,7 +85,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 			} = responseError;
 
 			// Handle flash messages
-			if (![status, originalRequest.status].includes(401)) {
+			if (![status, originalRequest.status].includes(httpStatus.UNAUTHORIZED)) {
 				if (error?.message || message) toast.error(error?.message || message);
 				if (Object.keys(flashes).length)
 					Object.keys(flashes).forEach((messageType) =>
@@ -93,9 +106,28 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 			}
 
 			// Handle 401 status code error.
-			if (status === 401 && !originalRequest._retry && session?.refreshToken) {
+			if (
+				status === httpStatus.UNAUTHORIZED &&
+				!originalRequest._retry &&
+				session?.refreshToken
+			) {
 				// Mark the request as retried to avoid infinite loops.
 				originalRequest._retry = true;
+
+				// Add the refresh token to subscribers queue
+				if (isRefreshing.current) {
+					// Wait for the refreshed token
+					return new Promise((resolve) => {
+						addRefreshSubscriber((newToken) => {
+							originalRequest.headers["Authorization"] =
+								`${session?.tokenType} ${newToken}`;
+							resolve(instance(originalRequest));
+						});
+					});
+				}
+
+				// Set refresh state
+				isRefreshing.current = true;
 
 				// Make a request to your auth server to refresh the token.
 				const [refreshTokenError, refreshTokenResponse] = await to(
@@ -105,6 +137,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 				// Handle refresh token errors by signing out and redirecting to the login page.
 				if (refreshTokenError || !refreshTokenResponse) {
 					await signOut({ callbackUrl: "/auth/login" });
+					isRefreshing.current = false; // Reset refresh state
 					return Promise.reject(responseError);
 				}
 
@@ -113,9 +146,7 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 					accessToken = "",
 					refreshToken = "",
 					tokenType = "",
-				} = (
-					refreshTokenResponse as unknown as AxiosResponseProps<PostRefreshTokenResponseType>
-				)?.entities?.data || {};
+				} = refreshTokenResponse.data.entities.data as PostRefreshTokenResponseType;
 
 				// Update next-auth session tokens.
 				const result = await signIn("credentials", {
@@ -129,8 +160,17 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 				// Handle sign in errors by signing out and redirecting to the login page.
 				if (!result?.ok) {
 					await signOut({ callbackUrl: "/auth/login" });
+					isRefreshing.current = false; // Reset refresh state
 					return Promise.reject(responseError);
 				}
+
+				// Notify all queued requests
+				notifySubscribers(accessToken);
+				isRefreshing.current = false; // Reset refresh state
+
+				// Set the new access token to the original request headers.
+				if (tokenType && accessToken)
+					originalRequest.headers["Authorization"] = `${tokenType} ${accessToken}`;
 
 				// Retry the original request with the new access token or invalidate the query.
 				return setTimeout(() => {
@@ -139,15 +179,16 @@ const Axios = ({ children, instance = axiosInstance }: Props) => {
 							queryKey: originalRequest.queryKey,
 						});
 					return instance(originalRequest);
-				}, 0);
+				}, 100);
 			}
 
 			// Handling 404 status code error.
-			if ([404].includes(status)) push("/not-found");
+			if (status === httpStatus.NOT_FOUND) push("/not-found");
 
+			// Return rejected promise
 			return Promise.reject(responseError);
 		},
-		[instance, push, queryClient, session?.refreshToken, session?.user]
+		[instance, push, queryClient, session?.user, session?.refreshToken, session?.tokenType]
 	);
 
 	// layout effects

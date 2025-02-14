@@ -7,8 +7,8 @@ let browserQueryClient: QueryClient | undefined = undefined;
 // above 0 to avoid refetching immediately on the client
 const queryClientOptions = {
 	defaultOptions: {
-		queries: { staleTime: 60 * 1000, retry: 0, refetchOnWindowFocus: true },
-		mutations: { retry: 0 },
+		queries: { retry: 1, staleTime: 60 * 1000, refetchOnWindowFocus: true },
+		mutations: { retry: 1 },
 	},
 };
 const makeQueryClient = () => new QueryClient(queryClientOptions);

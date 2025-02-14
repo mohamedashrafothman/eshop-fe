@@ -6,8 +6,8 @@ import useForgotPasswordMutation from "hooks/useForgotPasswordMutation";
 import { useTransitionRouter } from "next-view-transitions";
 import { useEffect, useRef } from "react";
 import { apiFormErrorExtractor } from "utils/helpers";
+import EmailField from "views/components/EmailField";
 import NextLink from "views/components/NextLink";
-import TextField from "views/components/TextField";
 import formValidationSchema, { type schemaType } from "./schema";
 
 const ForgotPassword = () => {
@@ -72,9 +72,7 @@ const ForgotPassword = () => {
 				<legend className="visually-hidden">Forgot Password form</legend>
 				<div className="row gy-4">
 					<div className="col-12">
-						<TextField
-							type="email"
-							name="email"
+						<EmailField
 							onChange={formState.handleChange}
 							onBlur={formState.handleBlur}
 							value={formState.values?.email || ""}
@@ -87,8 +85,6 @@ const ForgotPassword = () => {
 								!!formState.touched?.email && !!formState.errors?.email
 							)}
 							error={formState.errors?.email}
-							label="Email address"
-							autoComplete="email"
 							required
 						/>
 					</div>

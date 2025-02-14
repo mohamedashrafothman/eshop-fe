@@ -1,5 +1,6 @@
 "use client";
 
+import classNames from "classnames";
 import { ComponentPropsWithoutRef, useState } from "react";
 import { percentage } from "utils/helpers";
 import isStrongPassword from "validator/lib/isStrongPassword";
@@ -7,13 +8,13 @@ import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 import NextLink from "views/components/NextLink";
 
 type Props = {
-	isValid?: boolean;
-	isInvalid?: boolean;
-	error?: string;
-	label?: string;
-	allowForgotPasswordLink?: boolean;
-	allowToggleVisibility?: boolean;
-	allowStrengthBar?: boolean;
+	isValid?: boolean | undefined;
+	isInvalid?: boolean | undefined;
+	error?: string | undefined;
+	label?: string | undefined;
+	allowForgotPasswordLink?: boolean | undefined;
+	allowToggleVisibility?: boolean | undefined;
+	allowStrengthBar?: boolean | undefined;
 } & ComponentPropsWithoutRef<"input">;
 
 const PasswordField = ({
@@ -110,13 +111,19 @@ const PasswordField = ({
 					</span>
 				)}
 			</div>
-			<div className={`input-group ${isInvalid ? "has-validation" : ""}`}>
+			<div
+				className={classNames("input-group", {
+					"has-validation": isInvalid || isValid,
+				})}>
 				<input
 					type={isPasswordVisibleState ? "text" : "password"}
 					name={name}
 					id={id}
 					value={value}
-					className={`form-control text-truncate ${isInvalid ? "is-invalid" : isValid ? "is-valid" : "border-end-0"} ${className || ""}`}
+					className={classNames("form-control text-truncate rounded-end-0", className, {
+						"is-invalid": isInvalid,
+						"is-valid": isValid,
+					})}
 					placeholder={placeholder || label}
 					autoComplete="password"
 					aria-describedby={allowToggleVisibility ? "passwordToggleButton" : undefined}
@@ -140,7 +147,9 @@ const PasswordField = ({
 				)}
 				{isInvalid && error && (
 					<div className="invalid-feedback text-capitalize">
-						<strong>{error}</strong>
+						<strong>
+							<small>{error}</small>
+						</strong>
 					</div>
 				)}
 			</div>

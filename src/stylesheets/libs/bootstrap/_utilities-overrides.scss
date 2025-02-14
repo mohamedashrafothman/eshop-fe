@@ -35,6 +35,7 @@ $width-values: (
 	"100px": 100px,
 	"112px": 112px,
 	"150px": 150px,
+	"200px": 200px,
 );
 $height-values: map-merge($width-values, ());
 
@@ -489,6 +490,12 @@ $utilities: map-merge(
 					values: $width-values,
 				)
 			),
+		"min-width": (
+			responsive: true,
+			property: min-width,
+			class: min-w,
+			values: $width-values,
+		),
 		"min-height": (
 			responsive: true,
 			property: min-height,

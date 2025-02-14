@@ -2,6 +2,7 @@
 
 import classNames from "classnames";
 import useLoginBySocialMutation from "hooks/useLoginBySocialMutation";
+import useMeQuery from "hooks/useMeQuery";
 import useUnlinkSocialMutation from "hooks/useUnlinkSocialMutation";
 import { useSession } from "next-auth/react";
 import { useTransitionRouter } from "next-view-transitions";
@@ -11,17 +12,14 @@ import { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from "react-face
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { toast } from "react-toastify";
 import { type PostLoginBySocialMediaDataType } from "services/api/e-shop/auth";
-import { isFunction } from "utils/helpers";
 import vars from "utils/vars";
 import OAuthButton, { type Props as OAuthButtonProps } from "views/components/OAuthButton";
 
-type Props = { onSuccess?: (_x: any) => Promise<void> | undefined } & Omit<
-	OAuthButtonProps,
-	"title" | "icon"
->;
+type Props = Omit<OAuthButtonProps, "title" | "icon">;
 
-const FacebookOAuthButton = ({ onSuccess, className, ...props }: Props) => {
+const FacebookOAuthButton = ({ className, ...props }: Props) => {
 	const session = useSession();
+	const { data: user } = useMeQuery();
 	const { push } = useTransitionRouter();
 
 	// server state hooks
@@ -36,7 +34,7 @@ const FacebookOAuthButton = ({ onSuccess, className, ...props }: Props) => {
 
 	// constants
 	const isAuthenticated = session?.status === "authenticated";
-	const isConnectedToFacebook = Boolean(session?.data?.user?.facebook);
+	const isConnectedToFacebook = Boolean(user?.facebook);
 	const buttonTitle = isAuthenticated
 		? `${isConnectedToFacebook ? (facebookOAuthLoadingState ? "Unlinking from" : "Unlink from") : facebookOAuthLoadingState ? "Linking to" : "Link to"} Facebook`
 		: `${facebookOAuthLoadingState ? "Logging" : "Login"} by Facebook`;
@@ -47,13 +45,7 @@ const FacebookOAuthButton = ({ onSuccess, className, ...props }: Props) => {
 		if (!providerData?.email || !providerData?.name) {
 			setFacebookOAuthLoadingState(false);
 			toast("Your social account is missing the email or name.", { type: "error" });
-			if (!isAuthenticated)
-				push(
-					`/auth/register?${qs.stringify({
-						...(providerData?.email ? { email: providerData.email } : {}),
-						...(providerData?.name ? { name: providerData.name } : {}),
-					})}`
-				);
+			if (!isAuthenticated) push(`/auth/register?${qs.stringify(providerData)}`);
 			return;
 		}
 
@@ -74,14 +66,11 @@ const FacebookOAuthButton = ({ onSuccess, className, ...props }: Props) => {
 					// Reset Oauth loading state
 					setFacebookOAuthLoadingState(false);
 				},
-				onSuccess: async (response) => {
+				onSuccess: () => {
 					// Reset Oauth loading state
 					setFacebookOAuthLoadingState(false);
-
 					// Resetting login by social query mutation.
 					loginBySocialMutation.reset();
-
-					if (isFunction(onSuccess)) onSuccess(response);
 				},
 			}
 		);
@@ -104,14 +93,11 @@ const FacebookOAuthButton = ({ onSuccess, className, ...props }: Props) => {
 					// Reset Oauth loading state
 					setFacebookOAuthLoadingState(false);
 				},
-				onSuccess: async (response) => {
+				onSuccess: () => {
 					// Reset Oauth loading state
 					setFacebookOAuthLoadingState(false);
-
 					// Resetting login by social query mutation.
 					loginBySocialMutation.reset();
-
-					if (isFunction(onSuccess)) onSuccess(response);
 				},
 			}
 		);

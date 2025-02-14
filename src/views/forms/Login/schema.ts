@@ -12,7 +12,7 @@ const schema = object().shape({
 			message:
 				"Password must be Between 8 and 64 characters long. contains at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.",
 		}),
-	remember: boolean().optional(),
+	remember: boolean().optional().default(true),
 });
 
 export type schemaType = InferType<typeof schema>;

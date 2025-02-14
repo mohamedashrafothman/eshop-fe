@@ -1,7 +1,7 @@
 import { getSession } from "config/next-auth";
 import { redirect } from "next/navigation";
 
-type Props = { children: React.ReactNode };
+type Props = { children?: React.ReactNode | undefined };
 
 const AuthLayout = async ({ children }: Props) => {
 	// Check if the user is authenticated.

@@ -1,7 +1,7 @@
 import { dehydrate, QueryClient } from "@tanstack/react-query";
+import classNames from "classnames";
 import { getSession } from "config/next-auth";
 import type { Metadata } from "next";
-import type { Session } from "next-auth";
 import { Poppins } from "next/font/google";
 import "stylesheets/styles.scss";
 import Providers from "views/Providers";
@@ -22,11 +22,11 @@ export const metadata: Metadata = {
 type Props = { children: React.ReactNode };
 
 const RootLayout = async ({ children }: Props) => {
-	const session = (await getSession()) as Session;
+	const session = await getSession();
 	const queryClient = new QueryClient();
 
 	return (
-		<html lang="en" dir="ltr" data-bs-theme="light" className={`${poppins.variable}`}>
+		<html lang="en" dir="ltr" data-bs-theme="light" className={classNames(poppins.variable)}>
 			<body>
 				<noscript>You need to enable JavaScript to run this app.</noscript>
 				<SVGs />

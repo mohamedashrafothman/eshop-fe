@@ -2,8 +2,10 @@
 
 import Collapse from "bootstrap/js/dist/collapse";
 import classNames from "classnames";
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef } from "react";
+import { isUserRoleSuperAdmin, isUserRoleUser } from "utils/helpers";
 import NextLink from "views/components/NextLink";
 
 type singleNavLinkProps = {
@@ -18,8 +20,11 @@ type navLinkProps = (singleNavLinkProps & {
 
 const DashboardSideNav = () => {
 	const pathname = usePathname();
+	const { data: session } = useSession();
 
 	// constants
+	const IS_USER_ROLE_SUPER_ADMIN = isUserRoleSuperAdmin(session?.user?.role || "");
+	const IS_USER_ROLE_USER = isUserRoleUser(session?.user?.role || "");
 	const NAVIGATION_LINKS: navLinkProps = useMemo(
 		() => [
 			{ title: "Dashboard", href: "/dashboard", icon: "icon-dashboard", exact: true },
@@ -27,20 +32,34 @@ const DashboardSideNav = () => {
 				title: "Account Information",
 				href: "/dashboard/me",
 				icon: "icon-person",
-				children: [
-					{ title: "Edit Information", href: "/dashboard/me", exact: true },
-					{ title: "Social Connections", href: "/dashboard/me/connections", exact: true },
-				],
+				...(IS_USER_ROLE_USER
+					? {
+							children: [
+								{ title: "Edit Information", href: "/dashboard/me", exact: true },
+								{
+									title: "Social Connections",
+									href: "/dashboard/me/connections",
+									exact: true,
+								},
+							],
+						}
+					: {}),
 			},
-			{ title: "Addresses", href: "/dashboard/addresses", icon: "icon-house", exact: true },
-			{
-				title: "Users",
-				href: "/dashboard/users",
-				icon: "icon-people",
-				children: [{ title: "Users overview", href: "/dashboard/users", exact: true }],
-			},
+			...(IS_USER_ROLE_SUPER_ADMIN
+				? [{ title: "Users", href: "/dashboard/users", icon: "icon-people" }]
+				: []),
+			...(IS_USER_ROLE_USER
+				? [
+						{
+							title: "Addresses",
+							href: "/dashboard/addresses",
+							icon: "icon-house",
+							exact: true,
+						},
+					]
+				: []),
 		],
-		[]
+		[IS_USER_ROLE_SUPER_ADMIN, IS_USER_ROLE_USER]
 	);
 	const NAVIGATION_LINKS_WITH_CHILDREN_LENGTH: number =
 		NAVIGATION_LINKS.filter(({ children }) => children && children.length > 0).length || 0;
@@ -76,7 +95,7 @@ const DashboardSideNav = () => {
 						<strong>Skip to content</strong>
 					</a>
 				</li>
-				{NAVIGATION_LINKS.map(({ href, icon, title, children = [], exact }, index) => {
+				{NAVIGATION_LINKS.map(({ href = "", icon, title, children = [], exact }, index) => {
 					const isHasChildren = children?.length > 0;
 					const isAccordionItemCollapsed =
 						isHasChildren && !children.map(({ href }) => href).includes(pathname);
@@ -92,7 +111,7 @@ const DashboardSideNav = () => {
 							{isHasChildren ? (
 								<>
 									<AccordionItemLinkComponent
-										href={isHasChildren && (href as string)}
+										href={href}
 										type="button"
 										className={classNames(
 											"nav-link accordion-button text-capitalize text-decoration-none lh-1 text-reset py-3 px-gutter hstack gap-2 align-items-center flex-nowrap",

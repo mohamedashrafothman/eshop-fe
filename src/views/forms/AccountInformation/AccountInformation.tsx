@@ -3,18 +3,19 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import useMeQuery from "hooks/useMeQuery";
+import useMeQuery, { KEY_ARRAY as ME_KEY_QUERY } from "hooks/useMeQuery";
 import usePatchUserMutation from "hooks/usePatchUserMutation";
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
 import { apiFormErrorExtractor } from "utils/helpers";
+import EmailField from "views/components/EmailField";
 import TextField from "views/components/TextField";
 import formValidationSchema, { type schemaType } from "./schema";
 
 const AccountInformation = () => {
 	const queryClient = useQueryClient();
 	const { data: session } = useSession();
-	const { data: me, isLoading: isMeLoading } = useMeQuery();
+	const { data: user, isLoading: isUserLoading } = useMeQuery();
 
 	// server state hooks
 	const patchUserMutation = usePatchUserMutation();
@@ -27,14 +28,17 @@ const AccountInformation = () => {
 		data: schemaType,
 		formikHelpers: FormikHelpers<schemaType>
 	) => {
+		// Prevent empty id.
+		if (!user?._id) return;
+
 		// Abort any previous request, and create a new abort controller.
 		if (patchUserCancelRequestRef.current?.signal) patchUserCancelRequestRef.current?.abort();
 		patchUserCancelRequestRef.current = new AbortController();
 
-		// Call the forgot password mutation.
+		// Call the patch user mutation.
 		await patchUserMutation.mutateAsync(
 			{
-				variables: { id: me?.entities.data._id },
+				variables: { id: user._id },
 				data,
 				signal: patchUserCancelRequestRef.current.signal,
 			},
@@ -48,16 +52,27 @@ const AccountInformation = () => {
 				onSuccess: async (response) => {
 					// Resetting formik.
 					formikHelpers.resetForm();
-					// Resetting forgot password query mutation.
+					// Resetting patch user query mutation.
 					patchUserMutation.reset();
-					// Remove the me query from the cache.
-					queryClient.removeQueries({ queryKey: ["users", "me"], exact: true });
+					// Invalidate the me query from the cache.
+					queryClient.invalidateQueries({ queryKey: ME_KEY_QUERY, exact: true });
+					// Extract user, and tokens data from the response.
+					const user = response?.data?.entities?.data || {};
 					// Update next-auth session user data.
-					await signIn("credentials", {
-						...(session || {}),
-						user: JSON.stringify(response?.entities?.data),
-						redirect: false,
-					});
+					if (user)
+						await signIn("credentials", {
+							...(session?.accessToken && {
+								accessToken: JSON.stringify(session.accessToken),
+							}),
+							...(session?.refreshToken && {
+								refreshToken: JSON.stringify(session.refreshToken),
+							}),
+							...(session?.tokenType && {
+								tokenType: JSON.stringify(session.tokenType),
+							}),
+							...(user && { user: JSON.stringify(user) }),
+							redirect: false,
+						});
 				},
 			}
 		);
@@ -67,8 +82,8 @@ const AccountInformation = () => {
 	const formState = useFormik<schemaType>({
 		enableReinitialize: true,
 		initialValues: {
-			name: me?.entities.data.name || "",
-			email: me?.entities.data.email || "",
+			name: user?.name || "",
+			email: user?.email || "",
 		},
 		validationSchema: formValidationSchema,
 		onSubmit: onFormSubmitHandler,
@@ -85,7 +100,7 @@ const AccountInformation = () => {
 	return (
 		<form onSubmit={formState.handleSubmit} onReset={formState.handleReset} noValidate>
 			<FocusError formik={formState} />
-			<fieldset disabled={formState.isSubmitting || isMeLoading}>
+			<fieldset disabled={formState.isSubmitting || isUserLoading}>
 				<legend className="visually-hidden">account information form</legend>
 				<div className="row gy-4">
 					<div className="col-12">
@@ -111,10 +126,7 @@ const AccountInformation = () => {
 						/>
 					</div>
 					<div className="col-12">
-						<TextField
-							type="email"
-							name="email"
-							id="emailField"
+						<EmailField
 							onChange={formState.handleChange}
 							onBlur={formState.handleBlur}
 							value={formState.values?.email || ""}
@@ -127,8 +139,7 @@ const AccountInformation = () => {
 								!!formState.touched?.email && !!formState.errors?.email
 							)}
 							error={formState.errors?.email}
-							label="Email address"
-							autoComplete="email"
+							allowVerificationStatus
 							required
 						/>
 					</div>
@@ -152,6 +163,7 @@ const AccountInformation = () => {
 							<div className="col-12 col-lg">
 								<button
 									type="reset"
+									disabled={!formState.dirty}
 									className="btn btn-outline-primary border-primary-dark w-100 text-capitalize">
 									<strong>cancel</strong>
 								</button>

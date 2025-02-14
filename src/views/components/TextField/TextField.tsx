@@ -1,13 +1,14 @@
 "use client";
 
+import classNames from "classnames";
 import { ComponentPropsWithoutRef } from "react";
 import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 
 type Props = {
-	isValid?: boolean;
-	isInvalid?: boolean;
-	error?: string;
-	label?: string;
+	isValid?: boolean | undefined;
+	isInvalid?: boolean | undefined;
+	error?: string | undefined;
+	label?: string | undefined;
 } & ComponentPropsWithoutRef<"input">;
 
 const TextField = ({
@@ -32,14 +33,19 @@ const TextField = ({
 		<input
 			type={type}
 			id={id}
-			className={`form-control text-truncate ${isInvalid ? "is-invalid" : isValid ? "is-valid" : ""} ${className || ""}`}
+			className={classNames("form-control text-truncate", className, {
+				"is-invalid": isInvalid,
+				"is-valid": isValid,
+			})}
 			placeholder={placeholder || label || undefined}
 			required={required || undefined}
 			{...restOfProps}
 		/>
 		{isInvalid && error && (
 			<div className="invalid-feedback text-capitalize">
-				<strong>{error}</strong>
+				<strong>
+					<small>{error}</small>
+				</strong>
 			</div>
 		)}
 	</>

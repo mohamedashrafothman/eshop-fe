@@ -17,10 +17,13 @@ type Props = {
 } & HTMLAttributes<HTMLElement>;
 
 const Header = ({ type = "public", className = "", ...props }: Props) => {
-	const { data: session } = useSession();
+	const session = useSession();
 
 	// ref hook
 	const headerRef = useRef<HTMLElement | null>(null);
+
+	// constants
+	const isAuthenticated = session?.status === "authenticated";
 
 	// effect hook
 	useEffect(() => {
@@ -122,9 +125,17 @@ const Header = ({ type = "public", className = "", ...props }: Props) => {
 										<Nav.List>
 											<Nav.ListItem>
 												<Nav.Link
-													href={!session ? "/auth/login" : "/dashboard"}
+													href={
+														!isAuthenticated
+															? "/auth/login"
+															: "/dashboard"
+													}
 													className="link-dark"
-													title={!session ? "Login" : "Go to dashboard"}>
+													title={
+														!isAuthenticated
+															? "Login"
+															: "Go to dashboard"
+													}>
 													<svg
 														className="bi w-22px h-22px"
 														width="22"
