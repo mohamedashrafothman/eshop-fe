@@ -45,9 +45,6 @@ const DashboardSideNav = () => {
 						}
 					: {}),
 			},
-			...(IS_USER_ROLE_SUPER_ADMIN
-				? [{ title: "Users", href: "/dashboard/users", icon: "icon-people" }]
-				: []),
 			...(IS_USER_ROLE_USER
 				? [
 						{
@@ -56,6 +53,12 @@ const DashboardSideNav = () => {
 							icon: "icon-house",
 							exact: true,
 						},
+					]
+				: []),
+			...(IS_USER_ROLE_SUPER_ADMIN
+				? [
+						{ title: "Users", href: "/dashboard/users", icon: "icon-people" },
+						{ title: "Brands", href: "/dashboard/brands", icon: "icon-tags" },
 					]
 				: []),
 		],
