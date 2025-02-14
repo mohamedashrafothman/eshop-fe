@@ -5,10 +5,10 @@ import { ComponentPropsWithoutRef } from "react";
 import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 
 type Props = {
-	isValid?: boolean;
-	isInvalid?: boolean;
-	error?: string;
-	label?: string;
+	isValid?: boolean | undefined;
+	isInvalid?: boolean | undefined;
+	error?: string | undefined;
+	label?: string | undefined;
 } & ComponentPropsWithoutRef<"input">;
 
 const TextField = ({

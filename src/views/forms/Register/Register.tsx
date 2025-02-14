@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { apiFormErrorExtractor } from "utils/helpers";
+import EmailField from "views/components/EmailField";
 import FacebookOAuthButton from "views/components/FacebookOAuthButton";
 import GoogleOAuthButton from "views/components/GoogleOAuthButton";
 import NextLink from "views/components/NextLink";
@@ -148,10 +149,7 @@ const Register = () => {
 								/>
 							</div>
 							<div className="col-12 col-xl-6">
-								<TextField
-									type="email"
-									name="email"
-									id="emailField"
+								<EmailField
 									onChange={formState.handleChange}
 									onBlur={formState.handleBlur}
 									value={formState.values?.email || ""}
@@ -164,8 +162,6 @@ const Register = () => {
 										!!formState.touched?.email && !!formState.errors?.email
 									)}
 									error={formState.errors?.email}
-									label="Email address"
-									autoComplete="email"
 									required
 								/>
 							</div>

@@ -71,3 +71,22 @@ export const filterObjectFalsyValues = (obj: { [key: string]: any }) =>
 		if (obj[key]) acc[key] = obj[key];
 		return acc;
 	}, {});
+
+export const countDownTimer = (
+	date: number | null
+): { seconds: number; minutes: number; hours: number; days: number } => {
+	console.log("date: ", date);
+	if (date === null) return { seconds: 0, minutes: 0, hours: 0, days: 0 };
+	const distance = new Date(date).getTime() - new Date().getTime();
+	const _second = 1000;
+	const _minute = _second * 60;
+	const _hour = _minute * 60;
+	const _day = _hour * 24;
+	if (distance < 0) return { seconds: 0, minutes: 0, hours: 0, days: 0 };
+	return {
+		seconds: Math.floor((distance % _minute) / _second),
+		minutes: Math.floor((distance % _hour) / _minute),
+		hours: Math.floor((distance % _day) / _hour),
+		days: Math.floor(distance / _day),
+	};
+};

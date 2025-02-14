@@ -5,17 +5,19 @@ import { ComponentPropsWithoutRef } from "react";
 import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 
 type Props = {
-	isValid?: boolean;
-	isInvalid?: boolean;
-	isInline?: boolean;
-	error?: string;
-	label?: string;
+	isValid?: boolean | undefined;
+	isInvalid?: boolean | undefined;
+	isInline?: boolean | undefined;
+	error?: string | undefined;
+	label?: string | undefined;
+	isSwitch?: boolean | undefined;
 } & ComponentPropsWithoutRef<"input">;
 
 const CheckboxField = ({
 	isValid = false,
 	isInvalid = false,
 	isInline = false,
+	isSwitch = false,
 	className,
 	label,
 	error,
@@ -24,7 +26,11 @@ const CheckboxField = ({
 	type = "checkbox",
 	...restOfProps
 }: Props) => (
-	<div className={classNames("form-check", { "form-check-inline": isInline })}>
+	<div
+		className={classNames("form-check", {
+			"form-check-inline": isInline,
+			"form-switch": isSwitch,
+		})}>
 		<input
 			className={classNames("form-check-input", className, {
 				"is-invalid": isInvalid,

@@ -8,13 +8,13 @@ import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 import NextLink from "views/components/NextLink";
 
 type Props = {
-	isValid?: boolean;
-	isInvalid?: boolean;
-	error?: string;
-	label?: string;
-	allowForgotPasswordLink?: boolean;
-	allowToggleVisibility?: boolean;
-	allowStrengthBar?: boolean;
+	isValid?: boolean | undefined;
+	isInvalid?: boolean | undefined;
+	error?: string | undefined;
+	label?: string | undefined;
+	allowForgotPasswordLink?: boolean | undefined;
+	allowToggleVisibility?: boolean | undefined;
+	allowStrengthBar?: boolean | undefined;
 } & ComponentPropsWithoutRef<"input">;
 
 const PasswordField = ({

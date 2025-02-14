@@ -155,6 +155,7 @@ const AccountPassword = () => {
 							<div className="col-12 col-lg">
 								<button
 									type="reset"
+									disabled={!formState.dirty}
 									className="btn btn-outline-primary border-primary-dark w-100 text-capitalize">
 									<strong>cancel</strong>
 								</button>

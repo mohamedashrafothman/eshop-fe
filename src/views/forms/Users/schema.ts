@@ -1,5 +1,5 @@
 import vars from "utils/vars";
-import { InferType, object, string } from "yup";
+import { boolean, InferType, object, string } from "yup";
 
 const schema = object().shape({
 	name: string().required("Field required!"),
@@ -10,6 +10,7 @@ const schema = object().shape({
 			[...Object.values(vars.roles).filter((item) => item !== vars.roles.superAdmin)],
 			"Invalid role!"
 		),
+	emailVerified: boolean().optional().default(false),
 });
 
 export type schemaType = InferType<typeof schema>;

@@ -8,6 +8,7 @@ import usePatchUserMutation from "hooks/usePatchUserMutation";
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
 import { apiFormErrorExtractor } from "utils/helpers";
+import EmailField from "views/components/EmailField";
 import TextField from "views/components/TextField";
 import formValidationSchema, { type schemaType } from "./schema";
 
@@ -55,12 +56,23 @@ const AccountInformation = () => {
 					patchUserMutation.reset();
 					// Invalidate the me query from the cache.
 					queryClient.invalidateQueries({ queryKey: ME_KEY_QUERY, exact: true });
+					// Extract user, and tokens data from the response.
+					const user = response?.data?.entities?.data || {};
 					// Update next-auth session user data.
-					await signIn("credentials", {
-						...(session || {}),
-						user: JSON.stringify(response?.data?.entities?.data),
-						redirect: false,
-					});
+					if (user)
+						await signIn("credentials", {
+							...(session?.accessToken && {
+								accessToken: JSON.stringify(session.accessToken),
+							}),
+							...(session?.refreshToken && {
+								refreshToken: JSON.stringify(session.refreshToken),
+							}),
+							...(session?.tokenType && {
+								tokenType: JSON.stringify(session.tokenType),
+							}),
+							...(user && { user: JSON.stringify(user) }),
+							redirect: false,
+						});
 				},
 			}
 		);
@@ -114,10 +126,7 @@ const AccountInformation = () => {
 						/>
 					</div>
 					<div className="col-12">
-						<TextField
-							type="email"
-							name="email"
-							id="emailField"
+						<EmailField
 							onChange={formState.handleChange}
 							onBlur={formState.handleBlur}
 							value={formState.values?.email || ""}
@@ -130,8 +139,7 @@ const AccountInformation = () => {
 								!!formState.touched?.email && !!formState.errors?.email
 							)}
 							error={formState.errors?.email}
-							label="Email address"
-							autoComplete="email"
+							allowVerificationStatus
 							required
 						/>
 					</div>
@@ -155,6 +163,7 @@ const AccountInformation = () => {
 							<div className="col-12 col-lg">
 								<button
 									type="reset"
+									disabled={!formState.dirty}
 									className="btn btn-outline-primary border-primary-dark w-100 text-capitalize">
 									<strong>cancel</strong>
 								</button>

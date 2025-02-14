@@ -12,6 +12,8 @@ import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { apiFormErrorExtractor, pick } from "utils/helpers";
 import vars from "utils/vars";
+import CheckboxField from "views/components/CheckboxField";
+import EmailField from "views/components/EmailField";
 import SelectField from "views/components/SelectField";
 import TextField from "views/components/TextField";
 import formValidationSchema, { type schemaType } from "./schema";
@@ -100,7 +102,9 @@ const Users = () => {
 			name: "",
 			email: "",
 			role: "",
-			...((isEditForm && user && pick(user, ["name", "email", "role"])) || {}),
+			emailVerified: false,
+			...((isEditForm && user && pick(user, ["name", "email", "role", "emailVerified"])) ||
+				{}),
 		},
 		validationSchema: formValidationSchema,
 		onSubmit: onFormSubmitHandler,
@@ -117,7 +121,7 @@ const Users = () => {
 		<form onSubmit={formState.handleSubmit} onReset={formState.handleReset} noValidate>
 			<FocusError formik={formState} />
 			<fieldset disabled={formState.isSubmitting || isUserLoading}>
-				<legend className="visually-hidden">add new user form</legend>
+				<legend className="visually-hidden">{`${isEditForm ? "Edit User" : "Add User"} Form`}</legend>
 				<div className="row gy-4">
 					<div className="col-12">
 						<TextField
@@ -142,10 +146,7 @@ const Users = () => {
 						/>
 					</div>
 					<div className="col-12">
-						<TextField
-							type="email"
-							name="email"
-							id="emailField"
+						<EmailField
 							onChange={formState.handleChange}
 							onBlur={formState.handleBlur}
 							value={formState.values?.email || ""}
@@ -158,8 +159,6 @@ const Users = () => {
 								!!formState.touched?.email && !!formState.errors?.email
 							)}
 							error={formState.errors?.email}
-							label="Email address"
-							autoComplete="email"
 							required
 						/>
 					</div>
@@ -189,6 +188,20 @@ const Users = () => {
 							required
 						/>
 					</div>
+					<div className="col-12">
+						<CheckboxField
+							onChange={({ target: { checked } }) => {
+								formState.setFieldValue("emailVerified", checked);
+							}}
+							onBlur={formState.handleBlur}
+							value="1"
+							name="emailVerified"
+							id="emailVerifiedMeField"
+							label="Mark Email as Verified!"
+							checked={formState.values?.emailVerified || undefined}
+							isSwitch
+						/>
+					</div>
 					<div className="col-12 mt-5">
 						<div className="row g-3">
 							<div className="col-12 col-lg">
@@ -196,7 +209,7 @@ const Users = () => {
 									type="submit"
 									className="btn btn-primary border-primary-dark w-100 text-capitalize"
 									disabled={!formState.isValid}>
-									<strong>create</strong>
+									<strong>{isEditForm ? "update" : "create"}</strong>
 									{formState.isSubmitting && (
 										<span
 											className="spinner-border spinner-border-sm ms-2"
@@ -209,6 +222,7 @@ const Users = () => {
 							<div className="col-12 col-lg">
 								<button
 									type="reset"
+									disabled={!formState.dirty}
 									className="btn btn-outline-primary border-primary-dark w-100 text-capitalize">
 									<strong>cancel</strong>
 								</button>

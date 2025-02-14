@@ -6,11 +6,11 @@ import useLoginMutation from "hooks/useLoginMutation";
 import { useEffect, useRef, useState } from "react";
 import { apiFormErrorExtractor } from "utils/helpers";
 import CheckboxField from "views/components/CheckboxField";
+import EmailField from "views/components/EmailField";
 import FacebookOAuthButton from "views/components/FacebookOAuthButton";
 import GoogleOAuthButton from "views/components/GoogleOAuthButton";
 import NextLink from "views/components/NextLink";
 import PasswordField from "views/components/PasswordField";
-import TextField from "views/components/TextField";
 import formValidationSchema, { type schemaType } from "./schema";
 
 const Login = () => {
@@ -100,10 +100,7 @@ const Login = () => {
 					<div className="col-12">
 						<div className="row gy-4">
 							<div className="col-12">
-								<TextField
-									type="email"
-									name="email"
-									id="emailField"
+								<EmailField
 									onChange={formState.handleChange}
 									onBlur={formState.handleBlur}
 									value={formState.values?.email || ""}
@@ -116,8 +113,6 @@ const Login = () => {
 										!!formState.touched?.email && !!formState.errors?.email
 									)}
 									error={formState.errors?.email}
-									label="Email address"
-									autoComplete="email"
 									required
 								/>
 							</div>

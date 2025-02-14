@@ -1,23 +1,19 @@
 import slice, {
 	initialState,
-	isAuthenticatedSelector,
-	sessionSelector,
-	userSelector,
-	type Session,
+	resetEmailTimerSelector,
+	type ResetEmailTimer,
 	type SliceState,
-} from "store/session/slice";
+} from "store/resetEmailTimer/slice";
 
 const { actions, reducer, name } = slice;
 
 export {
 	actions,
 	initialState,
-	isAuthenticatedSelector,
 	name,
 	reducer,
-	sessionSelector,
-	userSelector,
-	type Session,
+	resetEmailTimerSelector,
+	type ResetEmailTimer,
 	type SliceState,
 };
 

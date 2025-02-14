@@ -29,7 +29,13 @@ const useUnlinkSocialQuery = () => {
 			// Call the signIn function from next-auth.
 			if (user)
 				await signIn("credentials", {
-					...(session || {}),
+					...(session?.accessToken && {
+						accessToken: JSON.stringify(session.accessToken),
+					}),
+					...(session?.refreshToken && {
+						refreshToken: JSON.stringify(session.refreshToken),
+					}),
+					...(session?.tokenType && { tokenType: JSON.stringify(session.tokenType) }),
 					...(user && { user: JSON.stringify(user) }),
 					redirect: false,
 				});
