@@ -1,5 +1,7 @@
 "use client";
 
+import { default as BrandsForm } from "views/forms/Brands";
+
 const BrandsEdit = () => (
 	<section className="brands-edit py-4">
 		<div className="row gy-4 gy-xl-0">
@@ -10,7 +12,7 @@ const BrandsEdit = () => (
 							<small>Edit brand</small>
 						</strong>
 					</h2>
-					{/* TODO: Brands form */}
+					<BrandsForm />
 				</div>
 			</div>
 		</div>

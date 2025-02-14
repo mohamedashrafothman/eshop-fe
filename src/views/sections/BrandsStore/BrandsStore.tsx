@@ -1,5 +1,7 @@
 "use client";
 
+import { default as BrandsForm } from "views/forms/Brands";
+
 const BrandsStore = () => (
 	<section className="brands-store py-4">
 		<div className="row gy-4 gy-xl-0">
@@ -10,7 +12,7 @@ const BrandsStore = () => (
 							<small>Add new brand</small>
 						</strong>
 					</h2>
-					{/* TODO: Add brands form */}
+					<BrandsForm />
 				</div>
 			</div>
 		</div>
