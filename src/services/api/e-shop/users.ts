@@ -7,7 +7,7 @@ export type GetMeDataType = object;
 export type PostUserDataType = Pick<IUser, "name" | "email" | "role">;
 export type PostUserResponseType = IUser;
 export type PatchUserDataType =
-	| Partial<IUser>
+	| Partial<Pick<IUser, "name" | "email" | "role">>
 	| { oldPassword: string; password: string; passwordConfirmation: string };
 export type PatchUserResponseType = IUser;
 export type GetUsersDataType = {
