@@ -3,6 +3,7 @@
 import classNames from "classnames";
 import useBrandsInfinityQuery from "hooks/useBrandsInfinityQuery";
 import IBrand from "interfaces/Brand.interface";
+import Image from "next/image";
 import { Fragment, useState } from "react";
 import { type GetBrandsDataType } from "services/api/e-shop/brands";
 import { filterObjectFalsyValues } from "utils/helpers";
@@ -149,7 +150,34 @@ const BrandsList = () => {
 																		)?.data.length || 0)}
 																</th>
 																<td>
-																	<span>{singleBrand.name}</span>
+																	<span className="hstack gap-2 flex-nowrap">
+																		{typeof singleBrand.logo !==
+																			"string" &&
+																			singleBrand.logo
+																				?.path && (
+																				<span className="flex-shrink-0">
+																					<Image
+																						src={
+																							singleBrand
+																								.logo
+																								.path
+																						}
+																						className="w-22px h-22px object-fit-scale-down rounded"
+																						width="22"
+																						height="22"
+																						alt={
+																							singleBrand
+																								?.logo
+																								?.alt ||
+																							singleBrand.name
+																						}
+																					/>
+																				</span>
+																			)}
+																		<span className="flex-grow-1">
+																			{singleBrand.name}
+																		</span>
+																	</span>
 																</td>
 																<td>
 																	<span>

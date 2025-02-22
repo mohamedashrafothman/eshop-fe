@@ -5,8 +5,9 @@ const schema = object().shape({
 	name: string().required("Field required!").max(100),
 	description: string().required("Field required!").max(1000),
 	logo: mixed()
+		.required("Field required!")
 		.test(
-			"size",
+			"fileSize",
 			`Uploaded file is too big, must be less than ${vars.app.fileMaxSizeInMB}MB`,
 			function (file: any) {
 				return Boolean(
@@ -18,16 +19,15 @@ const schema = object().shape({
 				);
 			}
 		)
-		.test("type", "Uploaded files has unsupported format", function (file: any) {
+		.test("fileFormat", "Uploaded files has unsupported format", function (file: any) {
 			return Boolean(
 				!!!file ||
 					(Array.from([file])?.filter((file) => file?.type)?.length &&
 						Array.from([file])?.every((file) =>
-							vars.app.applicationFileInputAccepts.includes(file?.type)
+							vars.app.imagesFileInputAccepts.includes(file?.type)
 						))
 			);
-		})
-		.required("Field required!"),
+		}),
 });
 
 export type schemaType = InferType<typeof schema>;

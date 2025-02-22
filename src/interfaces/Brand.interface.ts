@@ -6,7 +6,7 @@ export default interface Brand {
 	name: string;
 	slug: string;
 	description?: string | undefined;
-	logo?: string | IAttachment | undefined;
+	logo: IAttachment | string;
 	products: (string | IProduct)[];
 	productsCount: number;
 	createdAt: string;

@@ -10,8 +10,11 @@ import useSingleBrandsQuery from "hooks/useSingleBrandsQuery";
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { apiFormErrorExtractor, pick } from "utils/helpers";
+import { apiFormErrorExtractor, objectToFormData, pick } from "utils/helpers";
+import vars from "utils/vars";
+import FileField from "views/components/FileField";
 import TextField from "views/components/TextField";
+import TextareaField from "views/components/TextareaField";
 import formValidationSchema, { type schemaType } from "./schema";
 
 const Brands = () => {
@@ -42,7 +45,11 @@ const Brands = () => {
 		// Call the brand store/edit mutation.
 		if (!isEditForm) {
 			await postBrandMutation.mutateAsync(
-				{ data, signal: brandCancelRequestRef.current.signal },
+				{
+					data: objectToFormData(data),
+					signal: brandCancelRequestRef.current.signal,
+					headers: { "Content-Type": "multipart/form-data" },
+				},
 				{
 					onError: (responseError) => {
 						// Extract errors from the response error.
@@ -66,8 +73,9 @@ const Brands = () => {
 			await patchBrandMutation.mutateAsync(
 				{
 					variables: { id: identifier },
-					data,
+					data: objectToFormData(data),
 					signal: brandCancelRequestRef.current.signal,
+					headers: { "Content-Type": "multipart/form-data" },
 				},
 				{
 					onError: (responseError) => {
@@ -139,8 +147,50 @@ const Brands = () => {
 							required
 						/>
 					</div>
-					<div className="col-12"></div>
-					<div className="col-12"></div>
+					<div className="col-12">
+						<TextareaField
+							name="description"
+							id="descriptionField"
+							onChange={formState.handleChange}
+							onBlur={formState.handleBlur}
+							value={formState.values?.description || ""}
+							isValid={Boolean(
+								formState.values?.description &&
+									!!formState.touched?.description &&
+									!formState.errors?.description
+							)}
+							isInvalid={Boolean(
+								!!formState.touched?.description && !!formState.errors?.description
+							)}
+							error={formState.errors?.description}
+							label="Description"
+							required
+						/>
+					</div>
+					<div className="col-12">
+						<FileField
+							name="logo"
+							id="logoField"
+							onChange={({ target: { name, files } }) => {
+								formState.setFieldTouched(name, true);
+								formState?.setFieldValue(name, files?.[0] || "");
+							}}
+							onBlur={formState.handleBlur}
+							isValid={Boolean(
+								formState.values?.logo &&
+									!!formState.touched?.logo &&
+									!formState.errors?.logo
+							)}
+							isInvalid={Boolean(
+								!!formState.touched?.logo && !!formState.errors?.logo
+							)}
+							error={formState.errors?.logo as string}
+							accept={vars.app.imagesFileInputAccepts.join(",")}
+							helpText={`Allowed file types: png, jpg, jpeg. Max file size: ${vars.app.fileMaxSizeInMB}MB.`}
+							label="Logo Image"
+							required
+						/>
+					</div>
 					<div className="col-12 mt-5">
 						<div className="row g-3">
 							<div className="col-12 col-lg">

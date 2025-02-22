@@ -2,9 +2,9 @@ import axiosInstance, { type AxiosRequestConfig, type AxiosResponseProps } from 
 import IBrand from "interfaces/Brand.interface";
 
 // request and response types
-export type PostBrandDataType = Pick<IBrand, "name" | "description"> & { logo?: any };
+export type PostBrandDataType = FormData;
 export type PostBrandResponseType = IBrand;
-export type PatchBrandDataType = Partial<Pick<IBrand, "name" | "description">> & { logo?: any };
+export type PatchBrandDataType = FormData;
 export type PatchBrandResponseType = IBrand;
 export type GetBrandsDataType = {
 	page?: number | undefined;

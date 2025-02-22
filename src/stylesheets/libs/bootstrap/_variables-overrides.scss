@@ -902,11 +902,11 @@ $btn-active-border-tint-amount: 10% !default;
 // Forms
 
 // scss-docs-start form-text-variables
-$form-text-margin-top: 0.25rem !default;
+$form-text-margin-top: 0.125rem !default;
 $form-text-font-size: $font-size-base !default;
-$form-text-font-style: null !default;
-$form-text-font-weight: null !default;
-$form-text-color: var(--#{$prefix}secondary-color) !default;
+$form-text-font-style: italic !default;
+$form-text-font-weight: light !default;
+$form-text-color: rgba(var(--#{$prefix}body-color-rgb), 0.35) !default;
 // scss-docs-end form-text-variables
 
 // scss-docs-start form-label-variables
