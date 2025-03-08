@@ -10,8 +10,11 @@ export type varsTypes = {
 		baseUrl: string;
 		name: string;
 		authorName: string;
+		fileMaxSizeInMB: number;
+		applicationFileInputAccepts: string[];
+		imagesFileInputAccepts: string[];
 	};
-	api: { headers: Pick<RawAxiosRequestHeaders, "accept" | "content-type"> };
+	api: { headers: Pick<RawAxiosRequestHeaders, "Accept" | "Content-Type"> };
 	secrets: {
 		nextAuth: { secret: string };
 		OAuth: {
@@ -36,8 +39,11 @@ export const vars: varsTypes = {
 		baseUrl: `${process.env.NEXT_PUBLIC_API_URL || ""}/api`,
 		name: process.env.NEXT_PUBLIC_NAME || "",
 		authorName: process.env.NEXT_PUBLIC_AUTHOR_NAME || "",
+		fileMaxSizeInMB: 5,
+		applicationFileInputAccepts: ["application/pdf"],
+		imagesFileInputAccepts: ["image/png", "image/jpeg", "image/jpg"],
 	},
-	api: { headers: { accept: "application/json", "content-type": "application/json" } },
+	api: { headers: { Accept: "application/json", "Content-Type": "application/json" } },
 	secrets: {
 		nextAuth: { secret: process.env.NEXTAUTH_SECRET || "" },
 		OAuth: {

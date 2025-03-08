@@ -17,7 +17,7 @@ type Props = {
 	totalDocs: number;
 };
 
-const UsersFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
+const BrandsFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 	// ref hook
 	const collapseRef = useRef<HTMLButtonElement | null>(null);
 
@@ -49,12 +49,12 @@ const UsersFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 			<FocusError formik={formState} />
 			<AutoSave formik={{ submitForm, ...formState }} />
 			<fieldset>
-				<legend className="visually-hidden">Users filter form</legend>
+				<legend className="visually-hidden">Brands filter form</legend>
 				<div className="row flex-nowrap">
 					<div className="col-auto">
 						<p className="text-secondary fs-4 text-capitalize hstack gap-2 mb-0 lh-1 py-3">
 							<span className="badge bg-primary">{totalDocs}</span>
-							Users
+							Brands
 						</p>
 					</div>
 					<div className="col">
@@ -64,7 +64,7 @@ const UsersFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 									className="min-w-200px"
 									onChange={formState.handleChange}
 									value={formState.values?.q || ""}
-									placeholder="Search By Name/Email"
+									placeholder="Search By Name"
 								/>
 							</div>
 							<div className="col-auto">
@@ -118,29 +118,6 @@ const UsersFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 									<div>
 										<CheckboxField
 											onChange={formState.handleChange}
-											checked={+String(formState.values?.active) === 0}
-											type="radio"
-											name="active"
-											id="activeFalseField"
-											value="0"
-											label="Inactive"
-											isInline
-										/>
-										<CheckboxField
-											onChange={formState.handleChange}
-											checked={+String(formState.values?.active) === 1}
-											type="radio"
-											name="active"
-											id="activeTrueField"
-											value="1"
-											label="Active"
-											isInline
-										/>
-									</div>
-									<div className="vr border bg-transparent op-100" />
-									<div>
-										<CheckboxField
-											onChange={formState.handleChange}
 											checked={+String(formState.values?.deleted) === 0}
 											type="radio"
 											name="deleted"
@@ -160,29 +137,6 @@ const UsersFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 											isInline
 										/>
 									</div>
-									<div className="vr border bg-transparent op-100" />
-									<div>
-										<CheckboxField
-											onChange={formState.handleChange}
-											checked={+String(formState.values?.emailVerified) === 0}
-											type="radio"
-											name="emailVerified"
-											id="emailVerifiedFalseField"
-											value="0"
-											label="Not Verified"
-											isInline
-										/>
-										<CheckboxField
-											onChange={formState.handleChange}
-											checked={+String(formState.values?.emailVerified) === 1}
-											type="radio"
-											name="emailVerified"
-											id="emailVerifiedTrueField"
-											value="1"
-											label="Verified"
-											isInline
-										/>
-									</div>
 								</div>
 							</div>
 						</div>
@@ -193,4 +147,4 @@ const UsersFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 	);
 };
 
-export default UsersFilter;
+export default BrandsFilter;

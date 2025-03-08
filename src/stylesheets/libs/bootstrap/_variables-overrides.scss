@@ -902,11 +902,11 @@ $btn-active-border-tint-amount: 10% !default;
 // Forms
 
 // scss-docs-start form-text-variables
-$form-text-margin-top: 0.25rem !default;
+$form-text-margin-top: 0.125rem !default;
 $form-text-font-size: $font-size-base !default;
-$form-text-font-style: null !default;
-$form-text-font-weight: null !default;
-$form-text-color: var(--#{$prefix}secondary-color) !default;
+$form-text-font-style: italic !default;
+$form-text-font-weight: light !default;
+$form-text-color: rgba(var(--#{$prefix}body-color-rgb), 0.35) !default;
 // scss-docs-end form-text-variables
 
 // scss-docs-start form-label-variables
@@ -1579,9 +1579,9 @@ $modal-title-line-height: $line-height-base !default;
 
 $modal-content-color: null !default;
 $modal-content-bg: var(--#{$prefix}white) !default;
-$modal-content-border-color: var(--#{$prefix}border-color-translucent) !default;
-$modal-content-border-width: var(--#{$prefix}border-width) !default;
-$modal-content-border-radius: var(--#{$prefix}border-radius-lg) !default;
+$modal-content-border-color: var(--#{$prefix}primary) !default;
+$modal-content-border-width: calc(var(--#{$prefix}border-width) * 2) !default;
+$modal-content-border-radius: var(--#{$prefix}border-radius-xl) !default;
 $modal-content-inner-border-radius: subtract(
 	$modal-content-border-radius,
 	$modal-content-border-width
@@ -1589,8 +1589,8 @@ $modal-content-inner-border-radius: subtract(
 $modal-content-box-shadow-xs: var(--#{$prefix}box-shadow-sm) !default;
 $modal-content-box-shadow-sm-up: var(--#{$prefix}box-shadow) !default;
 
-$modal-backdrop-bg: $black !default;
-$modal-backdrop-opacity: 0.5 !default;
+$modal-backdrop-bg: $dark !default;
+$modal-backdrop-opacity: 0.9 !default;
 
 $modal-header-border-color: var(--#{$prefix}border-color) !default;
 $modal-header-border-width: $modal-content-border-width !default;
