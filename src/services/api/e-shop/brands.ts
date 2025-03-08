@@ -76,6 +76,6 @@ export const restoreSingleBrand = ({
 		AxiosResponseProps<RestoreSingleBrandResponseType>
 	>({
 		method: "patch",
-		url: `/v1/brands/${variables?.id}`,
+		url: `/v1/brands/${variables?.id}/restore`,
 		...options,
 	});

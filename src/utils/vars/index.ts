@@ -14,7 +14,7 @@ export type varsTypes = {
 		applicationFileInputAccepts: string[];
 		imagesFileInputAccepts: string[];
 	};
-	api: { headers: Pick<RawAxiosRequestHeaders, "accept" | "content-type"> };
+	api: { headers: Pick<RawAxiosRequestHeaders, "Accept" | "Content-Type"> };
 	secrets: {
 		nextAuth: { secret: string };
 		OAuth: {
@@ -43,7 +43,7 @@ export const vars: varsTypes = {
 		applicationFileInputAccepts: ["application/pdf"],
 		imagesFileInputAccepts: ["image/png", "image/jpeg", "image/jpg"],
 	},
-	api: { headers: { accept: "application/json", "content-type": "application/json" } },
+	api: { headers: { Accept: "application/json", "Content-Type": "application/json" } },
 	secrets: {
 		nextAuth: { secret: process.env.NEXTAUTH_SECRET || "" },
 		OAuth: {

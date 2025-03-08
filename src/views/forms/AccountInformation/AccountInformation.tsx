@@ -7,7 +7,7 @@ import useMeQuery, { KEY_ARRAY as ME_KEY_QUERY } from "hooks/useMeQuery";
 import usePatchUserMutation from "hooks/usePatchUserMutation";
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
-import { apiFormErrorExtractor } from "utils/helpers";
+import { apiFormErrorExtractor, pick } from "utils/helpers";
 import EmailField from "views/components/EmailField";
 import TextField from "views/components/TextField";
 import formValidationSchema, { type schemaType } from "./schema";
@@ -82,8 +82,9 @@ const AccountInformation = () => {
 	const formState = useFormik<schemaType>({
 		enableReinitialize: true,
 		initialValues: {
-			name: user?.name || "",
-			email: user?.email || "",
+			name: "",
+			email: "",
+			...((user && pick(user, ["name", "email"])) || {}),
 		},
 		validationSchema: formValidationSchema,
 		onSubmit: onFormSubmitHandler,

@@ -10,6 +10,7 @@ import { filterObjectFalsyValues } from "utils/helpers";
 import NextLink from "views/components/NextLink";
 import Pagination from "views/components/Pagination";
 import { default as BrandsFilterForm } from "views/forms/BrandsFilter";
+import { default as DeleteOrRestoreSingleBrandModal } from "views/modals/DeleteOrRestoreSingleBrand";
 
 const BrandsList = () => {
 	// state hooks
@@ -207,7 +208,7 @@ const BrandsList = () => {
 																<td>
 																	<div className="btn-group">
 																		<NextLink
-																			href={`/dashboard/brands/${singleBrand?.slug || singleBrand._id}/edit`}
+																			href={`/dashboard/brands/${singleBrand.slug || singleBrand._id}/edit`}
 																			className="btn btn-sm btn-link link-primary">
 																			<svg
 																				className="bi w-20px h-20px"
@@ -218,14 +219,37 @@ const BrandsList = () => {
 																		</NextLink>
 																		<button
 																			type="button"
-																			className="btn btn-sm btn-link link-danger">
+																			data-bs-toggle="modal"
+																			data-bs-target={`#deleteOrRestoreSingleBrand${singleBrand._id}Modal`}
+																			className={classNames(
+																				"btn btn-sm btn-link",
+																				{
+																					"link-primary":
+																						singleBrand.deleted,
+																					"link-danger":
+																						!singleBrand.deleted,
+																				}
+																			)}
+																			title={
+																				singleBrand.deleted
+																					? "Restore"
+																					: "Delete"
+																			}>
 																			<svg
 																				className="bi w-20px h-20px"
 																				height="20"
 																				width="20">
-																				<use href="#icon-trash"></use>
+																				<use
+																					href={
+																						singleBrand.deleted
+																							? "#icon-return"
+																							: "#icon-trash"
+																					}></use>
 																			</svg>
 																		</button>
+																		<DeleteOrRestoreSingleBrandModal
+																			brand={singleBrand}
+																		/>
 																	</div>
 																</td>
 															</tr>

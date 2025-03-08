@@ -109,7 +109,7 @@ const BrandsFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 									<svg className="bi w-16px h-16px" width="16" height="16">
 										<use href="#icon-funnel-fill"></use>
 									</svg>
-									<strong>More Filters</strong>
+									<strong>Toggle More Filters</strong>
 								</button>
 							</div>
 							<div className="col-12 m-0"></div>
