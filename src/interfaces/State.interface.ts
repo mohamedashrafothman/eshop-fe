@@ -1,6 +1,7 @@
 import ICountry from "./Country.interface";
 
 export default interface State {
+	_id: string;
 	name: string;
 	slug: string;
 	code?: string | undefined;

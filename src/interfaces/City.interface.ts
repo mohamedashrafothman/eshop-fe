@@ -2,6 +2,7 @@ import ICountry from "./Country.interface";
 import IState from "./State.interface";
 
 export default interface City {
+	_id: string;
 	name: string;
 	slug: string;
 	country: string | ICountry;

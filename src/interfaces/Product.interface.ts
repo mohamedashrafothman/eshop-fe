@@ -1,1 +1,3 @@
-export default interface Product {}
+export default interface Product {
+	_id: string;
+}
