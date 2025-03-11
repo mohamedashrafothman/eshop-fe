@@ -4,12 +4,12 @@ export * from "./form";
 export * from "./server";
 export * from "./user";
 
-export const isFunction = (value: any): boolean => typeof value === "function";
+export const isFunction = (value: unknown): boolean => typeof value === "function";
 
-export const isObject = (value: any): boolean =>
+export const isObject = (value: unknown): boolean =>
 	typeof value === "object" && !Array.isArray(value) && value !== null;
 
-export const isString = (value: any): boolean => typeof value === "string";
+export const isString = (value: unknown): boolean => typeof value === "string";
 
 export const percentage = (
 	val: number | "infinity",

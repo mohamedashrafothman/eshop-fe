@@ -7,7 +7,7 @@ type Props = {
 	code?: number | undefined;
 	title?: string | undefined;
 	message?: string | undefined;
-	reset?: () => void;
+	reset?: () => void | undefined;
 };
 
 const Error = ({ code = 500, title = "Internal Server Error", message, reset }: Props) => (
@@ -48,7 +48,7 @@ const Error = ({ code = 500, title = "Internal Server Error", message, reset }: 
 										<button
 											type="button"
 											className="btn btn-outline-primary border-primary-dark w-100 text-capitalize"
-											onClick={() => reset()}>
+											onClick={() => reset && reset()}>
 											Try again
 										</button>
 									) : (
