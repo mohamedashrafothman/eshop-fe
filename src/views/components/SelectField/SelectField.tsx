@@ -40,7 +40,7 @@ const SelectField = ({
 			})}
 			required={required || undefined}
 			{...restOfProps}>
-			<option value="">- {placeholder} -</option>
+			<option value="">{placeholder}</option>
 			{options.map(({ value, text }) => (
 				<option value={value} key={value}>
 					{text}

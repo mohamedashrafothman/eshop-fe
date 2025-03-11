@@ -79,7 +79,7 @@ const CountriesFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 										value: JSON.stringify(value),
 										text: name,
 									}))}
-									placeholder="Sort By"
+									placeholder="- Sort By -"
 								/>
 							</div>
 							<div className="col-auto">
@@ -114,8 +114,8 @@ const CountriesFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 							</div>
 							<div className="col-12 m-0"></div>
 							<div className="col collapse" id="filterCollapse">
-								<div className="px-16px py-10px hstack gap-2 rounded-4 border border-gray-500 border-2 bg-gray-400 flex-nowrap h-100">
-									<div>
+								<div className="hstack gap-2 align-items-stretch">
+									<div className="px-16px py-11px flex-shrink-0 hstack gap-2 rounded-4 border border-gray-500 border-2 bg-gray-400 flex-nowrap h-100">
 										<CheckboxField
 											onChange={formState.handleChange}
 											checked={+String(formState.values?.deleted) === 0}

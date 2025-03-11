@@ -58,7 +58,7 @@ const Countries = () => {
 						// Invalidate the countries query from the cache.
 						await queryClient.invalidateQueries({ queryKey: COUNTRIES_KEY_QUERY });
 						// Redirect to countries list
-						push("/dashboard/countries");
+						push("/dashboard/address/countries");
 					},
 				}
 			);
@@ -84,7 +84,7 @@ const Countries = () => {
 						// Invalidate the countries query from the cache.
 						await queryClient.invalidateQueries({ queryKey: COUNTRIES_KEY_QUERY });
 						// Redirect to countries list
-						push("/dashboard/countries");
+						push("/dashboard/address/countries");
 					},
 				}
 			);

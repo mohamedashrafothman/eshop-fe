@@ -1,33 +1,35 @@
 "use client";
 
 import classNames from "classnames";
-import useCountriesInfinityQuery from "hooks/useCountriesInfinityQuery";
+import { isObject } from "formik";
+import useStatesInfinityQuery from "hooks/useStatesInfinityQuery";
 import ICountry from "interfaces/Country.interface";
+import IState from "interfaces/State.interface";
 import { Fragment, useState } from "react";
-import { type GetCountriesDataType } from "services/api/e-shop/countries";
+import { type GetStatesDataType } from "services/api/e-shop/states";
 import { filterObjectFalsyValues } from "utils/helpers";
 import NextLink from "views/components/NextLink";
 import Pagination from "views/components/Pagination";
-import { default as CountriesFilterForm } from "views/forms/CountriesFilter";
-import { default as DeleteOrRestoreSingleCountryModal } from "views/modals/DeleteOrRestoreSingleCountry";
+import { default as StatesFilterForm } from "views/forms/StatesFilter";
+import { default as DeleteOrRestoreSingleStateModal } from "views/modals/DeleteOrRestoreSingleState";
 
-const CountriesList = () => {
+const StatesList = () => {
 	// state hooks
-	const [countriesParamsState, setCountriesParamsState] = useState<
-		GetCountriesDataType | undefined
-	>(undefined);
+	const [statesParamsState, setStatesParamsState] = useState<GetStatesDataType | undefined>(
+		undefined
+	);
 
 	// server side hooks
 	const {
 		data: { pages = [] } = {},
-		isLoading: isCountriesLoading,
-		hasNextPage: hasCountriesNextPage,
-		fetchNextPage: fetchCountriesNextPage,
-		isFetchingNextPage: isCountriesFetchingNextPage,
-		hasPreviousPage: hasCountriesPreviousPage,
-		fetchPreviousPage: fetchCountriesPreviousPage,
-		isFetchingPreviousPage: isCountriesFetchingPreviousPage,
-	} = useCountriesInfinityQuery(countriesParamsState);
+		isLoading: isStatesLoading,
+		hasNextPage: hasStatesNextPage,
+		fetchNextPage: fetchStatesNextPage,
+		isFetchingNextPage: isStatesFetchingNextPage,
+		hasPreviousPage: hasStatesPreviousPage,
+		fetchPreviousPage: fetchStatesPreviousPage,
+		isFetchingPreviousPage: isStatesFetchingPreviousPage,
+	} = useStatesInfinityQuery(statesParamsState);
 
 	// constants
 	const lastPage = pages.at(-1);
@@ -36,13 +38,11 @@ const CountriesList = () => {
 	const totalDocs = lastPage?.meta?.pagination?.totalDocs || 0;
 
 	return (
-		<section className="countries-list py-4">
+		<section className="states-list py-4">
 			<div className="row gy-4">
 				<div className="col-12">
-					<CountriesFilterForm
-						onSubmit={(value) =>
-							setCountriesParamsState(filterObjectFalsyValues(value))
-						}
+					<StatesFilterForm
+						onSubmit={(value) => setStatesParamsState(filterObjectFalsyValues(value))}
 						totalDocs={totalDocs}
 						sort={lastPage?.meta?.sort || []}
 					/>
@@ -50,18 +50,19 @@ const CountriesList = () => {
 				<div className="col-12">
 					<div className="table-responsive">
 						<table className="table table-striped align-middle">
-							<caption className="visually-hidden">List of countries</caption>
+							<caption className="visually-hidden">List of states</caption>
 							<thead className="table-primary">
 								<tr>
 									<th scope="col">#</th>
 									<th scope="col">Name</th>
 									<th scope="col">Code</th>
+									<th scope="col">Country</th>
 									<th scope="col">Deleted</th>
 									<th scope="col">Actions</th>
 								</tr>
 							</thead>
 							<tbody className="table-group-divider">
-								{[...(isCountriesLoading ? Array(1).map((_x, i) => i) : pages)].map(
+								{[...(isStatesLoading ? Array(1).map((_x, i) => i) : pages)].map(
 									(page, pageIndex, rowPages) => (
 										<Fragment
 											key={
@@ -72,10 +73,10 @@ const CountriesList = () => {
 												pageIndex
 											}>
 											{[
-												...(isCountriesLoading
+												...(isStatesLoading
 													? Array(5).map(
 															(_x, i) =>
-																({ _id: String(i) }) as ICountry
+																({ _id: String(i) }) as IState
 														)
 													: [
 															...((typeof page === "object" &&
@@ -86,10 +87,10 @@ const CountriesList = () => {
 														]),
 											]?.length ? (
 												[
-													...(isCountriesLoading
+													...(isStatesLoading
 														? Array(5).map(
 																(_x, i) =>
-																	({ _id: String(i) }) as ICountry
+																	({ _id: String(i) }) as IState
 															)
 														: [
 																...((typeof page === "object" &&
@@ -98,9 +99,9 @@ const CountriesList = () => {
 																	page?.data) ||
 																	[]),
 															]),
-												].map((singleCountry, singleCountryIndex) => (
-													<Fragment key={singleCountry?._id}>
-														{isCountriesLoading ? (
+												].map((singleState, singleStateIndex) => (
+													<Fragment key={singleState?._id}>
+														{isStatesLoading ? (
 															<tr>
 																<th scope="row">
 																	<span className="d-block placeholder-glow">
@@ -109,6 +110,13 @@ const CountriesList = () => {
 																		</span>
 																	</span>
 																</th>
+																<td>
+																	<span className="d-block placeholder-glow">
+																		<span className="placeholder placeholder-sm bg-secondary d-block w-100">
+																			&nbsp;
+																		</span>
+																	</span>
+																</td>
 																<td>
 																	<span className="d-block placeholder-glow">
 																		<span className="placeholder placeholder-sm bg-secondary d-block w-100">
@@ -141,34 +149,43 @@ const CountriesList = () => {
 														) : (
 															<tr>
 																<th scope="row">
-																	{singleCountryIndex +
+																	{singleStateIndex +
 																		1 +
 																		((
 																			rowPages?.[
 																				pageIndex - 1
 																			] as {
-																				data: ICountry[];
+																				data: IState[];
 																			}
 																		)?.data.length || 0)}
 																</th>
-																<td>{singleCountry.name}</td>
-																<td>{singleCountry.code}</td>
+																<td>{singleState.name}</td>
+																<td>{singleState.code}</td>
+																<td>
+																	{(isObject(
+																		singleState.country
+																	) &&
+																		(
+																			singleState.country as ICountry
+																		)?.name) ||
+																		(singleState.country as string)}
+																</td>
 																<td>
 																	<span
 																		className={classNames(
 																			"badge",
 																			{
 																				"bg-success":
-																					!singleCountry.deleted,
+																					!singleState.deleted,
 																				"text-success":
-																					!singleCountry.deleted,
+																					!singleState.deleted,
 																				"bg-danger":
-																					singleCountry.deleted,
+																					singleState.deleted,
 																				"text-danger":
-																					singleCountry.deleted,
+																					singleState.deleted,
 																			}
 																		)}>
-																		{singleCountry.deleted
+																		{singleState.deleted
 																			? "Deleted"
 																			: "Active"}
 																	</span>
@@ -176,7 +193,7 @@ const CountriesList = () => {
 																<td>
 																	<div className="btn-group">
 																		<NextLink
-																			href={`/dashboard/address/countries/${singleCountry.slug || singleCountry._id}/edit`}
+																			href={`/dashboard/address/states/${singleState.slug || singleState._id}/edit`}
 																			className="btn btn-sm btn-link link-primary">
 																			<svg
 																				className="bi w-20px h-20px"
@@ -188,18 +205,18 @@ const CountriesList = () => {
 																		<button
 																			type="button"
 																			data-bs-toggle="modal"
-																			data-bs-target={`#deleteOrRestoreSingleCountry${singleCountry._id}Modal`}
+																			data-bs-target={`#deleteOrRestoreSingleState${singleState._id}Modal`}
 																			className={classNames(
 																				"btn btn-sm btn-link",
 																				{
 																					"link-primary":
-																						singleCountry.deleted,
+																						singleState.deleted,
 																					"link-danger":
-																						!singleCountry.deleted,
+																						!singleState.deleted,
 																				}
 																			)}
 																			title={
-																				singleCountry.deleted
+																				singleState.deleted
 																					? "Restore"
 																					: "Delete"
 																			}>
@@ -209,14 +226,14 @@ const CountriesList = () => {
 																				width="20">
 																				<use
 																					href={
-																						singleCountry.deleted
+																						singleState.deleted
 																							? "#icon-return"
 																							: "#icon-trash"
 																					}></use>
 																			</svg>
 																		</button>
-																		<DeleteOrRestoreSingleCountryModal
-																			country={singleCountry}
+																		<DeleteOrRestoreSingleStateModal
+																			state={singleState}
 																		/>
 																	</div>
 																</td>
@@ -253,15 +270,15 @@ const CountriesList = () => {
 				{lastPage?.data && lastPage?.data?.length >= 1 && Number(totalPages) > 1 && (
 					<div className="col-auto ms-auto">
 						<Pagination
-							disabled={isCountriesLoading}
+							disabled={isStatesLoading}
 							page={page}
 							totalPages={totalPages}
-							hasNextPage={hasCountriesNextPage}
-							fetchNextPage={fetchCountriesNextPage}
-							hasPreviousPage={hasCountriesPreviousPage}
-							fetchPreviousPage={fetchCountriesPreviousPage}
-							isFetchingNextPage={isCountriesFetchingNextPage}
-							isFetchingPreviousPage={isCountriesFetchingPreviousPage}
+							hasNextPage={hasStatesNextPage}
+							fetchNextPage={fetchStatesNextPage}
+							hasPreviousPage={hasStatesPreviousPage}
+							fetchPreviousPage={fetchStatesPreviousPage}
+							isFetchingNextPage={isStatesFetchingNextPage}
+							isFetchingPreviousPage={isStatesFetchingPreviousPage}
 						/>
 					</div>
 				)}
@@ -270,4 +287,4 @@ const CountriesList = () => {
 	);
 };
 
-export default CountriesList;
+export default StatesList;

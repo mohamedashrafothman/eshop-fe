@@ -4,6 +4,7 @@ import Collapse from "bootstrap/js/dist/collapse";
 import { FocusError } from "focus-formik-error";
 import { FormikConfig, useFormik } from "formik";
 import AutoSave from "hooks/AutoSave";
+import useCountriesQuery from "hooks/useCountriesQuery";
 import { useEffect, useRef } from "react";
 import { type SortItemType } from "utils/helpers";
 import CheckboxField from "views/components/CheckboxField";
@@ -17,7 +18,13 @@ type Props = {
 	totalDocs: number;
 };
 
-const BrandsFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
+const StatesFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
+	// server state hooks
+	const { data: { data: countries = [] } = {}, isLoading: isCountriesLoading } =
+		useCountriesQuery({
+			pagination: false,
+		});
+
 	// ref hook
 	const collapseRef = useRef<HTMLButtonElement | null>(null);
 
@@ -49,12 +56,12 @@ const BrandsFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 			<FocusError formik={formState} />
 			<AutoSave formik={{ submitForm, ...formState }} />
 			<fieldset>
-				<legend className="visually-hidden">Brands filter form</legend>
+				<legend className="visually-hidden">States filter form</legend>
 				<div className="row flex-nowrap">
 					<div className="col-auto">
 						<p className="text-secondary fs-4 text-capitalize hstack gap-2 mb-0 lh-1 py-3">
 							<span className="badge bg-primary">{totalDocs}</span>
-							Brands
+							States
 						</p>
 					</div>
 					<div className="col">
@@ -64,7 +71,7 @@ const BrandsFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 									className="min-w-200px"
 									onChange={formState.handleChange}
 									value={formState.values?.q || ""}
-									placeholder="Search By Name"
+									placeholder="Search By Name / Code"
 								/>
 							</div>
 							<div className="col-auto">
@@ -115,6 +122,18 @@ const BrandsFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 							<div className="col-12 m-0"></div>
 							<div className="col collapse" id="filterCollapse">
 								<div className="hstack gap-2 align-items-stretch">
+									<SelectField
+										className="flex-shrink-0 w-fit-content"
+										name="country"
+										value={formState.values?.country || ""}
+										onChange={formState.handleChange}
+										options={countries.map(({ name, _id }) => ({
+											value: _id,
+											text: name,
+										}))}
+										placeholder="- Select Country -"
+										disabled={isCountriesLoading}
+									/>
 									<div className="px-16px py-11px flex-shrink-0 hstack gap-2 rounded-4 border border-gray-500 border-2 bg-gray-400 flex-nowrap h-100">
 										<CheckboxField
 											onChange={formState.handleChange}
@@ -147,4 +166,4 @@ const BrandsFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 	);
 };
 
-export default BrandsFilter;
+export default StatesFilter;

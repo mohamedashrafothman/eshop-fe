@@ -45,27 +45,28 @@ const DashboardSideNav = () => {
 						}
 					: {}),
 			},
-			...(IS_USER_ROLE_USER
-				? [
-						{
-							title: "Addresses",
-							href: "/dashboard/addresses",
-							icon: "icon-house",
-							exact: true,
-						},
-					]
-				: []),
 			...(IS_USER_ROLE_SUPER_ADMIN
 				? [
 						{ title: "Users", href: "/dashboard/users", icon: "icon-people" },
 						{ title: "Brands", href: "/dashboard/brands", icon: "icon-tags" },
-						{
-							title: "Countries",
-							href: "/dashboard/countries",
-							icon: "icon-globe-europe-africa",
-						},
 					]
 				: []),
+			{
+				title: "Address",
+				icon: "icon-house",
+				...(IS_USER_ROLE_USER ? { href: "/dashboard/address", exact: true } : {}),
+				...(IS_USER_ROLE_SUPER_ADMIN
+					? {
+							children: [
+								{
+									title: "Countries",
+									href: "/dashboard/address/countries",
+								},
+								{ title: "States", href: "/dashboard/address/states" },
+							],
+						}
+					: {}),
+			},
 		],
 		[IS_USER_ROLE_SUPER_ADMIN, IS_USER_ROLE_USER]
 	);
@@ -106,7 +107,10 @@ const DashboardSideNav = () => {
 				{NAVIGATION_LINKS.map(({ href = "", icon, title, children = [], exact }, index) => {
 					const isHasChildren = children?.length > 0;
 					const isAccordionItemCollapsed =
-						isHasChildren && !children.map(({ href }) => href).includes(pathname);
+						isHasChildren &&
+						!children
+							.map(({ href }) => href)
+							.some((href) => href && pathname.startsWith(href));
 					const AccordionItemLinkComponent = isHasChildren && href ? NextLink : "button";
 					return (
 						<li
