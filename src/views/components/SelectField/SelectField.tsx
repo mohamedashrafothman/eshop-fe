@@ -11,12 +11,13 @@ type Props = {
 	label?: string | undefined;
 	options?: { value: string; text: string }[] | [];
 	placeholder?: string | undefined;
+	id: string;
 } & ComponentPropsWithoutRef<"select">;
 
 const SelectField = ({
 	isValid = false,
 	isInvalid = false,
-	id = "selectField",
+	id,
 	className,
 	label,
 	error,

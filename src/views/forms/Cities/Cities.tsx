@@ -3,40 +3,56 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
+import { KEY_ARRAY as CITIES_KEY_QUERY } from "hooks/useCitiesInfinityQuery";
 import useCountriesQuery from "hooks/useCountriesQuery";
-import usePatchStateMutation from "hooks/usePatchStateMutation";
-import usePostStateMutation from "hooks/usePostStateMutation";
-import useSingleStatesQuery from "hooks/useSingleStatesQuery";
-import { KEY_ARRAY as STATES_KEY_QUERY } from "hooks/useStatesInfinityQuery";
+import usePatchCityMutation from "hooks/usePatchCityMutation";
+import usePostCityMutation from "hooks/usePostCityMutation";
+import useSingleCitiesQuery from "hooks/useSingleCitiesQuery";
+import useStatesQuery from "hooks/useStatesQuery";
 import ICountry from "interfaces/Country.interface";
+import IState from "interfaces/State.interface";
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { apiFormErrorExtractor, pick } from "utils/helpers";
 import SelectField from "views/components/SelectField";
 import TextField from "views/components/TextField";
 import formValidationSchema, { type schemaType } from "./schema";
 
-const States = () => {
+const Cities = () => {
 	const queryClient = useQueryClient();
 	const { push } = useTransitionRouter();
 	const { identifier = "" } = useParams<{ identifier: string }>();
 
-	// server state hooks
-	const postStateMutation = usePostStateMutation();
-	const patchStateMutation = usePatchStateMutation();
-	const { data: state, isLoading: isStateLoading } = useSingleStatesQuery(identifier);
+	// state hooks
+	const [selectedCountryIdState, setSelectedCountryIdState] = useState("");
+
+	// server city hooks
+	const postCityMutation = usePostCityMutation();
+	const patchCityMutation = usePatchCityMutation();
+	const { data: city, isLoading: isCityLoading } = useSingleCitiesQuery(identifier);
 	const { data: { data: countries = [] } = {}, isLoading: isCountriesLoading } =
-		useCountriesQuery({
+		useCountriesQuery({ pagination: false });
+	const countryId = (city?.country as ICountry)?._id || (city?.country as string);
+	const { data: { data: states = [] } = {}, isLoading: isStatesLoading } = useStatesQuery(
+		{
+			...((selectedCountryIdState || countryId) && {
+				country: selectedCountryIdState || countryId,
+			}),
 			pagination: false,
-		});
+		},
+		{ enabled: Boolean(selectedCountryIdState || countryId) }
+	);
 
 	// ref hook
-	const stateCancelRequestRef = useRef<AbortController | null>(null);
+	const cityCancelRequestRef = useRef<AbortController | null>(null);
 
 	// constants
 	const isEditForm = Boolean(identifier);
+	const isCountriesHasNoItems = countries.length === 0;
 	const isCountriesHasOneItem = countries.length === 1;
+	const isStatesHasNoItems = states.length === 0;
+	const isStatesHasOneItem = states.length === 1;
 
 	// Handle form submission.
 	const onFormSubmitHandler = async (
@@ -44,13 +60,13 @@ const States = () => {
 		formikHelpers: FormikHelpers<schemaType>
 	) => {
 		// Abort any previous request, and create a new abort controller.
-		if (stateCancelRequestRef.current?.signal) stateCancelRequestRef.current?.abort();
-		stateCancelRequestRef.current = new AbortController();
+		if (cityCancelRequestRef.current?.signal) cityCancelRequestRef.current?.abort();
+		cityCancelRequestRef.current = new AbortController();
 
-		// Call the state store/edit mutation.
+		// Call the city store/edit mutation.
 		if (!isEditForm) {
-			await postStateMutation.mutateAsync(
-				{ data, signal: stateCancelRequestRef.current.signal },
+			await postCityMutation.mutateAsync(
+				{ data, signal: cityCancelRequestRef.current.signal },
 				{
 					onError: (responseError) => {
 						// Extract errors from the response error.
@@ -61,21 +77,21 @@ const States = () => {
 					onSuccess: async () => {
 						// Resetting formik.
 						formikHelpers.resetForm();
-						// Resetting state store query mutation.
-						postStateMutation.reset();
-						// Invalidate the states query from the cache.
-						await queryClient.invalidateQueries({ queryKey: STATES_KEY_QUERY });
-						// Redirect to states list
-						push("/dashboard/address/states");
+						// Resetting city store query mutation.
+						postCityMutation.reset();
+						// Invalidate the cities query from the cache.
+						await queryClient.invalidateQueries({ queryKey: CITIES_KEY_QUERY });
+						// Redirect to cities list
+						push("/dashboard/address/cities");
 					},
 				}
 			);
 		} else {
-			await patchStateMutation.mutateAsync(
+			await patchCityMutation.mutateAsync(
 				{
 					variables: { id: identifier },
 					data,
-					signal: stateCancelRequestRef.current.signal,
+					signal: cityCancelRequestRef.current.signal,
 				},
 				{
 					onError: (responseError) => {
@@ -87,29 +103,30 @@ const States = () => {
 					onSuccess: async () => {
 						// Resetting formik.
 						formikHelpers.resetForm();
-						// Resetting state edit query mutation.
-						patchStateMutation.reset();
-						// Invalidate the states query from the cache.
-						await queryClient.invalidateQueries({ queryKey: STATES_KEY_QUERY });
-						// Redirect to states list
-						push("/dashboard/address/states");
+						// Resetting city edit query mutation.
+						patchCityMutation.reset();
+						// Invalidate the cities query from the cache.
+						await queryClient.invalidateQueries({ queryKey: CITIES_KEY_QUERY });
+						// Redirect to cities list
+						push("/dashboard/address/cities");
 					},
 				}
 			);
 		}
 	};
 
-	// form state
+	// form city
 	const formState = useFormik<schemaType>({
 		enableReinitialize: isEditForm,
 		initialValues: {
 			name: "",
-			code: "",
 			country: isCountriesHasOneItem ? countries[0]?._id || "" : "",
+			state: isStatesHasOneItem ? states[0]?._id || "" : "",
 			...((isEditForm &&
-				state && {
-					...(pick(state, ["name", "code"]) || {}),
-					country: (state.country as ICountry)?._id || (state.country as string) || "",
+				city && {
+					...(pick(city, ["name", "code"]) || {}),
+					country: (city.country as ICountry)?._id || (city.country as string) || "",
+					state: (city.state as IState)?._id || (city.state as string) || "",
 				}) ||
 				{}),
 		},
@@ -120,15 +137,15 @@ const States = () => {
 	// effect hooks
 	useEffect(() => {
 		return () => {
-			if (stateCancelRequestRef.current?.signal) stateCancelRequestRef.current?.abort();
+			if (cityCancelRequestRef.current?.signal) cityCancelRequestRef.current?.abort();
 		};
 	}, []);
 
 	return (
 		<form onSubmit={formState.handleSubmit} onReset={formState.handleReset} noValidate>
 			<FocusError formik={formState} />
-			<fieldset disabled={formState.isSubmitting || isStateLoading}>
-				<legend className="visually-hidden">{`${isEditForm ? "Edit State" : "Add State"} Form`}</legend>
+			<fieldset disabled={formState.isSubmitting || isCityLoading}>
+				<legend className="visually-hidden">{`${isEditForm ? "Edit City" : "Add City"} Form`}</legend>
 				<div className="row gy-4">
 					<div className="col-12">
 						<TextField
@@ -153,32 +170,16 @@ const States = () => {
 						/>
 					</div>
 					<div className="col-12">
-						<TextField
-							type="text"
-							name="code"
-							id="codeField"
-							onChange={formState.handleChange}
-							onBlur={formState.handleBlur}
-							value={formState.values?.code || ""}
-							isValid={Boolean(
-								formState.values?.code &&
-									!!formState.touched?.code &&
-									!formState.errors?.code
-							)}
-							isInvalid={Boolean(
-								!!formState.touched?.code && !!formState.errors?.code
-							)}
-							error={formState.errors?.code}
-							label="Code"
-							required
-						/>
-					</div>
-					<div className="col-12">
 						<SelectField
 							name="country"
 							id="countryField"
 							value={formState.values?.country || ""}
-							onChange={formState.handleChange}
+							onChange={(e) => {
+								formState.handleChange(e);
+								setSelectedCountryIdState(e.target.value);
+								formState.setFieldTouched("state", false);
+								formState.setFieldValue("state", "");
+							}}
 							onBlur={formState.handleBlur}
 							options={countries.map(({ name, _id }) => ({
 								value: _id,
@@ -193,9 +194,37 @@ const States = () => {
 								!!formState.touched?.country && !!formState.errors?.country
 							)}
 							error={formState.errors?.country}
-							disabled={isCountriesLoading || isCountriesHasOneItem}
+							disabled={
+								isCountriesLoading || isCountriesHasOneItem || isCountriesHasNoItems
+							}
 							label="Country"
 							placeholder="Select Country"
+							required
+						/>
+					</div>
+					<div className="col-12">
+						<SelectField
+							name="state"
+							id="stateField"
+							value={formState.values?.state || ""}
+							onChange={formState.handleChange}
+							onBlur={formState.handleBlur}
+							options={states.map(({ name, _id }) => ({
+								value: _id,
+								text: name,
+							}))}
+							isValid={Boolean(
+								formState.values?.state &&
+									!!formState.touched?.state &&
+									!formState.errors?.state
+							)}
+							isInvalid={Boolean(
+								!!formState.touched?.state && !!formState.errors?.state
+							)}
+							error={formState.errors?.state}
+							disabled={isStatesLoading || isStatesHasOneItem || isStatesHasNoItems}
+							label="State"
+							placeholder="Select State"
 							required
 						/>
 					</div>
@@ -232,4 +261,4 @@ const States = () => {
 	);
 };
 
-export default States;
+export default Cities;

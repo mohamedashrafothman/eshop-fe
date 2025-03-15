@@ -63,6 +63,7 @@ const DashboardSideNav = () => {
 									href: "/dashboard/address/countries",
 								},
 								{ title: "States", href: "/dashboard/address/states" },
+								{ title: "Cities", href: "/dashboard/address/cities" },
 							],
 						}
 					: {}),

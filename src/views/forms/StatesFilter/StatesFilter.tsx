@@ -78,6 +78,7 @@ const StatesFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 								<SelectField
 									className="mw-200px"
 									name="sort"
+									id="sortField"
 									value={JSON.stringify(formState.values?.sort || {})}
 									onChange={({ target: { name = "", value } }) =>
 										formState.setFieldValue(name, JSON.parse(value || "{}"))
@@ -125,6 +126,7 @@ const StatesFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 									<SelectField
 										className="flex-shrink-0 w-fit-content"
 										name="country"
+										id="countryField"
 										value={formState.values?.country || ""}
 										onChange={formState.handleChange}
 										options={countries.map(({ name, _id }) => ({

@@ -6,25 +6,23 @@ export const metadata: Metadata = { title: PAGE_TITLE };
 
 type Props = { children?: React.ReactNode | undefined };
 
-const CountriesActionsLayout = async ({ children }: Props) => {
-	return (
-		<>
-			<div className="hstack gap-gutter flex-nowrap justify-content-between">
-				<h1 className="display-5 text-capitalize">
-					<strong>{PAGE_TITLE}</strong>
-				</h1>
-				<NextLink
-					href="/dashboard/address/countries/"
-					className="btn btn-link text-capitalize text-decoration-none icon-link icon-link-hover icon-link-hover-reversed">
-					<svg className="bi w-16px h-16px" width="16" height="16">
-						<use href="#icon-chevron-left" />
-					</svg>
-					<strong>Back</strong>
-				</NextLink>
-			</div>
-			{children}
-		</>
-	);
-};
+const CountriesActionsLayout = async ({ children }: Props) => (
+	<>
+		<div className="hstack gap-gutter flex-nowrap justify-content-between">
+			<h1 className="display-5 text-capitalize">
+				<strong>{PAGE_TITLE}</strong>
+			</h1>
+			<NextLink
+				href="/dashboard/address/countries/"
+				className="btn btn-link text-capitalize text-decoration-none icon-link icon-link-hover icon-link-hover-reversed">
+				<svg className="bi w-16px h-16px" width="16" height="16">
+					<use href="#icon-chevron-left" />
+				</svg>
+				<strong>Back</strong>
+			</NextLink>
+		</div>
+		{children}
+	</>
+);
 
 export default CountriesActionsLayout;

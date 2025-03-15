@@ -23,8 +23,8 @@ const Providers = ({ children, session, hydrationBoundaryState }: Props) => (
 				<AxiosProvider>
 					<NextTopLoader color="var(--e-shop-primary)" />
 					<ToastContainer
-						position="bottom-right"
-						autoClose={5000}
+						position="bottom-center"
+						autoClose={3000}
 						theme="dark"
 						transition={Slide}
 						closeButton={false}
