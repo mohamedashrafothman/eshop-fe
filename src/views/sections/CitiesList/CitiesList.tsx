@@ -198,7 +198,7 @@ const CitiesList = () => {
 																<td>
 																	<div className="btn-group">
 																		<NextLink
-																			href={`/dashboard/address/cities/${singleCity.slug || singleCity._id}/edit`}
+																			href={`/dashboard/addresses/cities/${singleCity.slug || singleCity._id}/edit`}
 																			className="btn btn-sm btn-link link-primary">
 																			<svg
 																				className="bi w-20px h-20px"

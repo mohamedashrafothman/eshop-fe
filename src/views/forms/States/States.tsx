@@ -66,7 +66,7 @@ const States = () => {
 						// Invalidate the states query from the cache.
 						await queryClient.invalidateQueries({ queryKey: STATES_KEY_QUERY });
 						// Redirect to states list
-						push("/dashboard/address/states");
+						push("/dashboard/addresses/states");
 					},
 				}
 			);
@@ -92,7 +92,7 @@ const States = () => {
 						// Invalidate the states query from the cache.
 						await queryClient.invalidateQueries({ queryKey: STATES_KEY_QUERY });
 						// Redirect to states list
-						push("/dashboard/address/states");
+						push("/dashboard/addresses/states");
 					},
 				}
 			);

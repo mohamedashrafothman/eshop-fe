@@ -18,7 +18,7 @@ const DashboardLayout = async ({ children }: Props) => (
 		<div className="col-12 col-lg-9 col-xxl-10 ms-lg-auto ps-lg-0">
 			<div className="vstack vh-100 position-relative">
 				<Header type="dashboard" />
-				<Main className="py-gutter px-4 rounded-4 flex-grow-1 h-100 overflow-scroll shadow-sm">
+				<Main className="py-gutter px-4 rounded-4 flex-grow-1 h-100 overflow-auto shadow-sm">
 					{children}
 				</Main>
 				<Footer type="dashboard" className="" />

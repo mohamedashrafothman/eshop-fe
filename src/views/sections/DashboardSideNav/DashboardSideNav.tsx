@@ -52,18 +52,18 @@ const DashboardSideNav = () => {
 					]
 				: []),
 			{
-				title: "Address",
+				title: "Addresses",
 				icon: "icon-house",
-				...(IS_USER_ROLE_USER ? { href: "/dashboard/address", exact: true } : {}),
+				...(IS_USER_ROLE_USER ? { href: "/dashboard/addresses" } : {}),
 				...(IS_USER_ROLE_SUPER_ADMIN
 					? {
 							children: [
 								{
 									title: "Countries",
-									href: "/dashboard/address/countries",
+									href: "/dashboard/addresses/countries",
 								},
-								{ title: "States", href: "/dashboard/address/states" },
-								{ title: "Cities", href: "/dashboard/address/cities" },
+								{ title: "States", href: "/dashboard/addresses/states" },
+								{ title: "Cities", href: "/dashboard/addresses/cities" },
 							],
 						}
 					: {}),

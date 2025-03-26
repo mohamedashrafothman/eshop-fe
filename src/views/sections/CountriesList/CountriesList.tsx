@@ -176,7 +176,7 @@ const CountriesList = () => {
 																<td>
 																	<div className="btn-group">
 																		<NextLink
-																			href={`/dashboard/address/countries/${singleCountry.slug || singleCountry._id}/edit`}
+																			href={`/dashboard/addresses/countries/${singleCountry.slug || singleCountry._id}/edit`}
 																			className="btn btn-sm btn-link link-primary">
 																			<svg
 																				className="bi w-20px h-20px"
