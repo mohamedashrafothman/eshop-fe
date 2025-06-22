@@ -55,6 +55,33 @@ const Addresses = () => {
 	const isEditForm = Boolean(identifier);
 	const isStatesHasNoItems = states.length === 0;
 	const isCitiesHasNoItems = cities.length === 0;
+	const editAddressData = {
+		...(isEditForm
+			? {
+					...pick(address || {}, [
+						"name",
+						"street",
+						"building",
+						"floor",
+						"apartment",
+						"area",
+						"zip",
+					]),
+					country:
+						typeof address?.country !== "string"
+							? address?.country?._id
+							: address?.country || "",
+					state:
+						typeof address?.state !== "string"
+							? address?.state?._id
+							: address?.state || "",
+					city:
+						typeof address?.city !== "string"
+							? address?.city?._id
+							: address?.city || "",
+				}
+			: {}),
+	};
 
 	// Handle form submission.
 	const onFormSubmitHandler = async (
@@ -119,7 +146,7 @@ const Addresses = () => {
 
 	// form state
 	const formState = useFormik<schemaType>({
-		enableReinitialize: isEditForm,
+		enableReinitialize: true,
 		initialValues: {
 			name: "",
 			street: "",
@@ -131,28 +158,21 @@ const Addresses = () => {
 			state: "",
 			city: "",
 			user: user?._id || "",
-			...((isEditForm &&
-				address &&
-				pick(address, [
-					"name",
-					"street",
-					"building",
-					"floor",
-					"apartment",
-					"area",
-					"zip",
-					"country",
-					"state",
-					"city",
-					"user",
-				])) ||
-				{}),
+			...editAddressData,
 		},
 		validationSchema: formValidationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
 
 	// effect hooks
+	useEffect(() => {
+		if (editAddressData?.country) setSelectedCountryIdState(editAddressData?.country);
+	}, [editAddressData?.country]);
+
+	useEffect(() => {
+		if (editAddressData?.state) setSelectedStateIdState(editAddressData?.state);
+	}, [editAddressData?.state]);
+
 	useEffect(() => {
 		return () => {
 			if (addressCancelRequestRef.current?.signal) addressCancelRequestRef.current?.abort();

@@ -12,6 +12,7 @@ import {
 	type PostUnlinkSocialMediaDataType,
 	type PostUnlinkSocialMediaResponseType,
 } from "services/api/e-shop/auth";
+import { pick } from "utils/helpers";
 
 export const KEY_ARRAY = ["auth", "login", "social", "unlink"];
 
@@ -36,7 +37,9 @@ const useUnlinkSocialQuery = () => {
 						refreshToken: JSON.stringify(session.refreshToken),
 					}),
 					...(session?.tokenType && { tokenType: JSON.stringify(session.tokenType) }),
-					...(user && { user: JSON.stringify(user) }),
+					...(user && {
+						user: JSON.stringify(pick(user, ["_id", "name", "role", "emailVerified"])),
+					}),
 					redirect: false,
 				});
 		},

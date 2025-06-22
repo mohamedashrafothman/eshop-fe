@@ -13,6 +13,7 @@ import {
 	type PostLoginBySocialMediaDataType,
 	type PostLoginBySocialMediaResponseType,
 } from "services/api/e-shop/auth";
+import { pick } from "utils/helpers";
 
 export const KEY_ARRAY = ["auth", "login", "social"];
 
@@ -40,7 +41,9 @@ const useLoginBySocialMutation = () => {
 					...(accessToken && { accessToken: JSON.stringify(accessToken) }),
 					...(refreshToken && { refreshToken: JSON.stringify(refreshToken) }),
 					...(tokenType && { tokenType: JSON.stringify(tokenType) }),
-					...(user && { user: JSON.stringify(user) }),
+					...(user && {
+						user: JSON.stringify(pick(user, ["_id", "name", "role", "emailVerified"])),
+					}),
 					redirect: false,
 				});
 			// Redirect to the dashboard after success login.

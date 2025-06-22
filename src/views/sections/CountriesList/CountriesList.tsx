@@ -49,7 +49,7 @@ const CountriesList = () => {
 				</div>
 				<div className="col-12">
 					<div className="table-responsive">
-						<table className="table table-striped align-middle">
+						<table className="table table-sm table-striped align-middle">
 							<caption className="visually-hidden">List of countries</caption>
 							<thead className="table-primary">
 								<tr>

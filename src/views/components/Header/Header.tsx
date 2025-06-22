@@ -113,9 +113,7 @@ const Header = ({ type = "public", className = "", ...props }: Props) => {
 							<div className="col-auto">
 								<Logo />
 							</div>
-							<div className="col d-none d-lg-block">
-								<div className="text-bg-dark text-center p-3">search</div>
-							</div>
+							<div className="col d-none d-lg-block">Search</div>
 							<div className="col-auto">
 								<div className="hstack gap-1 flex-nowrap">
 									<Nav
@@ -189,9 +187,7 @@ const Header = ({ type = "public", className = "", ...props }: Props) => {
 						<div className="col col-md-auto d-lg-none">
 							<Logo />
 						</div>
-						<div className="col col-lg-5 d-none d-lg-block">
-							<div className="text-bg-dark text-center p-3">search</div>
-						</div>
+						<div className="col col-lg-5 d-none d-lg-block">Search</div>
 						<div className="col-auto d-lg-none ms-auto">
 							<div className="hstack gap-1 flex-nowrap">
 								<UserDropdown />
@@ -225,9 +221,7 @@ const Header = ({ type = "public", className = "", ...props }: Props) => {
 					<div className="container">
 						<div className="row">
 							<div className="col-12">
-								<div className="text-bg-dark text-center p-3">
-									Categories nav list
-								</div>
+								<div className="text-center p-1">Categories nav list</div>
 							</div>
 						</div>
 					</div>

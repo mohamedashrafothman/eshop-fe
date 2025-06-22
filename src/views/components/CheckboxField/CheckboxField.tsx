@@ -44,10 +44,8 @@ const CheckboxField = ({
 		/>
 		{label && (
 			<label className="form-check-label text-capitalize" htmlFor={id || undefined}>
-				<small>
-					{label}
-					{required && <FieldRequiredLabel />}
-				</small>
+				{label}
+				{required && <FieldRequiredLabel />}
 			</label>
 		)}
 		{isInvalid && error && (

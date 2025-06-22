@@ -103,7 +103,7 @@ const PublicHeader = () => {
 					</div>
 				</div>
 				<div className="offcanvas-body">
-					<div className="text-bg-dark text-center p-3">Categories nav list</div>
+					<div className="text-center p-1">Categories nav list</div>
 				</div>
 			</div>,
 			portalsRoot
