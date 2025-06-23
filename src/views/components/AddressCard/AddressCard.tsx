@@ -7,12 +7,13 @@ import { default as ICountry } from "interfaces/Country.interface";
 import { default as IState } from "interfaces/State.interface";
 import { ComponentPropsWithoutRef } from "react";
 import { pick } from "utils/helpers";
-import AddressCardDefaultInput from "./AddressCardDefaultInput";
-
-type Props = {
-	address?: IAddress | undefined;
-	isLoading?: boolean | undefined;
-} & ComponentPropsWithoutRef<"div">;
+import AddressCardCallToActions from "./AddressCardCallToActions";
+import AddressCardDefaultCheckbox from "./AddressCardDefaultCheckbox";
+type Props = (
+	| { address: Pick<IAddress, "_id">; isLoading: true }
+	| { address: IAddress; isLoading: false }
+) &
+	ComponentPropsWithoutRef<"div">;
 
 const AddressCard = ({ address, isLoading }: Props) => (
 	<div
@@ -23,12 +24,17 @@ const AddressCard = ({ address, isLoading }: Props) => (
 			<div className="vstack gap-2">
 				<div className="hstack gap-2 justify-content-between">
 					<div className="flex-shrink-0">
-						<AddressCardDefaultInput
-							address={address && pick(address, ["_id", "default", "name"])}
-							disabled={isLoading}
+						<AddressCardDefaultCheckbox
+							address={address as IAddress}
+							isLoading={isLoading}
 						/>
 					</div>
-					<div className="flex-shrink-0">call to actions</div>
+					<div className="flex-shrink-0">
+						<AddressCardCallToActions
+							address={address && pick(address, ["_id"])}
+							isLoading={isLoading}
+						/>
+					</div>
 				</div>
 				<p className="mb-0 ms-4 ps-2 white-space-pre-line">
 					{isLoading ? (

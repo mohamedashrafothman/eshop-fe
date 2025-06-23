@@ -20,8 +20,6 @@ export type GetSingleAddressDataType = object;
 export type GetSingleAddressResponseType = IAddress;
 export type DeleteSingleAddressDataType = object;
 export type DeleteSingleAddressResponseType = object;
-export type RestoreSingleAddressDataType = object;
-export type RestoreSingleAddressResponseType = object;
 
 export const postAddress = ({ ...options }: AxiosRequestConfig<PostAddressDataType>) =>
 	axiosInstance<PostAddressResponseType, AxiosResponseProps<PostAddressResponseType>>({
@@ -65,18 +63,5 @@ export const deleteSingleAddress = ({
 	>({
 		method: "delete",
 		url: `/v1/addresses/${variables?.id}`,
-		...options,
-	});
-
-export const restoreSingleAddress = ({
-	variables,
-	...options
-}: AxiosRequestConfig<RestoreSingleAddressDataType> & { variables: { id: string } }) =>
-	axiosInstance<
-		RestoreSingleAddressResponseType,
-		AxiosResponseProps<RestoreSingleAddressResponseType>
-	>({
-		method: "patch",
-		url: `/v1/addresses/${variables?.id}/restore`,
 		...options,
 	});

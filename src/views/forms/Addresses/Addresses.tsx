@@ -58,15 +58,17 @@ const Addresses = () => {
 	const editAddressData = {
 		...(isEditForm
 			? {
-					...pick(address || {}, [
-						"name",
-						"street",
-						"building",
-						"floor",
-						"apartment",
-						"area",
-						"zip",
-					]),
+					...((address &&
+						pick(address, [
+							"name",
+							"street",
+							"building",
+							"floor",
+							"apartment",
+							"area",
+							"zip",
+						])) ||
+						{}),
 					country:
 						typeof address?.country !== "string"
 							? address?.country?._id

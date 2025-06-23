@@ -7,12 +7,13 @@ import { default as IAddress } from "interfaces/Address.interface";
 import { ComponentPropsWithoutRef, useEffect, useRef } from "react";
 import CheckboxField from "views/components/CheckboxField";
 
-type Props = {
-	address?: Pick<IAddress, "_id" | "default" | "name"> | undefined;
-	disabled: boolean | undefined;
-} & ComponentPropsWithoutRef<"input">;
+type Props = (
+	| { address: Pick<IAddress, "_id">; isLoading: true }
+	| { address: Pick<IAddress, "_id" | "default" | "name">; isLoading: false }
+) &
+	ComponentPropsWithoutRef<"input">;
 
-const AddressCardDefaultInput = ({ address, disabled }: Props) => {
+const AddressCardDefaultCheckbox = ({ address, isLoading }: Props) => {
 	const queryClient = useQueryClient();
 
 	// ref hook
@@ -23,7 +24,7 @@ const AddressCardDefaultInput = ({ address, disabled }: Props) => {
 
 	// event handlers
 	const onAddressDefaultCheckboxChangeHandler = async () => {
-		if (!address?._id) return;
+		if (!address?._id || isLoading) return;
 
 		// Abort any previous request, and create a new abort controller.
 		if (addressCancelRequestRef.current?.signal) addressCancelRequestRef.current?.abort();
@@ -57,15 +58,18 @@ const AddressCardDefaultInput = ({ address, disabled }: Props) => {
 	return (
 		<CheckboxField
 			onChange={() => onAddressDefaultCheckboxChangeHandler()}
-			checked={address?.default || false}
+			checked={(!isLoading && address?.default) || false}
 			type="radio"
-			id={!disabled ? `defaultField${address?._id || ""}` : undefined}
-			value={Number(address?.default || false)}
-			label={`${address?.name || ""}${address?.default ? " (Default)" : ""}`}
-			disabled={disabled}
+			id={!isLoading ? `defaultField${address?._id || ""}` : undefined}
+			value={(!isLoading && Number(address?.default || false)) || ""}
+			label={
+				(!isLoading && `${address?.name || ""}${address?.default ? " (Default)" : ""}`) ||
+				""
+			}
+			disabled={isLoading}
 			isInline
 		/>
 	);
 };
 
-export default AddressCardDefaultInput;
+export default AddressCardDefaultCheckbox;

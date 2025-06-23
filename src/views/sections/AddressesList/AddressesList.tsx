@@ -40,7 +40,7 @@ const AddressesList = () => {
 								}>
 								{[
 									...(isAddressesLoading
-										? Array(5).map((_x, i) => ({ _id: String(i) }) as IAddress)
+										? Array(9).map((_x, i) => ({ _id: String(i) }) as IAddress)
 										: [
 												...((typeof page === "object" &&
 													!Array.isArray(page) &&
@@ -52,8 +52,12 @@ const AddressesList = () => {
 									<div className="row g-3 row-cols-1 row-cols-xl-2 row-cols-3xl-3">
 										{[
 											...(isAddressesLoading
-												? Array(5).map(
-														(_x, i) => ({ _id: String(i) }) as IAddress
+												? Array(9).map(
+														(_x, i) =>
+															({ _id: String(i) }) as Pick<
+																IAddress,
+																"_id"
+															>
 													)
 												: [
 														...((typeof page === "object" &&
@@ -62,10 +66,10 @@ const AddressesList = () => {
 															page?.data) ||
 															[]),
 													]),
-										].map((singleAddress) => (
+										].map((singleAddress: IAddress | Pick<IAddress, "_id">) => (
 											<div className="col" key={singleAddress?._id}>
 												<AddressCard
-													address={singleAddress}
+													address={singleAddress as IAddress}
 													isLoading={isAddressesLoading}
 												/>
 											</div>
