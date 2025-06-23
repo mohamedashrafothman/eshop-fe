@@ -48,7 +48,10 @@ export const omit = (obj: { [key: string]: any }, keys: string[]) =>
  * @throws {Error} Throws an error if a key does not exist on the object.
  * @returns {Object} A new object containing only the specified keys from the original object.
  */
-export const pick = (object: { [key: string]: any }, keys: string[]): object => {
+export const pick = <T extends Record<string, any>, K extends keyof T>(
+	object: T,
+	keys: K[]
+): Pick<T, K> => {
 	// Check if the object is null or undefined
 	if (!object) {
 		throw new Error("pick() method was called with a null or undefined object");
@@ -58,14 +61,17 @@ export const pick = (object: { [key: string]: any }, keys: string[]): object => 
 		throw new Error("pick() method was called with a non-array as the 'keys' parameter");
 	}
 	// Use reduce to build a new object with the specified keys
-	return keys.reduce((obj: { [key: string]: any }, key) => {
-		// Check if the key exists in the object
-		if (Object.prototype.hasOwnProperty.call(object, key)) {
-			// Assign the value to the new object
-			obj[key] = object[key];
-		}
-		return obj;
-	}, {});
+	return keys.reduce(
+		(obj, key) => {
+			// Check if the key exists in the object
+			if (Object.prototype.hasOwnProperty.call(object, key)) {
+				// Assign the value to the new object
+				obj[key] = object[key];
+			}
+			return obj;
+		},
+		{} as Pick<T, K>
+	);
 };
 
 export const filterObjectFalsyValues = (obj: { [key: string]: any }) =>
@@ -77,7 +83,6 @@ export const filterObjectFalsyValues = (obj: { [key: string]: any }) =>
 export const countDownTimer = (
 	date: number | null
 ): { seconds: number; minutes: number; hours: number; days: number } => {
-	console.log("date: ", date);
 	if (date === null) return { seconds: 0, minutes: 0, hours: 0, days: 0 };
 	const distance = new Date(date).getTime() - new Date().getTime();
 	const _second = 1000;

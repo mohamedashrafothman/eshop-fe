@@ -49,7 +49,7 @@ const CountriesList = () => {
 				</div>
 				<div className="col-12">
 					<div className="table-responsive">
-						<table className="table table-striped align-middle">
+						<table className="table table-sm table-striped align-middle">
 							<caption className="visually-hidden">List of countries</caption>
 							<thead className="table-primary">
 								<tr>
@@ -176,7 +176,7 @@ const CountriesList = () => {
 																<td>
 																	<div className="btn-group">
 																		<NextLink
-																			href={`/dashboard/address/countries/${singleCountry.slug || singleCountry._id}/edit`}
+																			href={`/dashboard/addresses/countries/${singleCountry.slug || singleCountry._id}/edit`}
 																			className="btn btn-sm btn-link link-primary">
 																			<svg
 																				className="bi w-20px h-20px"

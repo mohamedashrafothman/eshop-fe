@@ -13,7 +13,7 @@ const CitiesActionsLayout = async ({ children }: Props) => (
 				<strong>{PAGE_TITLE}</strong>
 			</h1>
 			<NextLink
-				href="/dashboard/address/cities/"
+				href="/dashboard/addresses/cities/"
 				className="btn btn-link text-capitalize text-decoration-none icon-link icon-link-hover icon-link-hover-reversed">
 				<svg className="bi w-16px h-16px" width="16" height="16">
 					<use href="#icon-chevron-left" />

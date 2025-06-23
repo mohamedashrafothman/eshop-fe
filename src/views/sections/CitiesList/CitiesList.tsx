@@ -50,7 +50,7 @@ const CitiesList = () => {
 				</div>
 				<div className="col-12">
 					<div className="table-responsive">
-						<table className="table table-striped align-middle">
+						<table className="table table-sm table-striped align-middle">
 							<caption className="visually-hidden">List of cities</caption>
 							<thead className="table-primary">
 								<tr>
@@ -198,7 +198,7 @@ const CitiesList = () => {
 																<td>
 																	<div className="btn-group">
 																		<NextLink
-																			href={`/dashboard/address/cities/${singleCity.slug || singleCity._id}/edit`}
+																			href={`/dashboard/addresses/cities/${singleCity.slug || singleCity._id}/edit`}
 																			className="btn btn-sm btn-link link-primary">
 																			<svg
 																				className="bi w-20px h-20px"

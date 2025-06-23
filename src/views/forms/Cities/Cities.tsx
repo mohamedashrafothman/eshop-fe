@@ -82,7 +82,7 @@ const Cities = () => {
 						// Invalidate the cities query from the cache.
 						await queryClient.invalidateQueries({ queryKey: CITIES_KEY_QUERY });
 						// Redirect to cities list
-						push("/dashboard/address/cities");
+						push("/dashboard/addresses/cities");
 					},
 				}
 			);
@@ -108,7 +108,7 @@ const Cities = () => {
 						// Invalidate the cities query from the cache.
 						await queryClient.invalidateQueries({ queryKey: CITIES_KEY_QUERY });
 						// Redirect to cities list
-						push("/dashboard/address/cities");
+						push("/dashboard/addresses/cities");
 					},
 				}
 			);

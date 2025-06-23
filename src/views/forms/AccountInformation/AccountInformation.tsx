@@ -70,7 +70,11 @@ const AccountInformation = () => {
 							...(session?.tokenType && {
 								tokenType: JSON.stringify(session.tokenType),
 							}),
-							...(user && { user: JSON.stringify(user) }),
+							...(user && {
+								user: JSON.stringify(
+									pick(user, ["_id", "name", "role", "emailVerified"])
+								),
+							}),
 							redirect: false,
 						});
 				},

@@ -43,9 +43,7 @@ const Search = () => {
 				<div className="offcanvas-body py-5">
 					<div className="container">
 						<div className="row g-0 align-items-center flex-nowrap">
-							<div className="col">
-								<div className="text-bg-dark text-center p-3">Search</div>
-							</div>
+							<div className="col">Search</div>
 							<div className="col-auto">
 								<button
 									type="button"

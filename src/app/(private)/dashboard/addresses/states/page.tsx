@@ -12,7 +12,7 @@ const States = () => (
 				<strong>{PAGE_TITLE}</strong>
 			</h1>
 			<NextLink
-				href="/dashboard/address/states/store"
+				href="/dashboard/addresses/states/store"
 				className="btn btn-primary border-primary-dark text-capitalize icon-link">
 				<svg className="bi w-22px h-22px" width="22" height="22">
 					<use href="#icon-plus" />
