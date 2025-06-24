@@ -136,7 +136,7 @@ const DashboardSideNav = () => {
 										data-bs-toggle="collapse"
 										aria-expanded="false"
 										aria-controls={`dashboard-side-nav-collapse-${index}`}
-										ref={(el) => {
+										ref={(el: HTMLButtonElement | null) => {
 											collapseRefs.current[index] = el;
 										}}>
 										{icon && (

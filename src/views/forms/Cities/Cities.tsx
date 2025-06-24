@@ -124,7 +124,7 @@ const Cities = () => {
 			state: isStatesHasOneItem ? states[0]?._id || "" : "",
 			...((isEditForm &&
 				city && {
-					...(pick(city, ["name", "code"]) || {}),
+					...(pick(city, ["name"]) || {}),
 					country: (city.country as ICountry)?._id || (city.country as string) || "",
 					state: (city.state as IState)?._id || (city.state as string) || "",
 				}) ||
