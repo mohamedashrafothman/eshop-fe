@@ -85,16 +85,28 @@ const CitiesFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 							</div>
 							<div className="col-auto">
 								<SelectField
-									className="mw-200px"
-									id="sortField"
+									className="w-200px"
 									name="sort"
-									value={JSON.stringify(formState.values?.sort || {})}
-									onChange={({ target: { name = "", value } }) =>
-										formState.setFieldValue(name, JSON.parse(value || "{}"))
+									id="sortField"
+									value={sort
+										?.filter(
+											(sortOption) =>
+												JSON.stringify(formState.values?.sort || {}) ===
+												JSON.stringify(sortOption?.value || {})
+										)
+										?.map(({ name: label, value }) => ({
+											value: JSON.stringify(value),
+											label,
+										}))}
+									onChange={(option: any) =>
+										formState.setFieldValue(
+											"sort",
+											JSON.parse(option?.value || "{}")
+										)
 									}
-									options={sort.map(({ name, value }) => ({
+									options={sort.map(({ name: label, value }) => ({
 										value: JSON.stringify(value),
-										text: name,
+										label,
 									}))}
 									placeholder="- Sort By -"
 								/>
@@ -136,32 +148,52 @@ const CitiesFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 										className="flex-shrink-0 w-fit-content"
 										name="country"
 										id="countryField"
-										value={formState.values?.country || ""}
-										onChange={(e) => {
-											formState.handleChange(e);
-											setSelectedCountryIdState(e.target.value);
+										value={countries
+											?.filter(
+												(country) =>
+													formState.values?.country === country._id
+											)
+											?.map(({ _id: value, name: label }) => ({
+												value,
+												label,
+											}))}
+										onChange={(option: any) => {
+											formState?.setFieldValue(
+												"country",
+												option?.value || ""
+											);
+											setSelectedCountryIdState(option?.value || "");
 											formState.setFieldTouched("state", false);
 											formState.setFieldValue("state", "");
 										}}
-										options={countries.map(({ name, _id }) => ({
-											value: _id,
-											text: name,
+										options={countries.map(({ _id: value, name: label }) => ({
+											value,
+											label,
 										}))}
 										placeholder="- Select Country -"
-										disabled={isCountriesLoading}
+										isDisabled={isCountriesLoading}
 									/>
 									<SelectField
 										className="flex-shrink-0 w-fit-content"
 										name="state"
 										id="stateField"
-										value={formState.values?.state || ""}
-										onChange={formState.handleChange}
-										options={states.map(({ name, _id }) => ({
-											value: _id,
-											text: name,
+										value={states
+											?.filter(
+												(state) => formState.values?.state === state._id
+											)
+											?.map(({ _id: value, name: label }) => ({
+												value,
+												label,
+											}))}
+										onChange={(option: any) =>
+											formState?.setFieldValue("state", option?.value || "")
+										}
+										options={states.map(({ _id: value, name: label }) => ({
+											value,
+											label,
 										}))}
 										placeholder="- Select State -"
-										disabled={isStatesLoading || isStatesHasNoItems}
+										isDisabled={isStatesLoading || isStatesHasNoItems}
 									/>
 									<div className="px-16px py-11px flex-shrink-0 hstack gap-2 rounded-4 border border-gray-500 border-2 bg-gray-400 flex-nowrap h-100">
 										<CheckboxField

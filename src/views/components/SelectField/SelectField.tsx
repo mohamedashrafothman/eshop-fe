@@ -1,7 +1,8 @@
 "use client";
 
 import classNames from "classnames";
-import { ComponentPropsWithoutRef, useId } from "react";
+import { useId } from "react";
+import Select, { type Props as SelectProps } from "react-select";
 import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 
 type Props = {
@@ -9,10 +10,9 @@ type Props = {
 	isInvalid?: boolean | undefined;
 	error?: string | undefined;
 	label?: string | undefined;
-	options?: { value: string; text: string }[] | [];
 	placeholder?: string | undefined;
 	id: string;
-} & ComponentPropsWithoutRef<"select">;
+} & SelectProps<{ value: string; label: string }>;
 
 const SelectField = ({
 	isValid = false,
@@ -22,10 +22,9 @@ const SelectField = ({
 	label,
 	error,
 	required,
-	options = [],
-	placeholder = "",
+	name,
 	...restOfProps
-}: Props) => {
+}: Props): ReturnType<Select> => {
 	const reactId = useId();
 	const id = `${passedId || "selectField"}-${reactId}`;
 
@@ -37,21 +36,13 @@ const SelectField = ({
 					{required && <FieldRequiredLabel />}
 				</label>
 			)}
-			<select
-				id={id}
-				className={classNames("form-select text-truncate", className, {
-					"is-invalid": isInvalid,
-					"is-valid": isValid,
-				})}
-				required={required || undefined}
-				{...restOfProps}>
-				<option value="">{placeholder}</option>
-				{options.map(({ value, text }) => (
-					<option value={value} key={value}>
-						{text}
-					</option>
-				))}
-			</select>
+			<Select
+				inputId={id}
+				name={name}
+				classNamePrefix="react-select"
+				className={classNames(className, { "is-invalid": isInvalid, "is-valid": isValid })}
+				{...restOfProps}
+			/>
 			{isInvalid && error && (
 				<div className="invalid-feedback text-capitalize">
 					<strong>

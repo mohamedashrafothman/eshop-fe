@@ -69,16 +69,28 @@ const BrandsFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 							</div>
 							<div className="col-auto">
 								<SelectField
-									className="mw-200px"
-									id="sortField"
+									className="w-200px"
 									name="sort"
-									value={JSON.stringify(formState.values?.sort || {})}
-									onChange={({ target: { name = "", value } }) =>
-										formState.setFieldValue(name, JSON.parse(value || "{}"))
+									id="sortField"
+									value={sort
+										?.filter(
+											(sortOption) =>
+												JSON.stringify(formState.values?.sort || {}) ===
+												JSON.stringify(sortOption?.value || {})
+										)
+										?.map(({ name: label, value }) => ({
+											value: JSON.stringify(value),
+											label,
+										}))}
+									onChange={(option: any) =>
+										formState.setFieldValue(
+											"sort",
+											JSON.parse(option?.value || "{}")
+										)
 									}
-									options={sort.map(({ name, value }) => ({
+									options={sort.map(({ name: label, value }) => ({
 										value: JSON.stringify(value),
-										text: name,
+										label,
 									}))}
 									placeholder="- Sort By -"
 								/>

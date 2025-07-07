@@ -177,12 +177,16 @@ const States = () => {
 						<SelectField
 							name="country"
 							id="countryField"
-							value={formState.values?.country || ""}
-							onChange={formState.handleChange}
-							onBlur={formState.handleBlur}
-							options={countries.map(({ name, _id }) => ({
-								value: _id,
-								text: name,
+							value={countries
+								?.filter((country) => formState.values?.country === country._id)
+								?.map(({ _id: value, name: label }) => ({ value, label }))}
+							onChange={(option: any) =>
+								formState?.setFieldValue("country", option?.value || "")
+							}
+							onBlur={() => formState.setFieldTouched("country", true)}
+							options={countries.map(({ _id: value, name: label }) => ({
+								value,
+								label,
 							}))}
 							isValid={Boolean(
 								formState.values?.country &&
@@ -193,7 +197,7 @@ const States = () => {
 								!!formState.touched?.country && !!formState.errors?.country
 							)}
 							error={formState.errors?.country}
-							disabled={isCountriesLoading || isCountriesHasOneItem}
+							isDisabled={isCountriesLoading || isCountriesHasOneItem}
 							label="Country"
 							placeholder="Select Country"
 							required

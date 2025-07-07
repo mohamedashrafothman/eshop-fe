@@ -173,17 +173,19 @@ const Cities = () => {
 						<SelectField
 							name="country"
 							id="countryField"
-							value={formState.values?.country || ""}
-							onChange={(e) => {
-								formState.handleChange(e);
-								setSelectedCountryIdState(e.target.value);
+							value={countries
+								?.filter((country) => formState.values?.country === country._id)
+								?.map(({ _id: value, name: label }) => ({ value, label }))}
+							onChange={(option: any) => {
+								formState?.setFieldValue("country", option?.value || "");
+								setSelectedCountryIdState(option?.value || "");
 								formState.setFieldTouched("state", false);
 								formState.setFieldValue("state", "");
 							}}
-							onBlur={formState.handleBlur}
-							options={countries.map(({ name, _id }) => ({
-								value: _id,
-								text: name,
+							onBlur={() => formState.setFieldTouched("country", true)}
+							options={countries.map(({ _id: value, name: label }) => ({
+								value,
+								label,
 							}))}
 							isValid={Boolean(
 								formState.values?.country &&
@@ -194,7 +196,7 @@ const Cities = () => {
 								!!formState.touched?.country && !!formState.errors?.country
 							)}
 							error={formState.errors?.country}
-							disabled={
+							isDisabled={
 								isCountriesLoading || isCountriesHasOneItem || isCountriesHasNoItems
 							}
 							label="Country"
@@ -206,12 +208,16 @@ const Cities = () => {
 						<SelectField
 							name="state"
 							id="stateField"
-							value={formState.values?.state || ""}
-							onChange={formState.handleChange}
-							onBlur={formState.handleBlur}
-							options={states.map(({ name, _id }) => ({
-								value: _id,
-								text: name,
+							value={states
+								?.filter((state) => formState.values?.state === state._id)
+								?.map(({ _id: value, name: label }) => ({ value, label }))}
+							onChange={(option: any) =>
+								formState?.setFieldValue("state", option?.value || "")
+							}
+							onBlur={() => formState.setFieldTouched("state", true)}
+							options={states.map(({ _id: value, name: label }) => ({
+								value,
+								label,
 							}))}
 							isValid={Boolean(
 								formState.values?.state &&
@@ -222,7 +228,7 @@ const Cities = () => {
 								!!formState.touched?.state && !!formState.errors?.state
 							)}
 							error={formState.errors?.state}
-							disabled={isStatesLoading || isStatesHasOneItem || isStatesHasNoItems}
+							isDisabled={isStatesLoading || isStatesHasOneItem || isStatesHasNoItems}
 							label="State"
 							placeholder="Select State"
 							required

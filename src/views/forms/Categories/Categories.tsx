@@ -186,12 +186,23 @@ const Categories = () => {
 						<SelectField
 							name="parent"
 							id="parentField"
-							value={formState.values?.parent || ""}
-							onChange={formState.handleChange}
-							onBlur={formState.handleBlur}
-							options={categories.map(({ name, _id }) => ({
-								value: _id,
-								text: name,
+							value={categories
+								?.filter((category) =>
+									formState.values?.parent?.includes(category._id)
+								)
+								?.map(({ _id: value, name: label }) => ({ value, label }))}
+							onBlur={() => formState.setFieldTouched("parent", true)}
+							onChange={(options) =>
+								formState?.setFieldValue(
+									"parent",
+									(Array.isArray(options) &&
+										options?.map(({ value }) => value)) ||
+										[]
+								)
+							}
+							options={categories.map(({ _id: value, name: label }) => ({
+								value,
+								label,
 							}))}
 							isValid={Boolean(
 								formState.values?.parent &&
@@ -201,12 +212,11 @@ const Categories = () => {
 							isInvalid={Boolean(
 								!!formState.touched?.parent && !!formState.errors?.parent
 							)}
-							error={formState.errors?.parent}
-							placeholder="- Select Parent Categories -"
+							error={formState.errors?.parent as string}
+							placeholder="Parent Categories"
 							label="Parent Categories"
-							disabled={isCategoriesLoading}
-							multiple
-							required
+							isDisabled={isCategoriesLoading}
+							isMulti
 						/>
 					</div>
 					<div className="col-12">

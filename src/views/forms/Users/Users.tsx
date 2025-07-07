@@ -166,14 +166,22 @@ const Users = () => {
 						<SelectField
 							name="role"
 							id="roleField"
-							value={formState.values?.role}
+							value={[
+								...Object.values(vars.roles).filter(
+									(item) => item !== vars.roles.superAdmin
+								),
+							]
+								?.filter((role) => formState.values?.role === role)
+								?.map((role) => ({ value: role, label: role }))}
+							onChange={(option: any) =>
+								formState.setFieldValue("role", option?.value || "")
+							}
+							onBlur={() => formState.setFieldTouched("role", true)}
 							options={[
 								...Object.values(vars.roles).filter(
 									(item) => item !== vars.roles.superAdmin
 								),
-							].map((item) => ({ value: item, text: item }))}
-							onChange={formState.handleChange}
-							onBlur={formState.handleBlur}
+							].map((item) => ({ value: item, label: item }))}
 							isValid={Boolean(
 								formState.values?.role &&
 									!!formState.touched?.role &&
@@ -184,7 +192,7 @@ const Users = () => {
 							)}
 							error={formState.errors?.role}
 							label="Role"
-							placeholder="- Select Role -"
+							placeholder="Select Role"
 							required
 						/>
 					</div>
