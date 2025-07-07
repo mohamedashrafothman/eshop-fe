@@ -1,3 +1,5 @@
+import vars from "utils/vars";
+
 export const isSameValueAsInitialValue = (v: any, init: any) =>
 	JSON.stringify(v) === JSON.stringify(init);
 
@@ -49,4 +51,24 @@ export const objectToFormData = (
 
 	appendFormData(obj, rootName);
 	return formData;
+};
+
+export const fileSizeValidation = function (file: any) {
+	return Boolean(
+		!!!file ||
+			(Array.from([file])?.filter((file) => file?.size)?.length &&
+				Array.from([file])?.every(
+					(file) => file?.size <= vars.app.fileMaxSizeInMB * 1024 * 1024
+				))
+	);
+};
+
+export const fileFormatValidation = function (file: any) {
+	return Boolean(
+		!!!file ||
+			(Array.from([file])?.filter((file) => file?.type)?.length &&
+				Array.from([file])?.every((file) =>
+					vars.app.imagesFileInputAccepts.includes(file?.type)
+				))
+	);
 };

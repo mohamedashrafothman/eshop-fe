@@ -3,35 +3,46 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import { KEY_ARRAY as BRANDS_KEY_QUERY } from "hooks/useBrandsInfinityQuery";
-import usePatchBrandMutation from "hooks/usePatchBrandMutation";
-import usePostBrandMutation from "hooks/usePostBrandMutation";
-import useSingleBrandsQuery from "hooks/useSingleBrandsQuery";
+import { KEY_ARRAY as CATEGORIES_KEY_QUERY } from "hooks/useCategoriesInfinityQuery";
+import useCategoriesQuery from "hooks/useCategoriesQuery";
+import usePatchCategoryMutation from "hooks/usePatchCategoryMutation";
+import usePostCategoryMutation from "hooks/usePostCategoryMutation";
+import useSingleCategoriesQuery from "hooks/useSingleCategoriesQuery";
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { apiFormErrorExtractor, objectToFormData, pick } from "utils/helpers";
 import vars from "utils/vars";
 import FileField from "views/components/FileField";
-import TextField from "views/components/TextField";
+import SelectField from "views/components/SelectField";
 import TextareaField from "views/components/TextareaField";
+import TextField from "views/components/TextField";
 import formValidationSchema, { type schemaType } from "./schema";
 
-const Brands = () => {
+const Categories = () => {
 	const queryClient = useQueryClient();
 	const { push } = useTransitionRouter();
 	const { identifier = "" } = useParams<{ identifier: string }>();
 
 	// server state hooks
-	const postBrandMutation = usePostBrandMutation();
-	const patchBrandMutation = usePatchBrandMutation();
-	const { data: brand, isLoading: isBrandLoading } = useSingleBrandsQuery(identifier);
+	const postCategoryMutation = usePostCategoryMutation();
+	const patchCategoryMutation = usePatchCategoryMutation();
+	const { data: category, isLoading: isCategoryLoading } = useSingleCategoriesQuery(identifier);
+	const { data: { data: categories = [] } = {}, isLoading: isCategoriesLoading } =
+		useCategoriesQuery({ pagination: false });
 
 	// ref hook
-	const brandCancelRequestRef = useRef<AbortController | null>(null);
+	const categoryCancelRequestRef = useRef<AbortController | null>(null);
 
 	// constants
 	const isEditForm = Boolean(identifier);
+	const editCategoryParentIds = [
+		...(category?.parent?.map((singleCategoryParent) =>
+			typeof singleCategoryParent !== "string"
+				? singleCategoryParent?._id
+				: singleCategoryParent || ""
+		) || []),
+	];
 
 	// Handle form submission.
 	const onFormSubmitHandler = async (
@@ -39,15 +50,15 @@ const Brands = () => {
 		formikHelpers: FormikHelpers<schemaType>
 	) => {
 		// Abort any previous request, and create a new abort controller.
-		if (brandCancelRequestRef.current?.signal) brandCancelRequestRef.current?.abort();
-		brandCancelRequestRef.current = new AbortController();
+		if (categoryCancelRequestRef.current?.signal) categoryCancelRequestRef.current?.abort();
+		categoryCancelRequestRef.current = new AbortController();
 
-		// Call the brand store/edit mutation.
+		// Call the category store/edit mutation.
 		if (!isEditForm) {
-			await postBrandMutation.mutateAsync(
+			await postCategoryMutation.mutateAsync(
 				{
 					data: objectToFormData(data),
-					signal: brandCancelRequestRef.current.signal,
+					signal: categoryCancelRequestRef.current.signal,
 					headers: { "Content-Type": "multipart/form-data" },
 				},
 				{
@@ -60,21 +71,21 @@ const Brands = () => {
 					onSuccess: async () => {
 						// Resetting formik.
 						formikHelpers.resetForm();
-						// Resetting brand store query mutation.
-						postBrandMutation.reset();
-						// Invalidate the brands query from the cache.
-						await queryClient.invalidateQueries({ queryKey: BRANDS_KEY_QUERY });
-						// Redirect to brands list
-						push("/dashboard/brands");
+						// Resetting category store query mutation.
+						postCategoryMutation.reset();
+						// Invalidate the categories query from the cache.
+						await queryClient.invalidateQueries({ queryKey: CATEGORIES_KEY_QUERY });
+						// Redirect to categories list
+						push("/dashboard/categories");
 					},
 				}
 			);
 		} else {
-			await patchBrandMutation.mutateAsync(
+			await patchCategoryMutation.mutateAsync(
 				{
 					variables: { id: identifier },
 					data: objectToFormData(data),
-					signal: brandCancelRequestRef.current.signal,
+					signal: categoryCancelRequestRef.current.signal,
 					headers: { "Content-Type": "multipart/form-data" },
 				},
 				{
@@ -87,12 +98,12 @@ const Brands = () => {
 					onSuccess: async () => {
 						// Resetting formik.
 						formikHelpers.resetForm();
-						// Resetting brand edit query mutation.
-						patchBrandMutation.reset();
-						// Invalidate the brands query from the cache.
-						await queryClient.invalidateQueries({ queryKey: BRANDS_KEY_QUERY });
-						// Redirect to brands list
-						push("/dashboard/brands");
+						// Resetting category edit query mutation.
+						patchCategoryMutation.reset();
+						// Invalidate the categories query from the cache.
+						await queryClient.invalidateQueries({ queryKey: CATEGORIES_KEY_QUERY });
+						// Redirect to categories list
+						push("/dashboard/categories");
 					},
 				}
 			);
@@ -106,8 +117,11 @@ const Brands = () => {
 			name: "",
 			description: "",
 			...(isEditForm
-				? { ...((brand && pick(brand, ["name", "description"])) || {}) }
-				: { logo: "" }),
+				? {
+						...((category && pick(category, ["name", "description"])) || {}),
+						...(editCategoryParentIds.length ? { parent: editCategoryParentIds } : {}),
+					}
+				: { icon: "" }),
 		},
 		validationSchema: formValidationSchema({ isEdit: isEditForm }),
 		onSubmit: onFormSubmitHandler,
@@ -116,15 +130,15 @@ const Brands = () => {
 	// effect hooks
 	useEffect(() => {
 		return () => {
-			if (brandCancelRequestRef.current?.signal) brandCancelRequestRef.current?.abort();
+			if (categoryCancelRequestRef.current?.signal) categoryCancelRequestRef.current?.abort();
 		};
 	}, []);
 
 	return (
 		<form onSubmit={formState.handleSubmit} onReset={formState.handleReset} noValidate>
 			<FocusError formik={formState} />
-			<fieldset disabled={formState.isSubmitting || isBrandLoading}>
-				<legend className="visually-hidden">{`${isEditForm ? "Edit Brand" : "Add Brand"} Form`}</legend>
+			<fieldset disabled={formState.isSubmitting || isCategoryLoading}>
+				<legend className="visually-hidden">{`${isEditForm ? "Edit Category" : "Add Category"} Form`}</legend>
 				<div className="row gy-4">
 					<div className="col-12">
 						<TextField
@@ -169,26 +183,53 @@ const Brands = () => {
 						/>
 					</div>
 					<div className="col-12">
+						<SelectField
+							name="parent"
+							id="parentField"
+							value={formState.values?.parent || ""}
+							onChange={formState.handleChange}
+							onBlur={formState.handleBlur}
+							options={categories.map(({ name, _id }) => ({
+								value: _id,
+								text: name,
+							}))}
+							isValid={Boolean(
+								formState.values?.parent &&
+									!!formState.touched?.parent &&
+									!formState.errors?.parent
+							)}
+							isInvalid={Boolean(
+								!!formState.touched?.parent && !!formState.errors?.parent
+							)}
+							error={formState.errors?.parent}
+							placeholder="- Select Parent Categories -"
+							label="Parent Categories"
+							disabled={isCategoriesLoading}
+							multiple
+							required
+						/>
+					</div>
+					<div className="col-12">
 						<FileField
-							name="logo"
-							id="logoField"
+							name="icon"
+							id="iconField"
 							onChange={({ target: { name, files } }) => {
 								formState.setFieldTouched(name, true);
 								formState?.setFieldValue(name, files?.[0] || "");
 							}}
 							onBlur={formState.handleBlur}
 							isValid={Boolean(
-								formState.values?.logo &&
-									!!formState.touched?.logo &&
-									!formState.errors?.logo
+								formState.values?.icon &&
+									!!formState.touched?.icon &&
+									!formState.errors?.icon
 							)}
 							isInvalid={Boolean(
-								!!formState.touched?.logo && !!formState.errors?.logo
+								!!formState.touched?.icon && !!formState.errors?.icon
 							)}
-							error={formState.errors?.logo as string}
+							error={formState.errors?.icon as string}
 							accept={vars.app.imagesFileInputAccepts.join(",")}
 							helpText={`Allowed file types: png, jpg, jpeg. Max file size: ${vars.app.fileMaxSizeInMB}MB.`}
-							label="Logo Image"
+							label="Icon Image"
 							required
 						/>
 					</div>
@@ -225,4 +266,4 @@ const Brands = () => {
 	);
 };
 
-export default Brands;
+export default Categories;

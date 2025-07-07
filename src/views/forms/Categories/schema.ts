@@ -1,12 +1,13 @@
 import { fileFormatValidation, fileSizeValidation } from "utils/helpers";
 import vars from "utils/vars";
-import { InferType, mixed, object, string } from "yup";
+import { array, InferType, mixed, object, string } from "yup";
 
 const schema = ({ isEdit = false }) =>
 	object().shape({
 		name: string().required("Field required!").max(100),
 		description: string().required("Field required!").max(1000),
-		logo: mixed().when("isNotEdit", {
+		parent: array(),
+		icon: mixed().when("isNotEdit", {
 			is: !isEdit,
 			then: (schema) =>
 				schema

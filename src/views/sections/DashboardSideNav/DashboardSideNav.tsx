@@ -49,6 +49,7 @@ const DashboardSideNav = () => {
 				? [
 						{ title: "Users", href: "/dashboard/users", icon: "icon-people" },
 						{ title: "Brands", href: "/dashboard/brands", icon: "icon-tags" },
+						{ title: "Categories", href: "/dashboard/categories", icon: "icon-tags" },
 					]
 				: []),
 			{
