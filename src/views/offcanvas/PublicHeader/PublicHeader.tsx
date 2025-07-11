@@ -69,7 +69,7 @@ const PublicHeader = () => {
 												<svg
 													className="bi w-22px h-22px"
 													width="22"
-													height="22">
+													height="24">
 													<use href="#icon-person" />
 												</svg>
 											</Nav.Link>
@@ -81,7 +81,7 @@ const PublicHeader = () => {
 												title="Cart">
 												<svg
 													className="bi w-22px h-22px"
-													width="22"
+													width="24"
 													height="22">
 													<use href="#icon-cart" />
 												</svg>

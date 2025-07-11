@@ -1,10 +1,10 @@
 "use client";
 
-import Collapse from "bootstrap/js/dist/collapse";
 import { FocusError } from "focus-formik-error";
 import { FormikConfig, useFormik } from "formik";
 import AutoSave from "hooks/AutoSave";
-import useCountriesQuery from "hooks/useCountriesQuery";
+import useBootstrapCollapse from "hooks/useBootstrapCollapse";
+import { useCountriesQuery } from "hooks/useTanstackQuery/useCountries";
 import { useEffect, useRef } from "react";
 import { type SortItemType } from "utils/helpers";
 import CheckboxField from "views/components/CheckboxField";
@@ -28,16 +28,8 @@ const StatesFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 	// ref hook
 	const collapseRef = useRef<HTMLButtonElement | null>(null);
 
-	// effect hooks
-	useEffect(() => {
-		const collapseRefCurrent = collapseRef?.current;
-		if (collapseRefCurrent)
-			Collapse.getOrCreateInstance(collapseRefCurrent, { toggle: false }).hide();
-
-		return () => {
-			if (collapseRefCurrent) Collapse.getInstance(collapseRefCurrent)?.dispose();
-		};
-	}, []);
+	// custom hooks
+	useBootstrapCollapse(collapseRef);
 
 	// form state
 	const { submitForm, ...formState } = useFormik<schemaType>({

@@ -1,0 +1,2 @@
+import CategoryAccordionCardDeleteCallToAction from "./CategoryAccordionCardDeleteCallToAction";
+export default CategoryAccordionCardDeleteCallToAction;

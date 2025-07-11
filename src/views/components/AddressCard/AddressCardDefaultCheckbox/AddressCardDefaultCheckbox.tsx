@@ -1,8 +1,10 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { KEY_ARRAY as ADDRESS_KEY_QUERY } from "hooks/useAddressesInfinityQuery";
-import usePatchAddressMutation from "hooks/usePatchAddressMutation";
+import {
+	PATCH_SINGLE_KEY_ARRAY as PATCH_SINGLE_ADDRESS_KEY_ARRAY,
+	usePatchAddressMutation,
+} from "hooks/useTanstackQuery/useAddresses";
 import { default as IAddress } from "interfaces/Address.interface";
 import { ComponentPropsWithoutRef, useEffect, useRef } from "react";
 import CheckboxField from "views/components/CheckboxField";
@@ -42,7 +44,9 @@ const AddressCardDefaultCheckbox = ({ address, isLoading }: Props) => {
 					// Resetting address edit query mutation.
 					patchAddressMutation.reset();
 					// Invalidate the address query from the cache.
-					await queryClient.invalidateQueries({ queryKey: ADDRESS_KEY_QUERY });
+					await queryClient.invalidateQueries({
+						queryKey: [...PATCH_SINGLE_ADDRESS_KEY_ARRAY, address._id],
+					});
 				},
 			}
 		);

@@ -4,16 +4,59 @@ const SVGs = () => (
 		aria-hidden="true"
 		xmlns="http://www.w3.org/2000/svg">
 		<defs>
-			<symbol id="icon-eye" viewBox="0 0 16 16" fill="currentColor">
+			<symbol id="icon-eye" viewBox="0 0 40 40" stroke="currentColor" fill="none">
 				<title className="visually-hidden">eye</title>
-				<path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
-				<path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
+				<path
+					d="M36.6666 20.1998L32.3333 24.9998C30.7711 26.7185 28.8671 28.0916 26.7432 29.0313C24.6193 29.971 22.3224 30.4564 19.9999 30.4564C17.6774 30.4564 15.3806 29.971 13.2567 29.0313C11.1328 28.0916 9.2287 26.7185 7.66659 24.9998L3.33325 20.1998L7.19992 15.5665C8.76409 13.6908 10.7214 12.1818 12.9333 11.1463C15.1452 10.1107 17.5576 9.57397 19.9999 9.57397C22.4422 9.57397 24.8547 10.1107 27.0666 11.1463C29.2785 12.1818 31.2358 13.6908 32.7999 15.5665L36.6666 20.1998Z"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
+				<path
+					d="M20.15 23.7664C22.5432 23.7664 24.4833 21.901 24.4833 19.5998C24.4833 17.2986 22.5432 15.4331 20.15 15.4331C17.7568 15.4331 15.8167 17.2986 15.8167 19.5998C15.8167 21.901 17.7568 23.7664 20.15 23.7664Z"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="bevel"
+				/>
 			</symbol>
-			<symbol id="icon-eye-slash" viewBox="0 0 16 16" fill="currentColor">
-				<title className="visually-hidden">eye-slash</title>
-				<path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7 7 0 0 0-2.79.588l.77.771A6 6 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755q-.247.248-.517.486z" />
-				<path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829" />
-				<path d="M3.35 5.47q-.27.24-.518.487A13 13 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7 7 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12z" />
+			<symbol id="icon-eye-closed" viewBox="0 0 40 40" stroke="currentColor" fill="none">
+				<title className="visually-hidden">eye-closed</title>
+				<path
+					d="M6.43319 17.05L4.31653 20.7667"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="bevel"
+				/>
+				<path
+					d="M12.5999 22.55L10.4833 26.2834"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="bevel"
+				/>
+				<path
+					d="M33.5664 17.2002L35.6831 20.9335"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="bevel"
+				/>
+				<path
+					d="M27.3997 22.7168L29.5163 26.4335"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="bevel"
+				/>
+				<path
+					d="M19.8501 24.4167V27.8501"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="bevel"
+				/>
+				<path
+					d="M5 15.4834C14.2 26.6501 25.4167 26.8001 34.6667 15.8834L35 15.4834"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="bevel"
+				/>
 			</symbol>
 			<symbol id="icon-google" viewBox="0 0 16 16" fill="currentColor">
 				<title className="visually-hidden">google</title>
@@ -60,17 +103,45 @@ const SVGs = () => (
 				<title className="visually-hidden">cone-striped</title>
 				<path d="m9.97 4.88.953 3.811C10.159 8.878 9.14 9 8 9s-2.158-.122-2.923-.309L6.03 4.88C6.635 4.957 7.3 5 8 5s1.365-.043 1.97-.12m-.245-.978L8.97.88C8.718-.13 7.282-.13 7.03.88L6.275 3.9C6.8 3.965 7.382 4 8 4s1.2-.036 1.725-.098m4.396 8.613a.5.5 0 0 1 .037.96l-6 2a.5.5 0 0 1-.316 0l-6-2a.5.5 0 0 1 .037-.96l2.391-.598.565-2.257c.862.212 1.964.339 3.165.339s2.303-.127 3.165-.339l.565 2.257z" />
 			</symbol>
-			<symbol id="icon-person" viewBox="0 0 16 16" fill="currentColor">
+			<symbol id="icon-person" viewBox="0 0 22 24" stroke="currentColor" fill="none">
 				<title className="visually-hidden">person</title>
-				<path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
+				<path
+					d="M2 21.9999L2.79 19.1199C5.4 9.6199 16.6 9.6199 19.21 19.1199L20 21.9999"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
+				<path
+					d="M11 11.98C13.7614 11.98 16 9.74141 16 6.97998C16 4.21856 13.7614 1.97998 11 1.97998C8.23858 1.97998 6 4.21856 6 6.97998C6 9.74141 8.23858 11.98 11 11.98Z"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="bevel"
+				/>
 			</symbol>
 			<symbol id="icon-people" viewBox="0 0 16 16" fill="currentColor">
 				<title className="visually-hidden">people</title>
 				<path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
 			</symbol>
-			<symbol id="icon-cart" viewBox="0 0 16 16" fill="currentColor">
+			<symbol id="icon-cart" viewBox="0 0 24 22" fill="none" stroke="currentColor">
 				<title className="visually-hidden">cart</title>
-				<path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l.84 4.479 9.144-.459L13.89 4zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+				<path
+					d="M17.8896 19.8499H6.10955C5.79187 19.8501 5.48326 19.7439 5.23309 19.5481C4.98291 19.3523 4.80562 19.0783 4.72955 18.7699L2.07955 8.15986C2.05369 8.05657 2.05174 7.94874 2.07383 7.84458C2.09593 7.74042 2.1415 7.64267 2.20707 7.55878C2.27264 7.47489 2.35649 7.40706 2.45223 7.36046C2.54797 7.31386 2.65307 7.28971 2.75955 7.28986H21.2396C21.346 7.28971 21.4511 7.31386 21.5469 7.36046C21.6426 7.40706 21.7265 7.47489 21.792 7.55878C21.8576 7.64267 21.9032 7.74042 21.9253 7.84458C21.9474 7.94874 21.9454 8.05657 21.9196 8.15986L19.2696 18.7699C19.1935 19.0783 19.0162 19.3523 18.766 19.5481C18.5158 19.7439 18.2072 19.8501 17.8896 19.8499V19.8499Z"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
+				<path
+					d="M9.79941 2.14993L6.89941 7.28993"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
+				<path
+					d="M13.8799 2.14993L16.7899 7.28993"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
 			</symbol>
 			<symbol id="icon-menu" viewBox="0 0 16 16" fill="currentColor">
 				<title className="visually-hidden">menu</title>

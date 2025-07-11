@@ -2,7 +2,7 @@
 
 import classNames from "classnames";
 import { isObject } from "formik";
-import useCitiesInfinityQuery from "hooks/useCitiesInfinityQuery";
+import { useCitiesInfinityQuery } from "hooks/useTanstackQuery/useCities";
 import ICity from "interfaces/City.interface";
 import ICountry from "interfaces/Country.interface";
 import IState from "interfaces/State.interface";
@@ -198,7 +198,7 @@ const CitiesList = () => {
 																<td>
 																	<div className="btn-group">
 																		<NextLink
-																			href={`/dashboard/addresses/cities/${singleCity.slug || singleCity._id}/edit`}
+																			href={`/dashboard/addresses/cities/${singleCity._id}/edit`}
 																			className="btn btn-sm btn-link link-primary">
 																			<svg
 																				className="bi w-20px h-20px"

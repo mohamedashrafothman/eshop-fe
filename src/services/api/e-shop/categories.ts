@@ -14,6 +14,7 @@ export type GetCategoriesDataType = {
 	pagination?: boolean | undefined;
 	q?: string | undefined;
 	deleted?: boolean | number | undefined;
+	firstLevelOnly?: boolean | number | undefined;
 };
 export type GetCategoriesResponseType = ICategory[];
 export type GetSingleCategoryDataType = object;

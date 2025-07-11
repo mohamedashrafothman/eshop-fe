@@ -3,12 +3,14 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import { KEY_ARRAY as CITIES_KEY_QUERY } from "hooks/useCitiesInfinityQuery";
-import useCountriesQuery from "hooks/useCountriesQuery";
-import usePatchCityMutation from "hooks/usePatchCityMutation";
-import usePostCityMutation from "hooks/usePostCityMutation";
-import useSingleCitiesQuery from "hooks/useSingleCitiesQuery";
-import useStatesQuery from "hooks/useStatesQuery";
+import {
+	ALL_KEY_ARRAY as ALL_CITIES_KEY_ARRAY,
+	usePatchCityMutation,
+	usePostCityMutation,
+	useSingleCitiesQuery,
+} from "hooks/useTanstackQuery/useCities";
+import { useCountriesQuery } from "hooks/useTanstackQuery/useCountries";
+import { useStatesQuery } from "hooks/useTanstackQuery/useStates";
 import ICountry from "interfaces/Country.interface";
 import IState from "interfaces/State.interface";
 import { useTransitionRouter } from "next-view-transitions";
@@ -80,7 +82,9 @@ const Cities = () => {
 						// Resetting city store query mutation.
 						postCityMutation.reset();
 						// Invalidate the cities query from the cache.
-						await queryClient.invalidateQueries({ queryKey: CITIES_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_CITIES_KEY_ARRAY,
+						});
 						// Redirect to cities list
 						push("/dashboard/addresses/cities");
 					},
@@ -106,7 +110,9 @@ const Cities = () => {
 						// Resetting city edit query mutation.
 						patchCityMutation.reset();
 						// Invalidate the cities query from the cache.
-						await queryClient.invalidateQueries({ queryKey: CITIES_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_CITIES_KEY_ARRAY,
+						});
 						// Redirect to cities list
 						push("/dashboard/addresses/cities");
 					},

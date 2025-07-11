@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import useUsersInfinityQuery from "hooks/useUsersInfinityQuery";
+import { useUsersInfinityQuery } from "hooks/useTanstackQuery/useUsers";
 import IUser from "interfaces/User.interface";
 import moment from "moment";
 import { Fragment, useState } from "react";
@@ -217,7 +217,7 @@ const UsersList = () => {
 																</td>
 																<td>
 																	<NextLink
-																		href={`/dashboard/users/${singleUser?.slug || singleUser._id}/edit`}
+																		href={`/dashboard/users/${singleUser._id}/edit`}
 																		className="btn btn-sm btn-link link-primary">
 																		<svg
 																			className="bi w-20px h-20px"

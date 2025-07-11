@@ -1,6 +1,6 @@
 "use client";
 
-import useAddressesInfinityQuery from "hooks/useAddressesInfinityQuery";
+import { useAddressesInfinityQuery } from "hooks/useTanstackQuery/useAddresses";
 import IAddress from "interfaces/Address.interface";
 import { Fragment } from "react";
 import AddressCard from "views/components/AddressCard";

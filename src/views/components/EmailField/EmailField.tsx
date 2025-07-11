@@ -1,8 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import useMeQuery from "hooks/useMeQuery";
-import useUserEmailResendQuery from "hooks/useUserEmailResendQuery";
+import { useMeQuery, useUserEmailResendQuery } from "hooks/useTanstackQuery/useUsers";
 import { useTransitionRouter } from "next-view-transitions";
 import { ComponentPropsWithoutRef } from "react";
 import FieldRequiredLabel from "views/components/FieldRequiredLabel";

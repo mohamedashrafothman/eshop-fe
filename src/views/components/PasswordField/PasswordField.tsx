@@ -112,7 +112,7 @@ const PasswordField = ({
 				)}
 			</div>
 			<div
-				className={classNames("input-group", {
+				className={classNames("input-group flex-nowrap", {
 					"has-validation": isInvalid || isValid,
 				})}>
 				<input
@@ -137,9 +137,9 @@ const PasswordField = ({
 							className="btn btn-link link-dark bg-gray-500-hover bg-gray-500-focus-visible p-1 rounded-3 text-decoration-none lh-1"
 							onClick={onPasswordVisibilityTogglerButtonClickHandler}
 							title={isPasswordVisibleState ? "Hide Password" : "Show Password"}>
-							<svg className="bi w-22px h-22px" width="22" height="22">
+							<svg className="bi w-22px h-22px" width="40" height="40">
 								<use
-									href={isPasswordVisibleState ? "#icon-eye-slash" : "#icon-eye"}
+									href={isPasswordVisibleState ? "#icon-eye" : "#icon-eye-closed"}
 								/>
 							</svg>
 						</button>

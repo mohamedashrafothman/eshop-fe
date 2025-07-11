@@ -2,7 +2,7 @@
 
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import useRegisterMutation from "hooks/useRegisterMutation";
+import { useRegisterMutation } from "hooks/useTanstackQuery/useAuth";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";

@@ -3,10 +3,12 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import { KEY_ARRAY as COUNTRIES_KEY_QUERY } from "hooks/useCountriesInfinityQuery";
-import usePatchCountryMutation from "hooks/usePatchCountryMutation";
-import usePostCountryMutation from "hooks/usePostCountryMutation";
-import useSingleCountriesQuery from "hooks/useSingleCountriesQuery";
+import {
+	ALL_KEY_ARRAY as ALL_COUNTRIES_KEY_ARRAY,
+	usePatchCountryMutation,
+	usePostCountryMutation,
+	useSingleCountriesQuery,
+} from "hooks/useTanstackQuery/useCountries";
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -56,7 +58,9 @@ const Countries = () => {
 						// Resetting country store query mutation.
 						postCountryMutation.reset();
 						// Invalidate the countries query from the cache.
-						await queryClient.invalidateQueries({ queryKey: COUNTRIES_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_COUNTRIES_KEY_ARRAY,
+						});
 						// Redirect to countries list
 						push("/dashboard/addresses/countries");
 					},
@@ -82,7 +86,9 @@ const Countries = () => {
 						// Resetting country edit query mutation.
 						patchCountryMutation.reset();
 						// Invalidate the countries query from the cache.
-						await queryClient.invalidateQueries({ queryKey: COUNTRIES_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_COUNTRIES_KEY_ARRAY,
+						});
 						// Redirect to countries list
 						push("/dashboard/addresses/countries");
 					},

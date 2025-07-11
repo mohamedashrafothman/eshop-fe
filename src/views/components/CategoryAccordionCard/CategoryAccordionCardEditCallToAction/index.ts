@@ -1,0 +1,2 @@
+import CategoryAccordionCardEditCallToAction from "./CategoryAccordionCardEditCallToAction";
+export default CategoryAccordionCardEditCallToAction;

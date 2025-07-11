@@ -3,11 +3,13 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import { KEY_ARRAY as CATEGORIES_KEY_QUERY } from "hooks/useCategoriesInfinityQuery";
-import useCategoriesQuery from "hooks/useCategoriesQuery";
-import usePatchCategoryMutation from "hooks/usePatchCategoryMutation";
-import usePostCategoryMutation from "hooks/usePostCategoryMutation";
-import useSingleCategoriesQuery from "hooks/useSingleCategoriesQuery";
+import {
+	ALL_KEY_ARRAY as ALL_CATEGORIES_KEY_ARRAY,
+	useCategoriesQuery,
+	usePatchCategoryMutation,
+	usePostCategoryMutation,
+	useSingleCategoriesQuery,
+} from "hooks/useTanstackQuery/useCategories";
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -74,7 +76,7 @@ const Categories = () => {
 						// Resetting category store query mutation.
 						postCategoryMutation.reset();
 						// Invalidate the categories query from the cache.
-						await queryClient.invalidateQueries({ queryKey: CATEGORIES_KEY_QUERY });
+						await queryClient.invalidateQueries({ queryKey: ALL_CATEGORIES_KEY_ARRAY });
 						// Redirect to categories list
 						push("/dashboard/categories");
 					},
@@ -101,7 +103,7 @@ const Categories = () => {
 						// Resetting category edit query mutation.
 						patchCategoryMutation.reset();
 						// Invalidate the categories query from the cache.
-						await queryClient.invalidateQueries({ queryKey: CATEGORIES_KEY_QUERY });
+						await queryClient.invalidateQueries({ queryKey: ALL_CATEGORIES_KEY_ARRAY });
 						// Redirect to categories list
 						push("/dashboard/categories");
 					},

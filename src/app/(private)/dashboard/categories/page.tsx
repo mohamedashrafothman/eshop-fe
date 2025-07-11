@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import NextLink from "views/components/NextLink";
-// import { default as categoriesListSection } from "views/sections/categoriesList";
+import { default as CategoriesListSection } from "views/sections/CategoriesList";
 
 const PAGE_TITLE = "categories";
 export const metadata: Metadata = { title: PAGE_TITLE };
@@ -20,7 +20,7 @@ const categories = () => (
 				<strong>Add new Category</strong>
 			</NextLink>
 		</div>
-		{/* <categoriesListSection /> */}
+		<CategoriesListSection />
 	</>
 );
 

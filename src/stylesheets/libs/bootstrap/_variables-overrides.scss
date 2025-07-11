@@ -1060,9 +1060,9 @@ $form-select-disabled-color: null !default;
 $form-select-disabled-bg: $input-disabled-bg !default;
 $form-select-disabled-border-color: $input-disabled-border-color !default;
 $form-select-bg-position: right $form-select-padding-x center !default;
-$form-select-bg-size: 16px 12px !default; // In pixels because image dimensions
+$form-select-bg-size: 2rem 2rem !default; // In pixels because image dimensions
 $form-select-indicator-color: $gray-800 !default;
-$form-select-indicator: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='#{$form-select-indicator-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/></svg>") !default;
+$form-select-indicator: url("data:image/svg+xml,<svg width='40' height='40' viewBox='0 0 40 40' stroke='#{$form-select-indicator-color}' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12.0332 16.3335L18.8832 23.1835C19.1955 23.4939 19.6179 23.6681 20.0582 23.6681C20.4985 23.6681 20.9209 23.4939 21.2332 23.1835L27.8999 16.5168' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='bevel'/></svg>") !default;
 
 $form-select-feedback-icon-padding-end: $form-select-padding-x * 2.5 +
 	$form-select-indicator-padding !default;
@@ -1453,22 +1453,22 @@ $accordion-button-bg: var(--#{$prefix}accordion-bg) !default;
 $accordion-transition:
 	$btn-transition,
 	border-radius 0.15s ease !default;
-$accordion-button-active-bg: var(--#{$prefix}primary-bg-subtle) !default;
-$accordion-button-active-color: var(--#{$prefix}primary-text-emphasis) !default;
+$accordion-button-active-bg: var(--#{$prefix}transparent) !default;
+$accordion-button-active-color: var(--#{$prefix}primary-text) !default;
 
 // fusv-disable
 $accordion-button-focus-border-color: $input-focus-border-color !default; // Deprecated in v5.3.3
 // fusv-enable
 $accordion-button-focus-box-shadow: $btn-focus-box-shadow !default;
 
-$accordion-icon-width: 1.25rem !default;
+$accordion-icon-width: 2rem !default;
 $accordion-icon-color: $body-color !default;
 $accordion-icon-active-color: $primary-text-emphasis !default;
 $accordion-icon-transition: transform 0.2s ease-in-out !default;
-$accordion-icon-transform: rotate(-0deg) !default;
+$accordion-icon-transform: rotate(-180deg) !default;
 
-$accordion-button-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#{$accordion-icon-color}' viewBox='0 0 16 16'><path d='M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z'/><path d='M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4'/></svg>") !default;
-$accordion-button-active-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='#{$accordion-icon-active-color}' class='bi bi-dash-square' viewBox='0 0 16 16'><path d='M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z'/><path d='M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8'/></svg>") !default;
+$accordion-button-icon: url("data:image/svg+xml,<svg width='40' height='40' viewBox='0 0 40 40' stroke='#{$accordion-icon-color}' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12.0332 16.3335L18.8832 23.1835C19.1955 23.4939 19.6179 23.6681 20.0582 23.6681C20.4985 23.6681 20.9209 23.4939 21.2332 23.1835L27.8999 16.5168' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='bevel'/></svg>") !default;
+$accordion-button-active-icon: url("data:image/svg+xml,<svg width='40' height='40' viewBox='0 0 40 40' stroke='#{$accordion-icon-active-color}' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12.0332 16.3335L18.8832 23.1835C19.1955 23.4939 19.6179 23.6681 20.0582 23.6681C20.4985 23.6681 20.9209 23.4939 21.2332 23.1835L27.8999 16.5168' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='bevel'/></svg>") !default;
 // scss-docs-end accordion-variables
 
 // Tooltips

@@ -2,7 +2,7 @@
 
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import useResetPasswordMutation from "hooks/useResetPasswordMutation";
+import { useResetPasswordMutation } from "hooks/useTanstackQuery/useAuth";
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";

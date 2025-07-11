@@ -3,8 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import useMeQuery, { KEY_ARRAY as ME_KEY_QUERY } from "hooks/useMeQuery";
-import usePatchUserMutation from "hooks/usePatchUserMutation";
+import { ME_KEY_ARRAY, useMeQuery, usePatchUserMutation } from "hooks/useTanstackQuery/useUsers";
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
 import { apiFormErrorExtractor, pick } from "utils/helpers";
@@ -55,7 +54,7 @@ const AccountInformation = () => {
 					// Resetting patch user query mutation.
 					patchUserMutation.reset();
 					// Invalidate the me query from the cache.
-					queryClient.invalidateQueries({ queryKey: ME_KEY_QUERY, exact: true });
+					queryClient.invalidateQueries({ queryKey: ME_KEY_ARRAY, exact: true });
 					// Extract user, and tokens data from the response.
 					const user = response?.data?.entities?.data || {};
 					// Update next-auth session user data.

@@ -3,11 +3,13 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import useCountriesQuery from "hooks/useCountriesQuery";
-import usePatchStateMutation from "hooks/usePatchStateMutation";
-import usePostStateMutation from "hooks/usePostStateMutation";
-import useSingleStatesQuery from "hooks/useSingleStatesQuery";
-import { KEY_ARRAY as STATES_KEY_QUERY } from "hooks/useStatesInfinityQuery";
+import { useCountriesQuery } from "hooks/useTanstackQuery/useCountries";
+import {
+	ALL_KEY_ARRAY as ALL_STATES_KEY_ARRAY,
+	usePatchStateMutation,
+	usePostStateMutation,
+	useSingleStatesQuery,
+} from "hooks/useTanstackQuery/useStates";
 import ICountry from "interfaces/Country.interface";
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
@@ -64,7 +66,9 @@ const States = () => {
 						// Resetting state store query mutation.
 						postStateMutation.reset();
 						// Invalidate the states query from the cache.
-						await queryClient.invalidateQueries({ queryKey: STATES_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_STATES_KEY_ARRAY,
+						});
 						// Redirect to states list
 						push("/dashboard/addresses/states");
 					},
@@ -90,7 +94,9 @@ const States = () => {
 						// Resetting state edit query mutation.
 						patchStateMutation.reset();
 						// Invalidate the states query from the cache.
-						await queryClient.invalidateQueries({ queryKey: STATES_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_STATES_KEY_ARRAY,
+						});
 						// Redirect to states list
 						push("/dashboard/addresses/states");
 					},
