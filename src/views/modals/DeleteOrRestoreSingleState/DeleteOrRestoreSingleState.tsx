@@ -3,9 +3,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import Modal from "bootstrap/js/dist/modal";
 import classNames from "classnames";
-import useDeleteSingleStateMutation from "hooks/useDeleteSingleStateMutation";
-import useRestoreSingleStateMutation from "hooks/useRestoreSingleStateMutation";
-import { KEY_ARRAY as STATES_KEY_QUERY } from "hooks/useStatesInfinityQuery";
+import {
+	ALL_KEY_ARRAY as ALL_STATES_KEY_ARRAY,
+	useDeleteSingleStateMutation,
+	useRestoreSingleStateMutation,
+} from "hooks/useTanstackQuery/useStates";
 import IState from "interfaces/State.interface";
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
@@ -68,7 +70,7 @@ const DeleteOrRestoreSingleState = ({ state }: Props) => {
 							async () => {
 								// Invalidate the states query from the cache.
 								await queryClient.invalidateQueries({
-									queryKey: STATES_KEY_QUERY,
+									queryKey: ALL_STATES_KEY_ARRAY,
 								});
 								// Resetting mutation.
 								mutation.reset();

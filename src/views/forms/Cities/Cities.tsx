@@ -3,12 +3,14 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import { KEY_ARRAY as CITIES_KEY_QUERY } from "hooks/useCitiesInfinityQuery";
-import useCountriesQuery from "hooks/useCountriesQuery";
-import usePatchCityMutation from "hooks/usePatchCityMutation";
-import usePostCityMutation from "hooks/usePostCityMutation";
-import useSingleCitiesQuery from "hooks/useSingleCitiesQuery";
-import useStatesQuery from "hooks/useStatesQuery";
+import {
+	ALL_KEY_ARRAY as ALL_CITIES_KEY_ARRAY,
+	usePatchCityMutation,
+	usePostCityMutation,
+	useSingleCitiesQuery,
+} from "hooks/useTanstackQuery/useCities";
+import { useCountriesQuery } from "hooks/useTanstackQuery/useCountries";
+import { useStatesQuery } from "hooks/useTanstackQuery/useStates";
 import ICountry from "interfaces/Country.interface";
 import IState from "interfaces/State.interface";
 import { useTransitionRouter } from "next-view-transitions";
@@ -80,7 +82,9 @@ const Cities = () => {
 						// Resetting city store query mutation.
 						postCityMutation.reset();
 						// Invalidate the cities query from the cache.
-						await queryClient.invalidateQueries({ queryKey: CITIES_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_CITIES_KEY_ARRAY,
+						});
 						// Redirect to cities list
 						push("/dashboard/addresses/cities");
 					},
@@ -106,7 +110,9 @@ const Cities = () => {
 						// Resetting city edit query mutation.
 						patchCityMutation.reset();
 						// Invalidate the cities query from the cache.
-						await queryClient.invalidateQueries({ queryKey: CITIES_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_CITIES_KEY_ARRAY,
+						});
 						// Redirect to cities list
 						push("/dashboard/addresses/cities");
 					},
@@ -173,17 +179,19 @@ const Cities = () => {
 						<SelectField
 							name="country"
 							id="countryField"
-							value={formState.values?.country || ""}
-							onChange={(e) => {
-								formState.handleChange(e);
-								setSelectedCountryIdState(e.target.value);
+							value={countries
+								?.filter((country) => formState.values?.country === country._id)
+								?.map(({ _id: value, name: label }) => ({ value, label }))}
+							onChange={(option: any) => {
+								formState?.setFieldValue("country", option?.value || "");
+								setSelectedCountryIdState(option?.value || "");
 								formState.setFieldTouched("state", false);
 								formState.setFieldValue("state", "");
 							}}
-							onBlur={formState.handleBlur}
-							options={countries.map(({ name, _id }) => ({
-								value: _id,
-								text: name,
+							onBlur={() => formState.setFieldTouched("country", true)}
+							options={countries.map(({ _id: value, name: label }) => ({
+								value,
+								label,
 							}))}
 							isValid={Boolean(
 								formState.values?.country &&
@@ -194,7 +202,7 @@ const Cities = () => {
 								!!formState.touched?.country && !!formState.errors?.country
 							)}
 							error={formState.errors?.country}
-							disabled={
+							isDisabled={
 								isCountriesLoading || isCountriesHasOneItem || isCountriesHasNoItems
 							}
 							label="Country"
@@ -206,12 +214,16 @@ const Cities = () => {
 						<SelectField
 							name="state"
 							id="stateField"
-							value={formState.values?.state || ""}
-							onChange={formState.handleChange}
-							onBlur={formState.handleBlur}
-							options={states.map(({ name, _id }) => ({
-								value: _id,
-								text: name,
+							value={states
+								?.filter((state) => formState.values?.state === state._id)
+								?.map(({ _id: value, name: label }) => ({ value, label }))}
+							onChange={(option: any) =>
+								formState?.setFieldValue("state", option?.value || "")
+							}
+							onBlur={() => formState.setFieldTouched("state", true)}
+							options={states.map(({ _id: value, name: label }) => ({
+								value,
+								label,
 							}))}
 							isValid={Boolean(
 								formState.values?.state &&
@@ -222,7 +234,7 @@ const Cities = () => {
 								!!formState.touched?.state && !!formState.errors?.state
 							)}
 							error={formState.errors?.state}
-							disabled={isStatesLoading || isStatesHasOneItem || isStatesHasNoItems}
+							isDisabled={isStatesLoading || isStatesHasOneItem || isStatesHasNoItems}
 							label="State"
 							placeholder="Select State"
 							required

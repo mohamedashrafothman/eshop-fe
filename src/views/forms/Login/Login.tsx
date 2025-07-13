@@ -2,7 +2,7 @@
 
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import useLoginMutation from "hooks/useLoginMutation";
+import { useLoginMutation } from "hooks/useTanstackQuery/useAuth";
 import { useEffect, useRef, useState } from "react";
 import { apiFormErrorExtractor } from "utils/helpers";
 import CheckboxField from "views/components/CheckboxField";

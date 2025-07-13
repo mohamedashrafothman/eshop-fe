@@ -3,9 +3,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import Modal from "bootstrap/js/dist/modal";
 import classNames from "classnames";
-import { KEY_ARRAY as BRANDS_KEY_QUERY } from "hooks/useBrandsInfinityQuery";
-import useDeleteSingleBrandMutation from "hooks/useDeleteSingleBrandMutation";
-import useRestoreSingleBrandMutation from "hooks/useRestoreSingleBrandMutation";
+import {
+	ALL_KEY_ARRAY as ALL_BRANDS_KEY_ARRAY,
+	useDeleteSingleBrandMutation,
+	useRestoreSingleBrandMutation,
+} from "hooks/useTanstackQuery/useBrands";
 import IBrand from "interfaces/Brand.interface";
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
@@ -67,7 +69,9 @@ const DeleteOrRestoreSingleBrand = ({ brand }: Props) => {
 							"hidden.bs.modal",
 							async () => {
 								// Invalidate the brands query from the cache.
-								await queryClient.invalidateQueries({ queryKey: BRANDS_KEY_QUERY });
+								await queryClient.invalidateQueries({
+									queryKey: ALL_BRANDS_KEY_ARRAY,
+								});
 								// Resetting mutation.
 								mutation.reset();
 							},

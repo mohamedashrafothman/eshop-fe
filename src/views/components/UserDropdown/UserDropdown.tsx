@@ -1,8 +1,7 @@
 "use client";
 
 import Dropdown from "bootstrap/js/dist/dropdown";
-import useLogoutMutation from "hooks/useLogoutMutation";
-import useMeQuery from "hooks/useMeQuery";
+import { useLogoutMutation, useMeQuery } from "hooks/useTanstackQuery/useAuth";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";

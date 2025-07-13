@@ -3,7 +3,7 @@ import { isServer, QueryClient } from "@tanstack/react-query";
 // The QueryClient should only be created once
 let browserQueryClient: QueryClient | undefined = undefined;
 
-// With SSR, we usually want to set some default staleTime
+// Note: With SSR, we usually want to set some default staleTime
 // above 0 to avoid refetching immediately on the client
 const queryClientOptions = {
 	defaultOptions: {

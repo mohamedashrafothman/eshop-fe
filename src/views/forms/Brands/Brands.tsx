@@ -3,10 +3,12 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import { KEY_ARRAY as BRANDS_KEY_QUERY } from "hooks/useBrandsInfinityQuery";
-import usePatchBrandMutation from "hooks/usePatchBrandMutation";
-import usePostBrandMutation from "hooks/usePostBrandMutation";
-import useSingleBrandsQuery from "hooks/useSingleBrandsQuery";
+import {
+	ALL_KEY_ARRAY as ALL_BRANDS_KEY_ARRAY,
+	usePatchBrandMutation,
+	usePostBrandMutation,
+	useSingleBrandsQuery,
+} from "hooks/useTanstackQuery/useBrands";
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -63,7 +65,9 @@ const Brands = () => {
 						// Resetting brand store query mutation.
 						postBrandMutation.reset();
 						// Invalidate the brands query from the cache.
-						await queryClient.invalidateQueries({ queryKey: BRANDS_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_BRANDS_KEY_ARRAY,
+						});
 						// Redirect to brands list
 						push("/dashboard/brands");
 					},
@@ -90,7 +94,9 @@ const Brands = () => {
 						// Resetting brand edit query mutation.
 						patchBrandMutation.reset();
 						// Invalidate the brands query from the cache.
-						await queryClient.invalidateQueries({ queryKey: BRANDS_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_BRANDS_KEY_ARRAY,
+						});
 						// Redirect to brands list
 						push("/dashboard/brands");
 					},
@@ -105,10 +111,11 @@ const Brands = () => {
 		initialValues: {
 			name: "",
 			description: "",
-			logo: "",
-			...((isEditForm && brand && pick(brand, ["name", "description"])) || {}),
+			...(isEditForm
+				? { ...((brand && pick(brand, ["name", "description"])) || {}) }
+				: { logo: "" }),
 		},
-		validationSchema: formValidationSchema,
+		validationSchema: formValidationSchema({ isEdit: isEditForm }),
 		onSubmit: onFormSubmitHandler,
 	});
 

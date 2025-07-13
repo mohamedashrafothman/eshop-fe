@@ -1,9 +1,9 @@
 "use client";
 
-import Collapse from "bootstrap/js/dist/collapse";
 import { FocusError } from "focus-formik-error";
 import { FormikConfig, useFormik } from "formik";
 import AutoSave from "hooks/AutoSave";
+import useBootstrapCollapse from "hooks/useBootstrapCollapse";
 import { useEffect, useRef } from "react";
 import { type SortItemType } from "utils/helpers";
 import CheckboxField from "views/components/CheckboxField";
@@ -21,16 +21,8 @@ const UsersFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 	// ref hook
 	const collapseRef = useRef<HTMLButtonElement | null>(null);
 
-	// effect hooks
-	useEffect(() => {
-		const collapseRefCurrent = collapseRef?.current;
-		if (collapseRefCurrent)
-			Collapse.getOrCreateInstance(collapseRefCurrent, { toggle: false }).hide();
-
-		return () => {
-			if (collapseRefCurrent) Collapse.getInstance(collapseRefCurrent)?.dispose();
-		};
-	}, []);
+	// custom hooks
+	useBootstrapCollapse(collapseRef);
 
 	// form state
 	const { submitForm, ...formState } = useFormik<schemaType>({
@@ -69,16 +61,28 @@ const UsersFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 							</div>
 							<div className="col-auto">
 								<SelectField
-									className="mw-200px"
+									className="w-200px"
 									name="sort"
 									id="sortField"
-									value={JSON.stringify(formState.values?.sort || {})}
-									onChange={({ target: { name = "", value } }) =>
-										formState.setFieldValue(name, JSON.parse(value || "{}"))
+									value={sort
+										?.filter(
+											(sortOption) =>
+												JSON.stringify(formState.values?.sort || {}) ===
+												JSON.stringify(sortOption?.value || {})
+										)
+										?.map(({ name: label, value }) => ({
+											value: JSON.stringify(value),
+											label,
+										}))}
+									onChange={(option: any) =>
+										formState.setFieldValue(
+											"sort",
+											JSON.parse(option?.value || "{}")
+										)
 									}
-									options={sort.map(({ name, value }) => ({
+									options={sort.map(({ name: label, value }) => ({
 										value: JSON.stringify(value),
-										text: name,
+										label,
 									}))}
 									placeholder="- Sort By -"
 								/>

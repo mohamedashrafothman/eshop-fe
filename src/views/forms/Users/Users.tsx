@@ -3,10 +3,12 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import usePatchUserMutation from "hooks/usePatchUserMutation";
-import usePostUserMutation from "hooks/usePostUserMutation";
-import useSingleUsersQuery from "hooks/useSingleUsersQuery";
-import { KEY_ARRAY as USERS_KEY_QUERY } from "hooks/useUsersInfinityQuery";
+import {
+	ALL_KEY_ARRAY as ALL_USERS_KEY_ARRAY,
+	usePatchUserMutation,
+	usePostUserMutation,
+	useSingleUsersQuery,
+} from "hooks/useTanstackQuery/useUsers";
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -60,7 +62,9 @@ const Users = () => {
 						// Resetting user store query mutation.
 						postUserMutation.reset();
 						// Invalidate the users query from the cache.
-						await queryClient.invalidateQueries({ queryKey: USERS_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_USERS_KEY_ARRAY,
+						});
 						// Redirect to users list
 						push("/dashboard/users");
 					},
@@ -86,7 +90,9 @@ const Users = () => {
 						// Resetting user edit query mutation.
 						patchUserMutation.reset();
 						// Invalidate the users query from the cache.
-						await queryClient.invalidateQueries({ queryKey: USERS_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_USERS_KEY_ARRAY,
+						});
 						// Redirect to users list
 						push("/dashboard/users");
 					},
@@ -166,14 +172,22 @@ const Users = () => {
 						<SelectField
 							name="role"
 							id="roleField"
-							value={formState.values?.role}
+							value={[
+								...Object.values(vars.roles).filter(
+									(item) => item !== vars.roles.superAdmin
+								),
+							]
+								?.filter((role) => formState.values?.role === role)
+								?.map((role) => ({ value: role, label: role }))}
+							onChange={(option: any) =>
+								formState.setFieldValue("role", option?.value || "")
+							}
+							onBlur={() => formState.setFieldTouched("role", true)}
 							options={[
 								...Object.values(vars.roles).filter(
 									(item) => item !== vars.roles.superAdmin
 								),
-							].map((item) => ({ value: item, text: item }))}
-							onChange={formState.handleChange}
-							onBlur={formState.handleBlur}
+							].map((item) => ({ value: item, label: item }))}
 							isValid={Boolean(
 								formState.values?.role &&
 									!!formState.touched?.role &&
@@ -184,7 +198,7 @@ const Users = () => {
 							)}
 							error={formState.errors?.role}
 							label="Role"
-							placeholder="- Select Role -"
+							placeholder="Select Role"
 							required
 						/>
 					</div>

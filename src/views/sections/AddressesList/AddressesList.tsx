@@ -1,6 +1,6 @@
 "use client";
 
-import useAddressesInfinityQuery from "hooks/useAddressesInfinityQuery";
+import { useAddressesInfinityQuery } from "hooks/useTanstackQuery/useAddresses";
 import IAddress from "interfaces/Address.interface";
 import { Fragment } from "react";
 import AddressCard from "views/components/AddressCard";
@@ -49,7 +49,7 @@ const AddressesList = () => {
 													[]),
 											]),
 								]?.length ? (
-									<div className="row g-3 row-cols-1 row-cols-xl-2 row-cols-3xl-3">
+									<div className="row g-3 row-cols-1 row-cols-xl-2 row-cols-3xl-3 row-cols-ultra-hd-4 row-cols-ultra-wide-5">
 										{[
 											...(isAddressesLoading
 												? Array(9).map(

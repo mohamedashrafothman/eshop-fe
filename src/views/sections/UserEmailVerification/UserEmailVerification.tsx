@@ -1,9 +1,12 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import useMeQuery, { KEY_ARRAY as ME_KEY_QUERY } from "hooks/useMeQuery";
-import useUserEmailResendQuery from "hooks/useUserEmailResendQuery";
-import useUserEmailVerifyQuery from "hooks/useUserEmailVerifyQuery";
+import {
+	ME_KEY_ARRAY,
+	useMeQuery,
+	useUserEmailResendQuery,
+	useUserEmailVerifyQuery,
+} from "hooks/useTanstackQuery/useUsers";
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
@@ -34,7 +37,7 @@ const UserEmailVerification = ({ title }: Props) => {
 	useEffect(() => {
 		if (token && user?._id && isVerifyEmailConfirmationSuccess) {
 			// Invalidate the me query from the cache.
-			queryClient.invalidateQueries({ queryKey: ME_KEY_QUERY, exact: true });
+			queryClient.invalidateQueries({ queryKey: ME_KEY_ARRAY, exact: true });
 			// Redirect to dashboard
 			push("/dashboard");
 		}

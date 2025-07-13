@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import useCountriesInfinityQuery from "hooks/useCountriesInfinityQuery";
+import { useCountriesInfinityQuery } from "hooks/useTanstackQuery/useCountries";
 import ICountry from "interfaces/Country.interface";
 import { Fragment, useState } from "react";
 import { type GetCountriesDataType } from "services/api/e-shop/countries";
@@ -176,7 +176,7 @@ const CountriesList = () => {
 																<td>
 																	<div className="btn-group">
 																		<NextLink
-																			href={`/dashboard/addresses/countries/${singleCountry.slug || singleCountry._id}/edit`}
+																			href={`/dashboard/addresses/countries/${singleCountry._id}/edit`}
 																			className="btn btn-sm btn-link link-primary">
 																			<svg
 																				className="bi w-20px h-20px"

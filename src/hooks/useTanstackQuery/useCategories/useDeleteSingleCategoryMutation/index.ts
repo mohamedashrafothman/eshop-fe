@@ -1,0 +1,2 @@
+import useDeleteSingleCategoryMutation from "./useDeleteSingleCategoryMutation";
+export default useDeleteSingleCategoryMutation;

@@ -1,0 +1,2 @@
+import CategoryAccordionCardCallToActionsGroup from "./CategoryAccordionCardCallToActionsGroup";
+export default CategoryAccordionCardCallToActionsGroup;

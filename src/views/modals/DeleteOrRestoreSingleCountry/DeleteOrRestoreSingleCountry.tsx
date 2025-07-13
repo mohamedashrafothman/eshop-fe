@@ -3,9 +3,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import Modal from "bootstrap/js/dist/modal";
 import classNames from "classnames";
-import { KEY_ARRAY as COUNTRIES_KEY_QUERY } from "hooks/useCountriesInfinityQuery";
-import useDeleteSingleCountryMutation from "hooks/useDeleteSingleCountryMutation";
-import useRestoreSingleCountryMutation from "hooks/useRestoreSingleCountryMutation";
+import {
+	ALL_KEY_ARRAY as ALL_COUNTRIES_KEY_ARRAY,
+	useDeleteSingleCountryMutation,
+	useRestoreSingleCountryMutation,
+} from "hooks/useTanstackQuery/useCountries";
 import ICountry from "interfaces/Country.interface";
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
@@ -70,7 +72,7 @@ const DeleteOrRestoreSingleCountry = ({ country }: Props) => {
 							async () => {
 								// Invalidate the countries query from the cache.
 								await queryClient.invalidateQueries({
-									queryKey: COUNTRIES_KEY_QUERY,
+									queryKey: ALL_COUNTRIES_KEY_ARRAY,
 								});
 								// Resetting mutation.
 								mutation.reset();

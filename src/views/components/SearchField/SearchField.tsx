@@ -10,7 +10,7 @@ const SearchField = ({
 	...restOfParams
 }) => (
 	<div
-		className={classNames("input-group", {
+		className={classNames("input-group flex-nowrap", {
 			"has-validation": isInvalid || isValid,
 		})}>
 		<TextField

@@ -150,3 +150,7 @@
 .badge {
 	--#{$prefix}bg-opacity: 0.15;
 }
+
+.accordion-button:not(.collapsed) {
+	box-shadow: none;
+}

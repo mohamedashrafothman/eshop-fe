@@ -3,11 +3,13 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import useCountriesQuery from "hooks/useCountriesQuery";
-import usePatchStateMutation from "hooks/usePatchStateMutation";
-import usePostStateMutation from "hooks/usePostStateMutation";
-import useSingleStatesQuery from "hooks/useSingleStatesQuery";
-import { KEY_ARRAY as STATES_KEY_QUERY } from "hooks/useStatesInfinityQuery";
+import { useCountriesQuery } from "hooks/useTanstackQuery/useCountries";
+import {
+	ALL_KEY_ARRAY as ALL_STATES_KEY_ARRAY,
+	usePatchStateMutation,
+	usePostStateMutation,
+	useSingleStatesQuery,
+} from "hooks/useTanstackQuery/useStates";
 import ICountry from "interfaces/Country.interface";
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
@@ -64,7 +66,9 @@ const States = () => {
 						// Resetting state store query mutation.
 						postStateMutation.reset();
 						// Invalidate the states query from the cache.
-						await queryClient.invalidateQueries({ queryKey: STATES_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_STATES_KEY_ARRAY,
+						});
 						// Redirect to states list
 						push("/dashboard/addresses/states");
 					},
@@ -90,7 +94,9 @@ const States = () => {
 						// Resetting state edit query mutation.
 						patchStateMutation.reset();
 						// Invalidate the states query from the cache.
-						await queryClient.invalidateQueries({ queryKey: STATES_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_STATES_KEY_ARRAY,
+						});
 						// Redirect to states list
 						push("/dashboard/addresses/states");
 					},
@@ -177,12 +183,16 @@ const States = () => {
 						<SelectField
 							name="country"
 							id="countryField"
-							value={formState.values?.country || ""}
-							onChange={formState.handleChange}
-							onBlur={formState.handleBlur}
-							options={countries.map(({ name, _id }) => ({
-								value: _id,
-								text: name,
+							value={countries
+								?.filter((country) => formState.values?.country === country._id)
+								?.map(({ _id: value, name: label }) => ({ value, label }))}
+							onChange={(option: any) =>
+								formState?.setFieldValue("country", option?.value || "")
+							}
+							onBlur={() => formState.setFieldTouched("country", true)}
+							options={countries.map(({ _id: value, name: label }) => ({
+								value,
+								label,
 							}))}
 							isValid={Boolean(
 								formState.values?.country &&
@@ -193,7 +203,7 @@ const States = () => {
 								!!formState.touched?.country && !!formState.errors?.country
 							)}
 							error={formState.errors?.country}
-							disabled={isCountriesLoading || isCountriesHasOneItem}
+							isDisabled={isCountriesLoading || isCountriesHasOneItem}
 							label="Country"
 							placeholder="Select Country"
 							required

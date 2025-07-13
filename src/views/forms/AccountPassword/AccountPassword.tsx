@@ -2,8 +2,7 @@
 
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import useMeQuery from "hooks/useMeQuery";
-import usePatchUserMutation from "hooks/usePatchUserMutation";
+import { useMeQuery, usePatchUserMutation } from "hooks/useTanstackQuery/useUsers";
 import { useRef } from "react";
 import { apiFormErrorExtractor } from "utils/helpers";
 import PasswordField from "views/components/PasswordField";

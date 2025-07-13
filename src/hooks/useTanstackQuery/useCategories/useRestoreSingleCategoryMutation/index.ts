@@ -1,0 +1,2 @@
+import useRestoreSingleCategoryMutation from "./useRestoreSingleCategoryMutation";
+export default useRestoreSingleCategoryMutation;

@@ -1,6 +1,6 @@
 "use client";
 
-import useMeQuery from "hooks/useMeQuery";
+import { useMeQuery } from "hooks/useTanstackQuery/useUsers";
 
 const DashboardSection = () => {
 	const { data: user, isLoading, isError, error } = useMeQuery();

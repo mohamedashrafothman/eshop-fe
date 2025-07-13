@@ -1,10 +1,10 @@
 "use client";
 
-import Collapse from "bootstrap/js/dist/collapse";
 import classNames from "classnames";
+import useBootstrapCollapse from "hooks/useBootstrapCollapse";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { isUserRoleSuperAdmin, isUserRoleUser } from "utils/helpers";
 import NextLink from "views/components/NextLink";
 
@@ -49,6 +49,11 @@ const DashboardSideNav = () => {
 				? [
 						{ title: "Users", href: "/dashboard/users", icon: "icon-people" },
 						{ title: "Brands", href: "/dashboard/brands", icon: "icon-tags" },
+						{
+							title: "Categories",
+							href: "/dashboard/categories",
+							icon: "icon-collection",
+						},
 					]
 				: []),
 			{
@@ -79,17 +84,8 @@ const DashboardSideNav = () => {
 		Array.from({ length: NAVIGATION_LINKS_WITH_CHILDREN_LENGTH }, () => null)
 	);
 
-	// effect hooks
-	useEffect(() => {
-		const collapseRefsCurrent = collapseRefs.current;
-		collapseRefsCurrent?.forEach(
-			(item) => item && new Collapse(item, { toggle: false }).hide()
-		);
-
-		return () => {
-			collapseRefsCurrent?.forEach((item) => item && Collapse.getInstance(item)?.dispose());
-		};
-	}, []);
+	// custom hooks
+	useBootstrapCollapse(collapseRefs);
 
 	return (
 		<nav className="dashboard-side-nav" aria-label="Dashboard side nav">
@@ -142,9 +138,9 @@ const DashboardSideNav = () => {
 										{icon && (
 											<span className="flex-shrink-0">
 												<svg
-													className="bi w-20px h-20px"
-													width="20"
-													height="20">
+													className="bi w-22px h-22px"
+													width="22"
+													height="22">
 													<use href={`#${icon}`}></use>
 												</svg>
 											</span>

@@ -2,7 +2,7 @@
 
 import classNames from "classnames";
 import { isObject } from "formik";
-import useStatesInfinityQuery from "hooks/useStatesInfinityQuery";
+import { useStatesInfinityQuery } from "hooks/useTanstackQuery/useStates";
 import ICountry from "interfaces/Country.interface";
 import IState from "interfaces/State.interface";
 import { Fragment, useState } from "react";
@@ -193,7 +193,7 @@ const StatesList = () => {
 																<td>
 																	<div className="btn-group">
 																		<NextLink
-																			href={`/dashboard/addresses/states/${singleState.slug || singleState._id}/edit`}
+																			href={`/dashboard/addresses/states/${singleState._id}/edit`}
 																			className="btn btn-sm btn-link link-primary">
 																			<svg
 																				className="bi w-20px h-20px"

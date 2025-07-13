@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import useBrandsInfinityQuery from "hooks/useBrandsInfinityQuery";
+import { useBrandsInfinityQuery } from "hooks/useTanstackQuery/useBrands";
 import IBrand from "interfaces/Brand.interface";
 import Image from "next/image";
 import { Fragment, useState } from "react";
@@ -208,7 +208,7 @@ const BrandsList = () => {
 																<td>
 																	<div className="btn-group">
 																		<NextLink
-																			href={`/dashboard/brands/${singleBrand.slug || singleBrand._id}/edit`}
+																			href={`/dashboard/brands/${singleBrand._id}/edit`}
 																			className="btn btn-sm btn-link link-primary">
 																			<svg
 																				className="bi w-20px h-20px"

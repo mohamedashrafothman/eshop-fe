@@ -3,9 +3,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import Modal from "bootstrap/js/dist/modal";
 import classNames from "classnames";
-import { KEY_ARRAY as CITIES_KEY_QUERY } from "hooks/useCitiesInfinityQuery";
-import useDeleteSingleCityMutation from "hooks/useDeleteSingleCityMutation";
-import useRestoreSingleCityMutation from "hooks/useRestoreSingleCityMutation";
+import {
+	ALL_KEY_ARRAY as ALL_CITIES_KEY_ARRAY,
+	useDeleteSingleCityMutation,
+	useRestoreSingleCityMutation,
+} from "hooks/useTanstackQuery/useCities";
 import ICity from "interfaces/City.interface";
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
@@ -68,7 +70,7 @@ const DeleteOrRestoreSingleCity = ({ city }: Props) => {
 							async () => {
 								// Invalidate the cities query from the cache.
 								await queryClient.invalidateQueries({
-									queryKey: CITIES_KEY_QUERY,
+									queryKey: ALL_CITIES_KEY_ARRAY,
 								});
 								// Resetting mutation.
 								mutation.reset();

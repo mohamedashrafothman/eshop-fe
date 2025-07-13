@@ -2,8 +2,10 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import Modal from "bootstrap/js/dist/modal";
-import { KEY_ARRAY as ADDRESSES_KEY_QUERY } from "hooks/useAddressesInfinityQuery";
-import useDeleteSingleAddressMutation from "hooks/useDeleteSingleAddressMutation";
+import {
+	DELETE_SINGLE_KEY_ARRAY,
+	useDeleteSingleAddressMutation,
+} from "hooks/useTanstackQuery/useAddresses";
 import IAddress from "interfaces/Address.interface";
 import { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
@@ -59,7 +61,7 @@ const DeleteSingleAddress = ({ address }: Props) => {
 						async () => {
 							// Invalidate the addresses query from the cache.
 							await queryClient.invalidateQueries({
-								queryKey: ADDRESSES_KEY_QUERY,
+								queryKey: DELETE_SINGLE_KEY_ARRAY,
 							});
 							// Resetting mutation.
 							deleteSingleAddressMutation.reset();

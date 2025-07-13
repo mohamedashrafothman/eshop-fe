@@ -3,14 +3,16 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
-import { KEY_ARRAY as ADDRESS_KEY_QUERY } from "hooks/useAddressesInfinityQuery";
-import useCitiesQuery from "hooks/useCitiesQuery";
-import useCountriesQuery from "hooks/useCountriesQuery";
-import useMeQuery from "hooks/useMeQuery";
-import usePatchAddressMutation from "hooks/usePatchAddressMutation";
-import usePostAddressMutation from "hooks/usePostAddressMutation";
-import useSingleAddressesQuery from "hooks/useSingleAddressesQuery";
-import useStatesQuery from "hooks/useStatesQuery";
+import {
+	ALL_KEY_ARRAY as ALL_ADDRESSES_KEY_ARRAY,
+	usePatchAddressMutation,
+	usePostAddressMutation,
+	useSingleAddressesQuery,
+} from "hooks/useTanstackQuery/useAddresses";
+import { useCitiesQuery } from "hooks/useTanstackQuery/useCities";
+import { useCountriesQuery } from "hooks/useTanstackQuery/useCountries";
+import { useStatesQuery } from "hooks/useTanstackQuery/useStates";
+import { useMeQuery } from "hooks/useTanstackQuery/useUsers";
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -111,7 +113,9 @@ const Addresses = () => {
 						// Resetting address store query mutation.
 						postAddressMutation.reset();
 						// Invalidate the address query from the cache.
-						await queryClient.invalidateQueries({ queryKey: ADDRESS_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_ADDRESSES_KEY_ARRAY,
+						});
 						// Redirect to address list
 						push("/dashboard/addresses");
 					},
@@ -137,7 +141,9 @@ const Addresses = () => {
 						// Resetting address edit query mutation.
 						patchAddressMutation.reset();
 						// Invalidate the address query from the cache.
-						await queryClient.invalidateQueries({ queryKey: ADDRESS_KEY_QUERY });
+						await queryClient.invalidateQueries({
+							queryKey: ALL_ADDRESSES_KEY_ARRAY,
+						});
 						// Redirect to address list
 						push("/dashboard/addresses");
 					},
@@ -317,19 +323,21 @@ const Addresses = () => {
 						<SelectField
 							name="country"
 							id="countryField"
-							value={formState.values?.country || ""}
-							onChange={(e) => {
-								formState.handleChange(e);
-								setSelectedCountryIdState(e.target.value);
+							value={countries
+								?.filter((country) => formState.values?.country === country._id)
+								?.map(({ _id: value, name: label }) => ({ value, label }))}
+							onChange={(option: any) => {
+								formState?.setFieldValue("country", option?.value || "");
+								setSelectedCountryIdState(option?.value || "");
 								formState.setFieldTouched("state", false);
 								formState.setFieldTouched("city", false);
 								formState.setFieldValue("state", "");
 								formState.setFieldValue("city", "");
 							}}
-							onBlur={formState.handleBlur}
-							options={countries.map(({ name, _id }) => ({
-								value: _id,
-								text: name,
+							onBlur={() => formState.setFieldTouched("country", true)}
+							options={countries.map(({ _id: value, name: label }) => ({
+								value,
+								label,
 							}))}
 							isValid={Boolean(
 								formState.values?.country &&
@@ -340,9 +348,9 @@ const Addresses = () => {
 								!!formState.touched?.country && !!formState.errors?.country
 							)}
 							error={formState.errors?.country}
-							placeholder="- Select Country -"
+							placeholder="Select Country"
 							label="Country"
-							disabled={isCountriesLoading}
+							isDisabled={isCountriesLoading}
 							required
 						/>
 					</div>
@@ -350,17 +358,19 @@ const Addresses = () => {
 						<SelectField
 							name="state"
 							id="stateField"
-							value={formState.values?.state || ""}
-							onChange={(e) => {
-								formState.handleChange(e);
-								setSelectedStateIdState(e.target.value);
+							value={states
+								?.filter((state) => formState.values?.state === state._id)
+								?.map(({ _id: value, name: label }) => ({ value, label }))}
+							onChange={(option: any) => {
+								formState?.setFieldValue("state", option?.value || "");
+								setSelectedStateIdState(option?.values || "");
 								formState.setFieldTouched("city", false);
 								formState.setFieldValue("city", "");
 							}}
-							onBlur={formState.handleBlur}
-							options={states.map(({ name, _id }) => ({
-								value: _id,
-								text: name,
+							onBlur={() => formState.setFieldTouched("state", true)}
+							options={states.map(({ _id: value, name: label }) => ({
+								value,
+								label,
 							}))}
 							isValid={Boolean(
 								formState.values?.state &&
@@ -371,9 +381,9 @@ const Addresses = () => {
 								!!formState.touched?.state && !!formState.errors?.state
 							)}
 							error={formState.errors?.state}
-							placeholder="- Select State -"
+							placeholder="Select State"
 							label="State"
-							disabled={isStatesLoading || isStatesHasNoItems}
+							isDisabled={isStatesLoading || isStatesHasNoItems}
 							required
 						/>
 					</div>
@@ -381,12 +391,16 @@ const Addresses = () => {
 						<SelectField
 							name="city"
 							id="cityField"
-							value={formState.values?.city || ""}
-							onChange={formState.handleChange}
-							onBlur={formState.handleBlur}
-							options={cities.map(({ name, _id }) => ({
-								value: _id,
-								text: name,
+							value={cities
+								?.filter((city) => formState.values?.city === city._id)
+								?.map(({ _id: value, name: label }) => ({ value, label }))}
+							onChange={(option: any) =>
+								formState?.setFieldValue("city", option?.value || "")
+							}
+							onBlur={() => formState.setFieldTouched("state", true)}
+							options={cities.map(({ _id: value, name: label }) => ({
+								value,
+								label,
 							}))}
 							isValid={Boolean(
 								formState.values?.city &&
@@ -397,9 +411,9 @@ const Addresses = () => {
 								!!formState.touched?.city && !!formState.errors?.city
 							)}
 							error={formState.errors?.city}
-							placeholder="- Select City -"
+							placeholder="Select City"
 							label="City"
-							disabled={isCitiesLoading || isCitiesHasNoItems}
+							isDisabled={isCitiesLoading || isCitiesHasNoItems}
 							required
 						/>
 					</div>

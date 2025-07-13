@@ -97,3 +97,11 @@ export const countDownTimer = (
 		days: Math.floor(distance / _day),
 	};
 };
+
+type DeepArray<T> = T | DeepArray<T>[];
+
+export function flattenDeep<T>(arr: DeepArray<T>): T[] {
+	return Array.isArray(arr)
+		? arr.reduce<T[]>((acc, val) => acc.concat(flattenDeep(val)), [])
+		: [arr];
+}

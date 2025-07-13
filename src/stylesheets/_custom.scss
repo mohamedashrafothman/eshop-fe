@@ -91,3 +91,209 @@ strong {
 .vr {
 	background-color: $hr-color;
 }
+
+.react-select {
+	&__placeholder,
+	&__label__placeholder {
+		@extend .mx-0 !optional;
+		color: $input-placeholder-color !important;
+		// Override Firefox's unusual default opacity; see https://github.com/twbs/bootstrap/pull/11526.
+		opacity: 1 !important;
+	}
+
+	&__value-container {
+		@extend .pe-5;
+	}
+
+	&__control {
+		@extend .form-select !optional;
+		@extend .text-truncate !optional;
+		@include border-radius($input-border-radius !important, 0);
+		padding-right: calc(#{$input-padding-x} - #{map-get($spacers, 1)}) !important;
+		padding-left: calc(#{$input-padding-x} - #{map-get($spacers, 1)}) !important;
+		background-color: $input-bg !important;
+		border-width: $input-border-width !important;
+
+		&:not(.react-select__control--is-focused):not(.react-select__control--is-disabled) {
+			&,
+			&:hover {
+				border-color: $input-border-color;
+			}
+		}
+
+		&--is-disabled {
+			background-color: $form-select-disabled-bg !important;
+		}
+
+		&--is-focused {
+			color: $input-focus-color !important;
+			background-color: $input-focus-bg !important;
+			border-color: $input-focus-border-color !important;
+			outline: 0;
+
+			@if $enable-shadows {
+				@include box-shadow($input-box-shadow !important, $input-focus-box-shadow);
+			} @else {
+				// Avoid using mixin so we can pass custom focus shadow properly
+				box-shadow: $input-focus-box-shadow !important;
+			}
+		}
+	}
+
+	&__indicators,
+	&__clear-indicator {
+		@extend .d-none !optional;
+	}
+
+	&__value-container {
+		@extend .p-0 !optional;
+	}
+
+	&__input {
+		&-container {
+			@extend .p-0 !optional;
+			@extend .m-0 !optional;
+		}
+	}
+
+	&__multi-value {
+		@extend .ms-0 !optional;
+		@extend .border !optional;
+		background-color: $dropdown-link-active-bg !important;
+		color: $dropdown-link-active-color !important;
+		border-color: $dropdown-link-active-color !important;
+
+		&,
+		&__remove {
+			@extend .rounded-2 !optional;
+		}
+
+		&__label {
+			@extend .py-0 !optional;
+			color: inherit !important;
+		}
+	}
+
+	&-label {
+		&__control {
+			@extend .form-control !optional;
+			background-color: $input-bg !important;
+
+			&:not(.react-select__control--is-focused):not(.react-select__control--is-disabled) {
+				&,
+				&:hover {
+					border-color: $primary !important;
+				}
+			}
+
+			&--is-disabled {
+				color: $form-select-disabled-color !important;
+				background-color: $form-select-disabled-bg !important;
+				border-color: $form-select-disabled-border-color !important;
+			}
+
+			&--is-focused {
+				color: $input-focus-color !important;
+				background-color: $input-focus-bg !important;
+				border-color: $input-focus-border-color !important;
+				outline: 0;
+
+				@if $enable-shadows {
+					@include box-shadow($input-box-shadow !important, $input-focus-box-shadow);
+				} @else {
+					// Avoid using mixin so we can pass custom focus shadow properly
+					box-shadow: $input-focus-box-shadow !important;
+				}
+			}
+		}
+
+		&__indicator {
+			@extend .p-0 !optional;
+			color: $form-select-indicator-color !important;
+
+			&-separator {
+				@extend .d-none !optional;
+			}
+		}
+
+		&__clear-indicator {
+			@extend .d-none !optional;
+		}
+
+		&__value-container {
+			@extend .p-0 !optional;
+		}
+
+		&__input {
+			&-container {
+				@extend .p-0 !optional;
+				@extend .m-0 !optional;
+			}
+		}
+
+		&__multi-value {
+			background-color: rgba($blue, 0.19) !important;
+			@extend .ms-0 !optional;
+
+			border-radius: 0.4375rem !important;
+
+			&__remove {
+				border-radius: 0 !important;
+				border-top-right-radius: 0.4375rem !important;
+				border-bottom-right-radius: 0.4375rem !important;
+				padding: 8px 10px !important;
+			}
+
+			&__label {
+				padding: 8px 10px !important;
+				margin: 0 5px 0 10px !important;
+				@extend .fw-light !optional;
+				@extend .fs-6 !optional;
+			}
+		}
+	}
+
+	&__option {
+		&--is-focused {
+			color: $dropdown-link-hover-color !important;
+			background-color: $dropdown-link-hover-bg !important;
+		}
+		&--is-selected {
+			color: $dropdown-link-active-color !important;
+			background-color: $dropdown-link-active-bg !important;
+		}
+	}
+}
+
+@each $state, $data in $form-validation-states {
+	@include form-validation-state-selector($state) {
+		$border-color: map-get($data, "border-color");
+		.react-select {
+			&__control {
+				&,
+				&:hover {
+					border-color: $border-color !important;
+				}
+
+				&--is-focused {
+					box-shadow: 0 0 $input-btn-focus-blur $input-focus-width
+						rgba($border-color, $input-btn-focus-color-opacity) !important;
+				}
+			}
+
+			&-label {
+				&__control {
+					&,
+					&:hover {
+						border-color: $border-color !important;
+					}
+
+					&--is-focused {
+						box-shadow: 0 0 $input-btn-focus-blur $input-focus-width
+							rgba($border-color, $input-btn-focus-color-opacity) !important;
+					}
+				}
+			}
+		}
+	}
+}

@@ -137,7 +137,7 @@ const Header = ({ type = "public", className = "", ...props }: Props) => {
 													<svg
 														className="bi w-22px h-22px"
 														width="22"
-														height="22">
+														height="24">
 														<use href="#icon-person" />
 													</svg>
 												</Nav.Link>
@@ -149,7 +149,7 @@ const Header = ({ type = "public", className = "", ...props }: Props) => {
 													title="Cart">
 													<svg
 														className="bi w-22px h-22px"
-														width="22"
+														width="24"
 														height="22">
 														<use href="#icon-cart" />
 													</svg>

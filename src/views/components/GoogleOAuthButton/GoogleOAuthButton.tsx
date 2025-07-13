@@ -1,9 +1,11 @@
 "use client";
 
 import classNames from "classnames";
-import useLoginBySocialMutation from "hooks/useLoginBySocialMutation";
-import useMeQuery from "hooks/useMeQuery";
-import useUnlinkSocialMutation from "hooks/useUnlinkSocialMutation";
+import {
+	useLoginBySocialMutation,
+	useMeQuery,
+	useUnlinkSocialMutation,
+} from "hooks/useTanstackQuery/useAuth";
 import { useSession } from "next-auth/react";
 import { useTransitionRouter } from "next-view-transitions";
 import qs from "qs";
