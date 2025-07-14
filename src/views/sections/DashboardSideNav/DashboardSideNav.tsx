@@ -54,6 +54,11 @@ const DashboardSideNav = () => {
 							href: "/dashboard/categories",
 							icon: "icon-collection",
 						},
+						{
+							title: "Products",
+							href: "/dashboard/products",
+							icon: "icon-cart",
+						},
 					]
 				: []),
 			{

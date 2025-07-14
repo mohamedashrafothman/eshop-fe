@@ -27,6 +27,9 @@ export type varsTypes = {
 		admin: string;
 		superAdmin: string;
 	};
+	products: {
+		sizes: ["S", "M", "L", "XL", "XXL"];
+	};
 };
 
 export const vars: varsTypes = {
@@ -58,6 +61,9 @@ export const vars: varsTypes = {
 		user: "USER",
 		admin: "ADMIN",
 		superAdmin: "SUPER_ADMIN",
+	},
+	products: {
+		sizes: ["S", "M", "L", "XL", "XXL"],
 	},
 };
 

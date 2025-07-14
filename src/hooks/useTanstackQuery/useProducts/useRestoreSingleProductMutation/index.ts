@@ -1,0 +1,2 @@
+import useRestoreSingleProductMutation from "./useRestoreSingleProductMutation";
+export default useRestoreSingleProductMutation;
