@@ -9,6 +9,7 @@ import { type GetProductsDataType } from "services/api/e-shop/products";
 import { filterObjectFalsyValues, flattenDeep } from "utils/helpers";
 import NextLink from "views/components/NextLink";
 import Pagination from "views/components/Pagination";
+import RatingStars from "views/components/RatingStars";
 import { default as ProductsFilterForm } from "views/forms/ProductsFilter";
 import { default as DeleteOrRestoreSingleProductModal } from "views/modals/DeleteOrRestoreSingleProduct";
 
@@ -165,8 +166,38 @@ const ProductsList = () => {
 													</span>
 												</span>
 											</td>
-											<td>Price data</td>
-											<td>Variations data</td>
+											<td>
+												<p className="mb-0 hstack gap-1 flex-nowrap">
+													{singleProduct.price.sale && (
+														<del>{singleProduct.price.normal}</del>
+													)}
+													<strong className="fs-5">
+														{singleProduct.price.sale ||
+															singleProduct.price.normal}
+													</strong>
+													{singleProduct.price.percentage && (
+														<small>
+															<em>
+																{`${singleProduct.price.percentage}% off`}
+															</em>
+														</small>
+													)}
+												</p>
+											</td>
+											<td>
+												<dl className="row mb-0 w-100 text-capitalize">
+													<dt className="col-3 col-xl-2">size:</dt>
+													<dd className="col-9 col-xl-10 mb-0">
+														{singleProduct.sizes.join(" - ")}
+													</dd>
+													<dt className="col-3 col-xl-2">color:</dt>
+													<dd className="col-9 col-xl-10 mb-0">
+														{singleProduct.colors
+															.map((color) => color.name)
+															.join(" - ")}
+													</dd>
+												</dl>
+											</td>
 											<td>
 												{typeof singleProduct.brand !== "string" ? (
 													<span className="hstack gap-2 flex-nowrap">
@@ -199,8 +230,25 @@ const ProductsList = () => {
 													<>-</>
 												)}
 											</td>
-											<td>Categories data</td>
-											<td>Reviews data</td>
+											<td>
+												{typeof singleProduct.category !== "string" ? (
+													<span className="text-capitalize">
+														{singleProduct.category.name}
+													</span>
+												) : (
+													"-"
+												)}
+											</td>
+											<td>
+												<span className="hstack gap-1 flex-nowrap align-items-center lh-1">
+													<RatingStars
+														value={singleProduct.averageRating}
+													/>
+													<small className="flex-shrink-0">
+														<em>{singleProduct.reviewCount}</em>
+													</small>
+												</span>
+											</td>
 											<td>
 												<span
 													className={classNames("badge", {
