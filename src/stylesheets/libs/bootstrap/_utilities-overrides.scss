@@ -518,5 +518,11 @@ $utilities: map-merge(
 					values: $height-values,
 				)
 			),
+		"flex-basis": (
+			responsive: true,
+			property: flex-basis,
+			class: flex-basis,
+			values: $width-values,
+		),
 	)
 );

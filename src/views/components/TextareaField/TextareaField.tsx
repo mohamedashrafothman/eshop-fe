@@ -2,6 +2,7 @@
 
 import classNames from "classnames";
 import { ComponentPropsWithoutRef, useId } from "react";
+import FieldHelpLabel from "views/components/FieldHelpLabel";
 import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
 	isInvalid?: boolean | undefined;
 	error?: string | undefined;
 	label?: string | undefined;
+	helpText?: string | undefined;
 } & ComponentPropsWithoutRef<"textarea">;
 
 const TextareaField = ({
@@ -16,10 +18,12 @@ const TextareaField = ({
 	isInvalid = false,
 	id: passedId,
 	className,
+	helpText = "",
 	label,
 	placeholder,
 	error,
 	required,
+	maxLength,
 	...restOfProps
 }: Props) => {
 	const reactId = useId();
@@ -43,6 +47,15 @@ const TextareaField = ({
 				required={required || undefined}
 				{...restOfProps}
 			/>
+			{helpText && <FieldHelpLabel id={id} text={helpText} />}
+			{maxLength && (
+				<FieldHelpLabel
+					id={`${id}-max`}
+					text={`${Math.max(0, maxLength - (restOfProps.value as string)?.length)}/${maxLength} Char.`}
+					direction="end"
+					className="d-inline-block float-end"
+				/>
+			)}
 			{isInvalid && error && (
 				<div className="invalid-feedback text-capitalize">
 					<strong>
