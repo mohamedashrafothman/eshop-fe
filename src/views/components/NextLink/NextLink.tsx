@@ -11,32 +11,32 @@ export const ACTIVE_CLASS = "active" as const;
 export type Props = {
 	exact?: boolean | undefined;
 	children?: ReactNode | undefined;
-	ref?: Ref<HTMLAnchorElement> | undefined;
 } & LinkProps &
 	HTMLAttributes<HTMLAnchorElement>;
 
-const NextLink = forwardRef(
-	({ ref, children, className = "", href, exact, ...props }: Props): JSX.Element => {
-		const pathname = usePathname();
-		const isActive = exact
-			? href === pathname
-			: pathname.startsWith(
-					String(typeof href === "string" ? href : (href as UrlObject)?.pathname)
-				);
+const NextLink = (
+	{ children, className = "", href, exact, ...props }: Props,
+	ref: Ref<HTMLAnchorElement> | undefined
+): JSX.Element => {
+	const pathname = usePathname();
+	const isActive = exact
+		? href === pathname
+		: pathname.startsWith(
+				String(typeof href === "string" ? href : (href as UrlObject)?.pathname)
+			);
 
-		return (
-			<Link
-				href={href}
-				ref={ref}
-				className={classNames(className, { [ACTIVE_CLASS]: isActive })}
-				aria-current={isActive ? "page" : undefined}
-				{...props}>
-				{children}
-			</Link>
-		);
-	}
-);
+	return (
+		<Link
+			href={href}
+			ref={ref}
+			className={classNames(className, { [ACTIVE_CLASS]: isActive })}
+			aria-current={isActive ? "page" : undefined}
+			{...props}>
+			{children}
+		</Link>
+	);
+};
 
 NextLink.displayName = "NextLink";
 
-export default NextLink;
+export default forwardRef(NextLink);

@@ -1,5 +1,7 @@
 import classNames from "classnames";
-import TextField from "views/components/TextField";
+import TextField, { type Props as TextFieldProps } from "views/components/TextField";
+
+export type Props = {} & TextFieldProps;
 
 const SearchField = ({
 	name = "q",
@@ -10,14 +12,14 @@ const SearchField = ({
 	...restOfParams
 }) => (
 	<div
-		className={classNames("input-group flex-nowrap", {
+		className={classNames(className, "input-group flex-nowrap", {
 			"has-validation": isInvalid || isValid,
 		})}>
 		<TextField
 			type="search"
 			name={name}
 			id={id}
-			className={classNames(className, "rounded-end-0")}
+			className="rounded-end-0"
 			isInvalid={isInvalid}
 			isValid={isValid}
 			{...restOfParams}

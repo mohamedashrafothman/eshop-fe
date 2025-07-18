@@ -2,13 +2,16 @@
 
 import classNames from "classnames";
 import { ComponentPropsWithoutRef, useId } from "react";
+import FieldHelpLabel from "views/components/FieldHelpLabel";
 import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 
-type Props = {
+export type Props = {
 	isValid?: boolean | undefined;
 	isInvalid?: boolean | undefined;
 	error?: string | undefined;
 	label?: string | undefined;
+	helpText?: string | undefined;
+	preventReactId?: boolean | undefined;
 } & ComponentPropsWithoutRef<"input">;
 
 const TextField = ({
@@ -21,10 +24,13 @@ const TextField = ({
 	placeholder,
 	error,
 	required,
+	helpText = "",
+	maxLength,
+	preventReactId = false,
 	...restOfProps
 }: Props) => {
 	const reactId = useId();
-	const id = `${passedId || "textField"}-${reactId}`;
+	const id = `${passedId || "textField"}${!preventReactId ? `-${reactId}` : ""}`;
 
 	return (
 		<>
@@ -45,6 +51,15 @@ const TextField = ({
 				required={required || undefined}
 				{...restOfProps}
 			/>
+			{helpText && <FieldHelpLabel id={id} text={helpText} />}
+			{maxLength && (
+				<FieldHelpLabel
+					id={`${id}-max`}
+					text={`${Math.max(0, maxLength - (restOfProps.value as string)?.length)}/${maxLength} Char.`}
+					direction="end"
+					className="d-inline-block float-end"
+				/>
+			)}
 			{isInvalid && error && (
 				<div className="invalid-feedback text-capitalize">
 					<strong>

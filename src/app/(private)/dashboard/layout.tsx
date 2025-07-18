@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 type Props = { children?: React.ReactNode | undefined };
 
 const DashboardLayout = async ({ children }: Props) => (
-	<div className="row mx-0 vh-100 position-relative flex-grow-1">
+	<div className="row mx-0 vh-100 position-relative flex-grow-1 overflow-hidden">
 		<div className="vh-100 top-0 bottom-0 start-0 col-auto d-none d-lg-block px-0 py-gutter">
 			<DashboardSide />
 		</div>

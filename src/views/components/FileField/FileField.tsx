@@ -2,6 +2,7 @@
 
 import classNames from "classnames";
 import { ComponentPropsWithoutRef, useId } from "react";
+import FieldHelpLabel from "views/components/FieldHelpLabel";
 import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 
 type Props = {
@@ -44,14 +45,10 @@ const FileField = ({
 				})}
 				required={required || undefined}
 				autoComplete={autoComplete || undefined}
-				aria-describedby={helpText ? "fileFieldHelp" : undefined}
+				aria-describedby={helpText ? `${id}-help` : undefined}
 				{...restOfProps}
 			/>
-			{helpText && (
-				<div id="fileFieldHelp" className="form-text small">
-					<small>{helpText}</small>
-				</div>
-			)}
+			{helpText && <FieldHelpLabel id={id} text={helpText} />}
 			{isInvalid && error && (
 				<div className="invalid-feedback text-capitalize">
 					<strong>

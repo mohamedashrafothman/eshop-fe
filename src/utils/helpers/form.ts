@@ -1,4 +1,5 @@
 import vars from "utils/vars";
+import { AnyObjectSchema, AnySchema } from "yup";
 
 export const isSameValueAsInitialValue = (v: any, init: any) =>
 	JSON.stringify(v) === JSON.stringify(init);
@@ -71,4 +72,27 @@ export const fileFormatValidation = function (file: any) {
 					vars.app.imagesFileInputAccepts.includes(file?.type)
 				))
 	);
+};
+
+const normalizePath = (path: string): string[] =>
+	path
+		.replace(/\[(?:'([^']+)'|"([^"]+)"|([^\]]+))\]/g, (_, single, double, bare) => {
+			return "." + (single || double || bare);
+		})
+		.split(".");
+
+export const isFieldRequired = (fieldPath: string, schema: AnyObjectSchema): boolean => {
+	const parts = normalizePath(fieldPath);
+	let currentSchema: AnySchema | undefined = schema;
+
+	for (const part of parts) {
+		const fields = (currentSchema as any)?.fields as any;
+		if (!fields || !(part in fields)) return false;
+		currentSchema = fields[part];
+	}
+
+	if (!currentSchema) return false;
+
+	const spec = (currentSchema as AnySchema).spec;
+	return spec?.optional === false;
 };

@@ -6,7 +6,7 @@ import { default as AccountPasswordForm } from "views/forms/AccountPassword";
 const AccountInformation = () => (
 	<section className="account-information py-4">
 		<div className="row gy-4 gy-xl-0">
-			<div className="col-12 col-xl-5 col-3xl-4">
+			<div className="col-12 col-xl-6 col-3xl-5 col-ultra-hd-4">
 				<div className="vstack gap-3">
 					<h2 className="h3 text-capitalize">
 						<strong>
@@ -17,7 +17,7 @@ const AccountInformation = () => (
 				</div>
 			</div>
 			<div className="col-12 col-xl-1 col-3xl-2 m-0"></div>
-			<div className="col-12 col-xl-5 col-3xl-4">
+			<div className="col-12 col-xl-6 col-3xl-5 col-ultra-hd-4">
 				<div className="vstack gap-3">
 					<h2 className="h3 text-capitalize">
 						<strong>

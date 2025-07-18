@@ -204,9 +204,9 @@ const Users = () => {
 					</div>
 					<div className="col-12">
 						<CheckboxField
-							onChange={({ target: { checked } }) => {
-								formState.setFieldValue("emailVerified", checked);
-							}}
+							onChange={({ target: { checked, name } }) =>
+								formState.setFieldValue(name, checked)
+							}
 							onBlur={formState.handleBlur}
 							value="1"
 							name="emailVerified"

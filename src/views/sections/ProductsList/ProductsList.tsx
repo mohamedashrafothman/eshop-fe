@@ -61,6 +61,7 @@ const ProductsList = () => {
 									<th scope="col">Brand</th>
 									<th scope="col">Categories</th>
 									<th scope="col">Reviews</th>
+									<th scope="col">featured</th>
 									<th scope="col">Deleted</th>
 									<th scope="col">Actions</th>
 								</tr>
@@ -79,6 +80,13 @@ const ProductsList = () => {
 													</span>
 												</span>
 											</th>
+											<td>
+												<span className="d-block placeholder-glow">
+													<span className="placeholder placeholder-sm bg-secondary d-block w-100">
+														&nbsp;
+													</span>
+												</span>
+											</td>
 											<td>
 												<span className="d-block placeholder-glow">
 													<span className="placeholder placeholder-sm bg-secondary d-block w-100">
@@ -168,14 +176,15 @@ const ProductsList = () => {
 											</td>
 											<td>
 												<p className="mb-0 hstack gap-1 flex-nowrap">
-													{singleProduct.price.sale && (
-														<del>{singleProduct.price.normal}</del>
+													{Boolean(singleProduct.price.sale) && (
+														<del>{singleProduct.price.normal}LE</del>
 													)}
 													<strong className="fs-5">
 														{singleProduct.price.sale ||
 															singleProduct.price.normal}
+														LE
 													</strong>
-													{singleProduct.price.percentage && (
+													{Boolean(singleProduct.price.percentage) && (
 														<small>
 															<em>
 																{`${singleProduct.price.percentage}% off`}
@@ -252,6 +261,19 @@ const ProductsList = () => {
 											<td>
 												<span
 													className={classNames("badge", {
+														"bg-success": singleProduct.isFeatured,
+														"text-success": singleProduct.isFeatured,
+														"bg-gray-700": !singleProduct.isFeatured,
+														"text-gray-800": !singleProduct.isFeatured,
+													})}>
+													{singleProduct.isFeatured
+														? "Featured"
+														: "Not Featured"}
+												</span>
+											</td>
+											<td>
+												<span
+													className={classNames("badge", {
 														"bg-success": !singleProduct.deleted,
 														"text-success": !singleProduct.deleted,
 														"bg-danger": singleProduct.deleted,
@@ -311,7 +333,7 @@ const ProductsList = () => {
 									))
 								) : (
 									<tr>
-										<td colSpan={10} className="text-center text-capitalize">
+										<td colSpan={11} className="text-center text-capitalize">
 											<span className="vstack gap-2 align-items-center justify-content-center">
 												<svg
 													width="50"

@@ -13,7 +13,7 @@ const Cities = () => (
 			</h1>
 			<NextLink
 				href="/dashboard/addresses/cities/store"
-				className="btn btn-primary border-primary-dark text-capitalize icon-link">
+				className="btn btn-primary border-primary-dark text-capitalize icon-link icon-link-hover icon-link-hover-rotate">
 				<svg className="bi w-22px h-22px" width="22" height="22">
 					<use href="#icon-plus" />
 				</svg>
