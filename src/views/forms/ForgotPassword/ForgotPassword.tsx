@@ -5,7 +5,7 @@ import { FormikHelpers, useFormik } from "formik";
 import { useForgotPasswordMutation } from "hooks/useTanstackQuery/useAuth";
 import { useTransitionRouter } from "next-view-transitions";
 import { useEffect, useRef } from "react";
-import { apiFormErrorExtractor } from "utils/helpers";
+import { apiFormErrorExtractor, isFieldRequired } from "utils/helpers";
 import EmailField from "views/components/EmailField";
 import NextLink from "views/components/NextLink";
 import formValidationSchema, { type schemaType } from "./schema";
@@ -18,6 +18,9 @@ const ForgotPassword = () => {
 
 	// ref hook
 	const forgotPasswordCancelRequestRef = useRef<AbortController | null>(null);
+
+	// constants
+	const validationSchema = formValidationSchema();
 
 	// event handlers
 	const onFormSubmitHandler = async (
@@ -53,7 +56,7 @@ const ForgotPassword = () => {
 	// form state
 	const formState = useFormik<schemaType>({
 		initialValues: { email: "" },
-		validationSchema: formValidationSchema,
+		validationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
 
@@ -85,7 +88,7 @@ const ForgotPassword = () => {
 								!!formState.touched?.email && !!formState.errors?.email
 							)}
 							error={formState.errors?.email}
-							required
+							required={isFieldRequired("email", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 mt-5">

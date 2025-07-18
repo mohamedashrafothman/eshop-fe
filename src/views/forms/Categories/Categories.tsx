@@ -13,13 +13,17 @@ import {
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { apiFormErrorExtractor, objectToFormData, pick } from "utils/helpers";
+import { apiFormErrorExtractor, isFieldRequired, objectToFormData, pick } from "utils/helpers";
 import vars from "utils/vars";
 import FileField from "views/components/FileField";
 import SelectField from "views/components/SelectField";
 import TextareaField from "views/components/TextareaField";
 import TextField from "views/components/TextField";
-import formValidationSchema, { type schemaType } from "./schema";
+import formValidationSchema, {
+	type schemaType,
+	DESCRIPTION_MAX_LENGTH,
+	NAME_MAX_LENGTH,
+} from "./schema";
 
 const Categories = () => {
 	const queryClient = useQueryClient();
@@ -38,6 +42,7 @@ const Categories = () => {
 
 	// constants
 	const isEditForm = Boolean(identifier);
+	const validationSchema = formValidationSchema({ isEdit: isEditForm });
 	const editCategoryParentIds = [
 		...(category?.parent?.map((singleCategoryParent) =>
 			typeof singleCategoryParent !== "string"
@@ -125,7 +130,7 @@ const Categories = () => {
 					}
 				: { icon: "" }),
 		},
-		validationSchema: formValidationSchema({ isEdit: isEditForm }),
+		validationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
 
@@ -161,7 +166,8 @@ const Categories = () => {
 							error={formState.errors?.name}
 							label="Name"
 							autoComplete="name"
-							required
+							maxLength={NAME_MAX_LENGTH}
+							required={isFieldRequired("name", validationSchema)}
 						/>
 					</div>
 					<div className="col-12">
@@ -181,7 +187,8 @@ const Categories = () => {
 							)}
 							error={formState.errors?.description}
 							label="Description"
-							required
+							maxLength={DESCRIPTION_MAX_LENGTH}
+							required={isFieldRequired("description", validationSchema)}
 						/>
 					</div>
 					<div className="col-12">
@@ -218,6 +225,7 @@ const Categories = () => {
 							placeholder="Parent Categories"
 							label="Parent Categories"
 							isDisabled={isCategoriesLoading}
+							required={isFieldRequired("parent", validationSchema)}
 							isMulti
 						/>
 					</div>
@@ -242,7 +250,7 @@ const Categories = () => {
 							accept={vars.app.imagesFileInputAccepts.join(",")}
 							helpText={`Allowed file types: png, jpg, jpeg. Max file size: ${vars.app.fileMaxSizeInMB}MB.`}
 							label="Icon Image"
-							required
+							required={isFieldRequired("icon", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 mt-5">

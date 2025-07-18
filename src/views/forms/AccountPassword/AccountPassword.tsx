@@ -4,7 +4,7 @@ import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
 import { useMeQuery, usePatchUserMutation } from "hooks/useTanstackQuery/useUsers";
 import { useRef } from "react";
-import { apiFormErrorExtractor } from "utils/helpers";
+import { apiFormErrorExtractor, isFieldRequired } from "utils/helpers";
 import PasswordField from "views/components/PasswordField";
 import formValidationSchema, { type schemaType } from "./schema";
 
@@ -16,6 +16,9 @@ const AccountPassword = () => {
 
 	// ref hook
 	const patchUserCancelRequestRef = useRef<AbortController | null>(null);
+
+	// constants
+	const validationSchema = formValidationSchema();
 
 	// Handle form submission.
 	const onFormSubmitHandler = async (
@@ -55,12 +58,8 @@ const AccountPassword = () => {
 
 	// form state
 	const formState = useFormik<schemaType>({
-		initialValues: {
-			oldPassword: "",
-			password: "",
-			passwordConfirmation: "",
-		},
-		validationSchema: formValidationSchema,
+		initialValues: { oldPassword: "", password: "", passwordConfirmation: "" },
+		validationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
 
@@ -87,7 +86,7 @@ const AccountPassword = () => {
 								!!formState.touched?.oldPassword && !!formState.errors?.oldPassword
 							)}
 							error={formState.errors?.oldPassword}
-							required
+							required={isFieldRequired("oldPassword", validationSchema)}
 							allowToggleVisibility
 						/>
 					</div>
@@ -107,7 +106,7 @@ const AccountPassword = () => {
 								!!formState.touched?.password && !!formState.errors?.password
 							)}
 							error={formState.errors?.password}
-							required
+							required={isFieldRequired("password", validationSchema)}
 							allowToggleVisibility
 							allowStrengthBar
 						/>
@@ -130,7 +129,7 @@ const AccountPassword = () => {
 									!!formState.errors?.passwordConfirmation
 							)}
 							error={formState.errors?.passwordConfirmation}
-							required
+							required={isFieldRequired("passwordConfirmation", validationSchema)}
 							allowToggleVisibility
 						/>
 					</div>

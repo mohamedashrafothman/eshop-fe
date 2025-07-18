@@ -6,7 +6,7 @@ import { FormikHelpers, useFormik } from "formik";
 import { ME_KEY_ARRAY, useMeQuery, usePatchUserMutation } from "hooks/useTanstackQuery/useUsers";
 import { signIn, useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
-import { apiFormErrorExtractor, pick } from "utils/helpers";
+import { apiFormErrorExtractor, isFieldRequired, pick } from "utils/helpers";
 import EmailField from "views/components/EmailField";
 import TextField from "views/components/TextField";
 import formValidationSchema, { type schemaType } from "./schema";
@@ -21,6 +21,9 @@ const AccountInformation = () => {
 
 	// ref hook
 	const patchUserCancelRequestRef = useRef<AbortController | null>(null);
+
+	// constants
+	const validationSchema = formValidationSchema();
 
 	// Handle form submission.
 	const onFormSubmitHandler = async (
@@ -89,7 +92,7 @@ const AccountInformation = () => {
 			email: "",
 			...((user && pick(user, ["name", "email"])) || {}),
 		},
-		validationSchema: formValidationSchema,
+		validationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
 
@@ -126,7 +129,7 @@ const AccountInformation = () => {
 							error={formState.errors?.name}
 							label="Name"
 							autoComplete="name"
-							required
+							required={isFieldRequired("name", validationSchema)}
 						/>
 					</div>
 					<div className="col-12">
@@ -144,7 +147,7 @@ const AccountInformation = () => {
 							)}
 							error={formState.errors?.email}
 							allowVerificationStatus
-							required
+							required={isFieldRequired("email", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 mt-5">

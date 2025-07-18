@@ -2,15 +2,16 @@ import { fileFormatValidation, fileSizeValidation } from "utils/helpers";
 import vars from "utils/vars";
 import { array, InferType, mixed, object, string } from "yup";
 
+export const NAME_MAX_LENGTH = 100;
+export const DESCRIPTION_MAX_LENGTH = 1000;
+
 const schema = ({ isEdit = false }) =>
 	object().shape({
-		name: string().required("Field required!").max(100),
-		description: string().required("Field required!").max(1000),
+		name: string().required("Field required!").max(NAME_MAX_LENGTH),
+		description: string().required("Field required!").max(DESCRIPTION_MAX_LENGTH),
 		parent: array(),
-		icon: mixed().when("isNotEdit", {
-			is: !isEdit,
-			then: (schema) =>
-				schema
+		icon: !isEdit
+			? mixed()
 					.required("Field required!")
 					.test(
 						"fileSize",
@@ -21,8 +22,8 @@ const schema = ({ isEdit = false }) =>
 						"fileFormat",
 						"Uploaded files has unsupported format",
 						fileFormatValidation
-					),
-		}),
+					)
+			: mixed().nullable(),
 	});
 
 export type schemaType = InferType<ReturnType<typeof schema>>;

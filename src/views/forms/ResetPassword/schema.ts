@@ -1,20 +1,19 @@
-import isStrongPassword from "validator/lib/isStrongPassword";
+import { passwordValidation } from "utils/helpers";
 import { InferType, object, ref, string } from "yup";
 
-const schema = object().shape({
-	password: string()
-		.required("Field required!")
-		.test({
-			name: "password",
-			test: (value = "") =>
-				Boolean(value && isStrongPassword(value, { minLength: 8 }) && value.length < 64),
-			message:
+const schema = () =>
+	object().shape({
+		password: string()
+			.required("Field required!")
+			.test(
+				"password",
 				"Password must be Between 8 and 64 characters long. contains at least 1 uppercase, 1 lowercase, 1 number, and 1 special character.",
-		}),
-	passwordConfirmation: string()
-		.required("Field required!")
-		.oneOf([ref("password")], "passwords must match"),
-});
+				passwordValidation
+			),
+		passwordConfirmation: string()
+			.required("Field required!")
+			.oneOf([ref("password")], "passwords must match"),
+	});
 
-export type schemaType = InferType<typeof schema>;
+export type schemaType = InferType<ReturnType<typeof schema>>;
 export default schema;

@@ -12,7 +12,7 @@ import {
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { apiFormErrorExtractor, pick } from "utils/helpers";
+import { apiFormErrorExtractor, isFieldRequired, pick } from "utils/helpers";
 import vars from "utils/vars";
 import CheckboxField from "views/components/CheckboxField";
 import EmailField from "views/components/EmailField";
@@ -35,6 +35,7 @@ const Users = () => {
 
 	// constants
 	const isEditForm = Boolean(identifier);
+	const validationSchema = formValidationSchema();
 
 	// Handle form submission.
 	const onFormSubmitHandler = async (
@@ -112,7 +113,7 @@ const Users = () => {
 			...((isEditForm && user && pick(user, ["name", "email", "role", "emailVerified"])) ||
 				{}),
 		},
-		validationSchema: formValidationSchema,
+		validationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
 
@@ -148,7 +149,7 @@ const Users = () => {
 							error={formState.errors?.name}
 							label="Name"
 							autoComplete="name"
-							required
+							required={isFieldRequired("name", validationSchema)}
 						/>
 					</div>
 					<div className="col-12">
@@ -165,7 +166,7 @@ const Users = () => {
 								!!formState.touched?.email && !!formState.errors?.email
 							)}
 							error={formState.errors?.email}
-							required
+							required={isFieldRequired("email", validationSchema)}
 						/>
 					</div>
 					<div className="col-12">
@@ -199,7 +200,7 @@ const Users = () => {
 							error={formState.errors?.role}
 							label="Role"
 							placeholder="Select Role"
-							required
+							required={isFieldRequired("role", validationSchema)}
 						/>
 					</div>
 					<div className="col-12">
@@ -213,6 +214,7 @@ const Users = () => {
 							id="emailVerifiedMeField"
 							label="Mark Email as Verified!"
 							checked={formState.values?.emailVerified || undefined}
+							required={isFieldRequired("emailVerified", validationSchema)}
 							isSwitch
 						/>
 					</div>

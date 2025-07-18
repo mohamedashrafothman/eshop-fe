@@ -12,12 +12,16 @@ import {
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { apiFormErrorExtractor, objectToFormData, pick } from "utils/helpers";
+import { apiFormErrorExtractor, isFieldRequired, objectToFormData, pick } from "utils/helpers";
 import vars from "utils/vars";
 import FileField from "views/components/FileField";
 import TextField from "views/components/TextField";
 import TextareaField from "views/components/TextareaField";
-import formValidationSchema, { type schemaType } from "./schema";
+import formValidationSchema, {
+	type schemaType,
+	DESCRIPTION_MAX_LENGTH,
+	NAME_MAX_LENGTH,
+} from "./schema";
 
 const Brands = () => {
 	const queryClient = useQueryClient();
@@ -34,6 +38,7 @@ const Brands = () => {
 
 	// constants
 	const isEditForm = Boolean(identifier);
+	const validationSchema = formValidationSchema({ isEdit: isEditForm });
 
 	// Handle form submission.
 	const onFormSubmitHandler = async (
@@ -115,7 +120,7 @@ const Brands = () => {
 				? { ...((brand && pick(brand, ["name", "description"])) || {}) }
 				: { logo: "" }),
 		},
-		validationSchema: formValidationSchema({ isEdit: isEditForm }),
+		validationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
 
@@ -151,7 +156,8 @@ const Brands = () => {
 							error={formState.errors?.name}
 							label="Name"
 							autoComplete="name"
-							required
+							maxLength={NAME_MAX_LENGTH}
+							required={isFieldRequired("name", validationSchema)}
 						/>
 					</div>
 					<div className="col-12">
@@ -171,7 +177,8 @@ const Brands = () => {
 							)}
 							error={formState.errors?.description}
 							label="Description"
-							required
+							maxLength={DESCRIPTION_MAX_LENGTH}
+							required={isFieldRequired("description", validationSchema)}
 						/>
 					</div>
 					<div className="col-12">
@@ -195,7 +202,7 @@ const Brands = () => {
 							accept={vars.app.imagesFileInputAccepts.join(",")}
 							helpText={`Allowed file types: png, jpg, jpeg. Max file size: ${vars.app.fileMaxSizeInMB}MB.`}
 							label="Logo Image"
-							required
+							required={isFieldRequired("logo", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 mt-5">

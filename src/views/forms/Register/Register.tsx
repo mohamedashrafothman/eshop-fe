@@ -6,7 +6,7 @@ import { useRegisterMutation } from "hooks/useTanstackQuery/useAuth";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { apiFormErrorExtractor } from "utils/helpers";
+import { apiFormErrorExtractor, isFieldRequired } from "utils/helpers";
 import EmailField from "views/components/EmailField";
 import FacebookOAuthButton from "views/components/FacebookOAuthButton";
 import GoogleOAuthButton from "views/components/GoogleOAuthButton";
@@ -28,6 +28,9 @@ const Register = () => {
 
 	// state hook
 	const [isRegisterLoadingState, setIsRegisterLoadingState] = useState(false);
+
+	// constants
+	const validationSchema = formValidationSchema();
 
 	const onFormSubmitHandler = async (
 		data: schemaType,
@@ -88,7 +91,7 @@ const Register = () => {
 			passwordConfirmation: "",
 			"g-recaptcha-response": "",
 		},
-		validationSchema: formValidationSchema,
+		validationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
 
@@ -145,7 +148,7 @@ const Register = () => {
 									error={formState.errors?.name}
 									label="Name"
 									autoComplete="name"
-									required
+									required={isFieldRequired("name", validationSchema)}
 								/>
 							</div>
 							<div className="col-12 col-xl-6">
@@ -162,7 +165,7 @@ const Register = () => {
 										!!formState.touched?.email && !!formState.errors?.email
 									)}
 									error={formState.errors?.email}
-									required
+									required={isFieldRequired("email", validationSchema)}
 								/>
 							</div>
 							<div className="col-12 col-xl-6">
@@ -182,7 +185,7 @@ const Register = () => {
 											!!formState.errors?.password
 									)}
 									error={formState.errors?.password}
-									required
+									required={isFieldRequired("password", validationSchema)}
 									allowToggleVisibility
 									allowStrengthBar
 								/>
@@ -205,7 +208,10 @@ const Register = () => {
 									)}
 									error={formState.errors?.passwordConfirmation}
 									label="Password Confirmation"
-									required
+									required={isFieldRequired(
+										"passwordConfirmation",
+										validationSchema
+									)}
 									allowToggleVisibility
 								/>
 							</div>
@@ -225,7 +231,10 @@ const Register = () => {
 											!!formState.errors?.["g-recaptcha-response"]
 									)}
 									error={formState.errors?.["g-recaptcha-response"]}
-									required
+									required={isFieldRequired(
+										"g-recaptcha-response",
+										validationSchema
+									)}
 								/>
 							</div>
 							<div className="col-12 m-0"></div>

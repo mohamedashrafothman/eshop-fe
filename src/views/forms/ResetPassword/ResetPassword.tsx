@@ -6,7 +6,7 @@ import { useResetPasswordMutation } from "hooks/useTanstackQuery/useAuth";
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { apiFormErrorExtractor } from "utils/helpers";
+import { apiFormErrorExtractor, isFieldRequired } from "utils/helpers";
 import PasswordField from "views/components/PasswordField";
 import formValidationSchema, { type schemaType } from "./schema";
 
@@ -20,6 +20,9 @@ const ResetPassword = () => {
 
 	// ref hook
 	const resetPasswordCancelRequestRef = useRef<AbortController | null>(null);
+
+	// constants
+	const validationSchema = formValidationSchema();
 
 	// event handlers
 	const onFormSubmitHandler = async (
@@ -55,7 +58,7 @@ const ResetPassword = () => {
 	// form state
 	const formState = useFormik<schemaType>({
 		initialValues: { password: "", passwordConfirmation: "" },
-		validationSchema: formValidationSchema,
+		validationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
 
@@ -88,7 +91,7 @@ const ResetPassword = () => {
 							)}
 							error={formState.errors?.password}
 							label="Password"
-							required
+							required={isFieldRequired("password", validationSchema)}
 							allowToggleVisibility
 						/>
 					</div>
@@ -110,7 +113,7 @@ const ResetPassword = () => {
 							)}
 							error={formState.errors?.passwordConfirmation}
 							label="Password Confirmation"
-							required
+							required={isFieldRequired("passwordConfirmation", validationSchema)}
 							allowToggleVisibility
 						/>
 					</div>

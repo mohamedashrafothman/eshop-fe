@@ -12,9 +12,9 @@ import {
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { apiFormErrorExtractor, pick } from "utils/helpers";
+import { apiFormErrorExtractor, isFieldRequired, pick } from "utils/helpers";
 import TextField from "views/components/TextField";
-import formValidationSchema, { type schemaType } from "./schema";
+import formValidationSchema, { type schemaType, CODE_MAX_LENGTH, NAME_MAX_LENGTH } from "./schema";
 
 const Countries = () => {
 	const queryClient = useQueryClient();
@@ -31,6 +31,7 @@ const Countries = () => {
 
 	// constants
 	const isEditForm = Boolean(identifier);
+	const validationSchema = formValidationSchema();
 
 	// Handle form submission.
 	const onFormSubmitHandler = async (
@@ -105,7 +106,7 @@ const Countries = () => {
 			code: "",
 			...((isEditForm && country && pick(country, ["name", "code"])) || {}),
 		},
-		validationSchema: formValidationSchema,
+		validationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
 
@@ -141,7 +142,8 @@ const Countries = () => {
 							error={formState.errors?.name}
 							label="Name"
 							autoComplete="name"
-							required
+							maxLength={NAME_MAX_LENGTH}
+							required={isFieldRequired("name", validationSchema)}
 						/>
 					</div>
 					<div className="col-12">
@@ -162,7 +164,8 @@ const Countries = () => {
 							)}
 							error={formState.errors?.code}
 							label="Code"
-							required
+							maxLength={CODE_MAX_LENGTH}
+							required={isFieldRequired("code", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 mt-5">

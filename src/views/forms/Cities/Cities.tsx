@@ -16,10 +16,10 @@ import IState from "interfaces/State.interface";
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { apiFormErrorExtractor, pick } from "utils/helpers";
+import { apiFormErrorExtractor, isFieldRequired, pick } from "utils/helpers";
 import SelectField from "views/components/SelectField";
 import TextField from "views/components/TextField";
-import formValidationSchema, { type schemaType } from "./schema";
+import formValidationSchema, { type schemaType, NAME_MAX_LENGTH } from "./schema";
 
 const Cities = () => {
 	const queryClient = useQueryClient();
@@ -51,6 +51,7 @@ const Cities = () => {
 
 	// constants
 	const isEditForm = Boolean(identifier);
+	const validationSchema = formValidationSchema();
 	const isCountriesHasNoItems = countries.length === 0;
 	const isCountriesHasOneItem = countries.length === 1;
 	const isStatesHasNoItems = states.length === 0;
@@ -136,7 +137,7 @@ const Cities = () => {
 				}) ||
 				{}),
 		},
-		validationSchema: formValidationSchema,
+		validationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
 
@@ -172,7 +173,8 @@ const Cities = () => {
 							error={formState.errors?.name}
 							label="Name"
 							autoComplete="name"
-							required
+							maxLength={NAME_MAX_LENGTH}
+							required={isFieldRequired("name", validationSchema)}
 						/>
 					</div>
 					<div className="col-12">
@@ -207,7 +209,7 @@ const Cities = () => {
 							}
 							label="Country"
 							placeholder="Select Country"
-							required
+							required={isFieldRequired("country", validationSchema)}
 						/>
 					</div>
 					<div className="col-12">
@@ -237,7 +239,7 @@ const Cities = () => {
 							isDisabled={isStatesLoading || isStatesHasOneItem || isStatesHasNoItems}
 							label="State"
 							placeholder="Select State"
-							required
+							required={isFieldRequired("state", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 mt-5">

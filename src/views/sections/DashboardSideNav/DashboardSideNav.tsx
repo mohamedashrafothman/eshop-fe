@@ -126,7 +126,7 @@ const DashboardSideNav = () => {
 								<>
 									<AccordionItemLinkComponent
 										href={href}
-										type="button"
+										type={!isHasChildren || !href ? "button" : undefined}
 										className={classNames(
 											"nav-link accordion-button text-capitalize text-decoration-none lh-1 text-reset py-3 px-gutter hstack gap-2 align-items-center flex-nowrap",
 											{
@@ -137,9 +137,7 @@ const DashboardSideNav = () => {
 										data-bs-toggle="collapse"
 										aria-expanded="false"
 										aria-controls={`dashboard-side-nav-collapse-${index}`}
-										ref={(el: HTMLButtonElement | null) => {
-											collapseRefs.current[index] = el;
-										}}>
+										ref={(el: any) => (collapseRefs.current[index] = el)}>
 										{icon && (
 											<span className="flex-shrink-0">
 												<svg

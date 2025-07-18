@@ -4,7 +4,7 @@ import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
 import { useLoginMutation } from "hooks/useTanstackQuery/useAuth";
 import { useEffect, useRef, useState } from "react";
-import { apiFormErrorExtractor } from "utils/helpers";
+import { apiFormErrorExtractor, isFieldRequired } from "utils/helpers";
 import CheckboxField from "views/components/CheckboxField";
 import EmailField from "views/components/EmailField";
 import FacebookOAuthButton from "views/components/FacebookOAuthButton";
@@ -22,6 +22,9 @@ const Login = () => {
 
 	// state hook
 	const [isLoginLoadingState, setIsLoginLoadingState] = useState(false);
+
+	// constants
+	const validationSchema = formValidationSchema();
 
 	const onFormSubmitHandler = async (
 		data: schemaType,
@@ -61,7 +64,7 @@ const Login = () => {
 	// form state
 	const formState = useFormik<schemaType>({
 		initialValues: { email: "", password: "", remember: true },
-		validationSchema: formValidationSchema,
+		validationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
 
@@ -113,7 +116,7 @@ const Login = () => {
 										!!formState.touched?.email && !!formState.errors?.email
 									)}
 									error={formState.errors?.email}
-									required
+									required={isFieldRequired("email", validationSchema)}
 								/>
 							</div>
 							<div className="col-12">
@@ -133,7 +136,7 @@ const Login = () => {
 									)}
 									error={formState.errors?.password}
 									label="Password"
-									required
+									required={isFieldRequired("password", validationSchema)}
 									allowForgotPasswordLink
 									allowToggleVisibility
 								/>
@@ -149,6 +152,7 @@ const Login = () => {
 									id="rememberMeField"
 									label="Remember me!"
 									checked={formState.values?.remember || undefined}
+									required={isFieldRequired("remember", validationSchema)}
 								/>
 							</div>
 							<div className="col-12 mt-5">

@@ -1,9 +1,13 @@
 import { InferType, object, string } from "yup";
 
-const schema = object().shape({
-	name: string().required("Field required!").max(100),
-	code: string().required("Field required!").min(1).max(3),
-});
+export const NAME_MAX_LENGTH = 100;
+export const CODE_MAX_LENGTH = 3;
 
-export type schemaType = InferType<typeof schema>;
+const schema = () =>
+	object().shape({
+		name: string().required("Field required!").max(NAME_MAX_LENGTH),
+		code: string().required("Field required!").min(1).max(CODE_MAX_LENGTH),
+	});
+
+export type schemaType = InferType<ReturnType<typeof schema>>;
 export default schema;

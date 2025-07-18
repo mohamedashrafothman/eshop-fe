@@ -16,10 +16,10 @@ import { useMeQuery } from "hooks/useTanstackQuery/useUsers";
 import { useTransitionRouter } from "next-view-transitions";
 import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { apiFormErrorExtractor, pick } from "utils/helpers";
+import { apiFormErrorExtractor, isFieldRequired, pick } from "utils/helpers";
 import SelectField from "views/components/SelectField";
 import TextField from "views/components/TextField";
-import formValidationSchema, { type schemaType } from "./schema";
+import formValidationSchema, { type schemaType, NAME_MAX_LENGTH } from "./schema";
 
 const Addresses = () => {
 	const queryClient = useQueryClient();
@@ -55,6 +55,7 @@ const Addresses = () => {
 
 	// constants
 	const isEditForm = Boolean(identifier);
+	const validationSchema = formValidationSchema();
 	const isStatesHasNoItems = states.length === 0;
 	const isCitiesHasNoItems = cities.length === 0;
 	const editAddressData = {
@@ -168,7 +169,7 @@ const Addresses = () => {
 			user: user?._id || "",
 			...editAddressData,
 		},
-		validationSchema: formValidationSchema,
+		validationSchema,
 		onSubmit: onFormSubmitHandler,
 	});
 
@@ -211,7 +212,8 @@ const Addresses = () => {
 							)}
 							error={formState.errors?.name}
 							label="Name"
-							required
+							maxLength={NAME_MAX_LENGTH}
+							required={isFieldRequired("name", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 col-xl-6">
@@ -232,7 +234,7 @@ const Addresses = () => {
 							)}
 							error={formState.errors?.street}
 							label="Street"
-							required
+							required={isFieldRequired("street", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 col-xl-6">
@@ -253,7 +255,7 @@ const Addresses = () => {
 							)}
 							error={formState.errors?.building}
 							label="Building"
-							required
+							required={isFieldRequired("building", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 col-xl-6">
@@ -274,7 +276,7 @@ const Addresses = () => {
 							)}
 							error={formState.errors?.floor}
 							label="Floor"
-							required
+							required={isFieldRequired("floor", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 col-xl-6">
@@ -295,7 +297,7 @@ const Addresses = () => {
 							)}
 							error={formState.errors?.apartment}
 							label="Apartment"
-							required
+							required={isFieldRequired("apartment", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 col-xl-6">
@@ -316,7 +318,7 @@ const Addresses = () => {
 							)}
 							error={formState.errors?.area}
 							label="Area"
-							required
+							required={isFieldRequired("area", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 col-xl-6">
@@ -351,7 +353,7 @@ const Addresses = () => {
 							placeholder="Select Country"
 							label="Country"
 							isDisabled={isCountriesLoading}
-							required
+							required={isFieldRequired("country", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 col-xl-6">
@@ -384,7 +386,7 @@ const Addresses = () => {
 							placeholder="Select State"
 							label="State"
 							isDisabled={isStatesLoading || isStatesHasNoItems}
-							required
+							required={isFieldRequired("state", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 col-xl-6">
@@ -397,7 +399,7 @@ const Addresses = () => {
 							onChange={(option: any) =>
 								formState?.setFieldValue("city", option?.value || "")
 							}
-							onBlur={() => formState.setFieldTouched("state", true)}
+							onBlur={() => formState.setFieldTouched("city", true)}
 							options={cities.map(({ _id: value, name: label }) => ({
 								value,
 								label,
@@ -414,7 +416,7 @@ const Addresses = () => {
 							placeholder="Select City"
 							label="City"
 							isDisabled={isCitiesLoading || isCitiesHasNoItems}
-							required
+							required={isFieldRequired("city", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 col-xl-6">
@@ -433,6 +435,7 @@ const Addresses = () => {
 							isInvalid={Boolean(!!formState.touched?.zip && !!formState.errors?.zip)}
 							error={formState.errors?.zip}
 							label="Zip"
+							required={isFieldRequired("zip", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 mt-0"></div>

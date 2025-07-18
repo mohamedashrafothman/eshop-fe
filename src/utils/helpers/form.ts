@@ -1,4 +1,5 @@
 import vars from "utils/vars";
+import isStrongPassword from "validator/lib/isStrongPassword";
 import { AnyObjectSchema, AnySchema } from "yup";
 
 export const isSameValueAsInitialValue = (v: any, init: any) =>
@@ -72,6 +73,10 @@ export const fileFormatValidation = function (file: any) {
 					vars.app.imagesFileInputAccepts.includes(file?.type)
 				))
 	);
+};
+
+export const passwordValidation = function (value: string = "") {
+	return Boolean(value && isStrongPassword(value, { minLength: 8 }) && value.length < 64);
 };
 
 const normalizePath = (path: string): string[] =>
