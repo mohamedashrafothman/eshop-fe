@@ -209,7 +209,7 @@ const States = () => {
 							isDisabled={isCountriesLoading || isCountriesHasOneItem}
 							label="Country"
 							placeholder="Select Country"
-							required
+							required={isFieldRequired("country", validationSchema)}
 						/>
 					</div>
 					<div className="col-12 mt-5">

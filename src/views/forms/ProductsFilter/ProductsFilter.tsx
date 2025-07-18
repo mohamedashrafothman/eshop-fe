@@ -4,6 +4,8 @@ import { FocusError } from "focus-formik-error";
 import { FormikConfig, useFormik } from "formik";
 import AutoSave from "hooks/AutoSave";
 import useBootstrapCollapse from "hooks/useBootstrapCollapse";
+import { useBrandsQuery } from "hooks/useTanstackQuery/useBrands";
+import { useCategoriesQuery } from "hooks/useTanstackQuery/useCategories";
 import { useEffect, useRef } from "react";
 import { type SortItemType } from "utils/helpers";
 import CheckboxField from "views/components/CheckboxField";
@@ -18,6 +20,13 @@ type Props = {
 };
 
 const ProductsFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
+	// server state hooks
+	const { data: { data: categories = [] } = {}, isLoading: isCategoriesLoading } =
+		useCategoriesQuery({ pagination: false });
+	const { data: { data: brands = [] } = {}, isLoading: isBrandsLoading } = useBrandsQuery({
+		pagination: false,
+	});
+
 	// ref hook
 	const collapseRef = useRef<HTMLButtonElement | null>(null);
 
@@ -120,6 +129,62 @@ const ProductsFilter = ({ onSubmit, sort = [], totalDocs = 0 }: Props) => {
 							<div className="col-12 m-0"></div>
 							<div className="col collapse" id="filterCollapse">
 								<div className="hstack gap-2 align-items-stretch">
+									<SelectField
+										className="flex-shrink-0 flex-basis-auto"
+										name="categories"
+										id="categoriesField"
+										value={categories
+											?.filter((category) =>
+												formState.values?.categories?.includes(category._id)
+											)
+											?.map(({ _id: value, name: label }) => ({
+												value,
+												label,
+											}))}
+										onChange={(options) =>
+											formState?.setFieldValue(
+												"categories",
+												(Array.isArray(options) &&
+													options?.map(({ value }) => value)) ||
+													[]
+											)
+										}
+										options={categories.map(({ _id: value, name: label }) => ({
+											value,
+											label,
+										}))}
+										placeholder="Categories"
+										isDisabled={isCategoriesLoading}
+										isMulti
+									/>
+									<SelectField
+										className="flex-shrink-0 flex-basis-auto"
+										name="brands"
+										id="brandsField"
+										value={brands
+											?.filter((brand) =>
+												formState.values?.brands?.includes(brand._id)
+											)
+											?.map(({ _id: value, name: label }) => ({
+												value,
+												label,
+											}))}
+										onChange={(options) =>
+											formState?.setFieldValue(
+												"brands",
+												(Array.isArray(options) &&
+													options?.map(({ value }) => value)) ||
+													[]
+											)
+										}
+										options={brands.map(({ _id: value, name: label }) => ({
+											value,
+											label,
+										}))}
+										placeholder="Brands"
+										isDisabled={isBrandsLoading}
+										isMulti
+									/>
 									<div className="px-16px py-11px flex-shrink-0 hstack gap-2 rounded-4 border border-gray-500 border-2 bg-gray-400 flex-nowrap h-100">
 										<CheckboxField
 											onChange={formState.handleChange}
