@@ -2,7 +2,7 @@
 
 import classNames from "classnames";
 import { useMeQuery, useUserEmailResendQuery } from "hooks/useTanstackQuery/useUsers";
-import { useTransitionRouter } from "next-view-transitions";
+import { useRouter } from "next/navigation";
 import { ComponentPropsWithoutRef } from "react";
 import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 
@@ -28,7 +28,7 @@ const EmailField = ({
 	allowVerificationStatus,
 	...restOfProps
 }: Props) => {
-	const { push } = useTransitionRouter();
+	const { push } = useRouter();
 
 	// server state hooks
 	const { data: user, isFetching: isUserFetching } = useMeQuery();

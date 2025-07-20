@@ -7,7 +7,7 @@ import {
 	useUnlinkSocialMutation,
 } from "hooks/useTanstackQuery/useAuth";
 import { useSession } from "next-auth/react";
-import { useTransitionRouter } from "next-view-transitions";
+import { useRouter } from "next/navigation";
 import qs from "qs";
 import { useEffect, useRef, useState } from "react";
 import GoogleLogin, {
@@ -24,7 +24,7 @@ type Props = Omit<OAuthButtonProps, "icon" | "title">;
 const GoogleOAuthButton = ({ className, ...props }: Props) => {
 	const session = useSession();
 	const { data: user } = useMeQuery();
-	const { push } = useTransitionRouter();
+	const { push } = useRouter();
 
 	// server state hooks
 	const loginBySocialMutation = useLoginBySocialMutation();

@@ -96,9 +96,9 @@ const UserDropdown = () => {
 				</span>
 				<span className="rounded-circle w-34px h-34px w-lg-50px h-lg-50px object-fit-cover flex-shrink-0 d-flex align-items-center justify-content-center">
 					<svg
-						width="20"
-						height="20"
-						className="w-16px h-16px w-lg-20px h-lg-20px flex-shrink-0">
+						width="26"
+						height="26"
+						className="w-22px h-22px w-lg-26px h-lg-26px flex-shrink-0">
 						<use href="#icon-chevron-down"></use>
 					</svg>
 				</span>

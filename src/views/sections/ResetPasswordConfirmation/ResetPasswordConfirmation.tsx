@@ -27,7 +27,7 @@ const ResetPasswordConfirmation = ({ title = "" }: Props) => (
 					<NextLink
 						href="/auth/login"
 						className="btn btn-outline-primary border-primary-dark w-100 text-capitalize justify-content-center icon-link icon-link-hover icon-link-hover-reversed">
-						<svg className="bi w-20px h-20px" width="20" height="20">
+						<svg className="bi w-22px h-22px" width="22" height="22">
 							<use href="#icon-chevron-left" />
 						</svg>
 						<strong>back to login</strong>

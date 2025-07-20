@@ -2,7 +2,6 @@
 
 import { type DehydratedState } from "@tanstack/react-query";
 import type { Session } from "next-auth";
-import { ViewTransitions } from "next-view-transitions";
 import NextTopLoader from "nextjs-toploader";
 import { Slide, ToastContainer } from "react-toastify";
 import { default as AuthProvider } from "./Auth";
@@ -32,7 +31,7 @@ const Providers = ({ children, session, hydrationBoundaryState }: Props) => (
 						hideProgressBar
 						closeOnClick
 					/>
-					<ViewTransitions>{children}</ViewTransitions>
+					{children}
 				</AxiosProvider>
 			</ReactQueryProvider>
 		</ReduxProvider>

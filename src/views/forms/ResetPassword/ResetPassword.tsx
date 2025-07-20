@@ -3,15 +3,14 @@
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
 import { useResetPasswordMutation } from "hooks/useTanstackQuery/useAuth";
-import { useTransitionRouter } from "next-view-transitions";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { apiFormErrorExtractor, isFieldRequired } from "utils/helpers";
 import PasswordField from "views/components/PasswordField";
 import formValidationSchema, { type schemaType } from "./schema";
 
 const ResetPassword = () => {
-	const { push } = useTransitionRouter();
+	const { push } = useRouter();
 	const params = useParams<{ token: string }>();
 	const { token } = params;
 

@@ -2,31 +2,12 @@
 	z-index: $zindex-fixed;
 	@include transition($transition-base);
 
-	&-scrolling {
-		animation-duration: 0.5s;
-		@extend .animated !optional;
-
-		&-up,
-		&:focus-within {
-			@extend .shadow !optional;
-			@include animate-prefixer(animation-name, slideInDown);
-		}
-
-		&-down {
-			@extend .shadow-none !optional;
-			@include animate-prefixer(animation-name, slideOutUp);
-		}
-	}
-
 	&-public {
+		@extend .bg-white !optional;
 		.app-header {
 			&-content {
 				@extend .py-22px !optional;
-				@extend .py-lg-32px !optional;
-				@extend .bg-white !optional;
-			}
-			&-categories {
-				@extend .bg-body !optional;
+				@extend .py-lg-40px !optional;
 			}
 		}
 	}
@@ -37,6 +18,35 @@
 				@extend .py-gutter !optional;
 				@extend .px-4 !optional;
 			}
+		}
+	}
+
+	&-scrolling {
+		animation-duration: 0.5s;
+		@extend .animated !optional;
+		@extend .sticky-top !optional;
+
+		&-up,
+		&:focus-within {
+			@extend .shadow !optional;
+			@include animate-prefixer(animation-name, slideInDown);
+			&.app-header-public {
+				.app-header-content {
+					@extend .py-12px !optional;
+					@extend .py-lg-16px !optional;
+				}
+				.app-header-top {
+					&,
+					& + hr {
+						@extend .visually-hidden !optional;
+					}
+				}
+			}
+		}
+
+		&-down {
+			@extend .shadow-none !optional;
+			@include animate-prefixer(animation-name, slideOutUp);
 		}
 	}
 }

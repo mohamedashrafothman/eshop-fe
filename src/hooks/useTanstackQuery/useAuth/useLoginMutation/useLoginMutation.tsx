@@ -7,7 +7,7 @@ import {
 import { LOGIN_KEY_ARRAY } from "hooks/useTanstackQuery/useAuth";
 import { ME_KEY_ARRAY } from "hooks/useTanstackQuery/useUsers";
 import { signIn } from "next-auth/react";
-import { useTransitionRouter } from "next-view-transitions";
+import { useRouter } from "next/navigation";
 import {
 	postLogin as mutationFn,
 	type PostLoginDataType,
@@ -17,7 +17,7 @@ import { pick } from "utils/helpers";
 
 const useLoginMutation = () => {
 	const queryClient = useQueryClient();
-	const { push } = useTransitionRouter();
+	const { push } = useRouter();
 
 	queryClient.setMutationDefaults(LOGIN_KEY_ARRAY, {
 		mutationFn,

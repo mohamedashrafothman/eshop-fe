@@ -40,7 +40,7 @@ const Pagination = ({
 							<span className="visually-hidden">Loading...</span>
 						</span>
 					) : (
-						<svg className="bi w-16px h-16px" width="16" height="16">
+						<svg className="bi w-22px h-22px" width="22" height="22">
 							<use href="#icon-chevron-left" />
 						</svg>
 					)}
@@ -64,7 +64,7 @@ const Pagination = ({
 							<span className="visually-hidden">Loading...</span>
 						</span>
 					) : (
-						<svg className="bi w-16px h-16px" width="16" height="16">
+						<svg className="bi w-22px h-22px" width="22" height="22">
 							<use href="#icon-chevron-right" />
 						</svg>
 					)}

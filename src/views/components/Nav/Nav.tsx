@@ -6,7 +6,11 @@ import NavLink from "./NavLink";
 import NavList from "./NavList";
 import NavListItem from "./NavListItem";
 
-export const PROPS_TYPES = { MENUBAR: "menubar", CATEGORIES: "categories" } as const;
+export const PROPS_TYPES = {
+	MENUBAR: "menubar",
+	CATEGORIES: "categories",
+	MENUBAR_TOP: "menubar-top",
+} as const;
 type Props = {
 	children?: ReactNode | undefined;
 	type: (typeof PROPS_TYPES)[keyof typeof PROPS_TYPES];

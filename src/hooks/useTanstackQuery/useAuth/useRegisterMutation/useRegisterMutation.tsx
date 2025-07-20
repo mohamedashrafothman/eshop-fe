@@ -7,7 +7,7 @@ import {
 import { REGISTER_KEY_ARRAY } from "hooks/useTanstackQuery/useAuth";
 import { ME_KEY_ARRAY } from "hooks/useTanstackQuery/useUsers";
 import { signIn } from "next-auth/react";
-import { useTransitionRouter } from "next-view-transitions";
+import { useRouter } from "next/navigation";
 import {
 	postRegister as mutationFn,
 	type PostRegisterDataType,
@@ -16,7 +16,7 @@ import {
 import { pick } from "utils/helpers";
 
 const useRegisterMutation = () => {
-	const { push } = useTransitionRouter();
+	const { push } = useRouter();
 	const queryClient = useQueryClient();
 
 	queryClient.setMutationDefaults(REGISTER_KEY_ARRAY, {

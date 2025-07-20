@@ -9,8 +9,7 @@ import {
 	usePostCountryMutation,
 	useSingleCountriesQuery,
 } from "hooks/useTanstackQuery/useCountries";
-import { useTransitionRouter } from "next-view-transitions";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { apiFormErrorExtractor, isFieldRequired, pick } from "utils/helpers";
 import TextField from "views/components/TextField";
@@ -18,7 +17,7 @@ import formValidationSchema, { type schemaType, CODE_MAX_LENGTH, NAME_MAX_LENGTH
 
 const Countries = () => {
 	const queryClient = useQueryClient();
-	const { push } = useTransitionRouter();
+	const { push } = useRouter();
 	const { identifier = "" } = useParams<{ identifier: string }>();
 
 	// server state hooks

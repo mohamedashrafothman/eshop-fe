@@ -1,14 +1,27 @@
 "use client";
 
 import classNames from "classnames";
-import NextLink, { type NextLinkProps } from "views/components/NextLink";
+import { ComponentPropsWithRef, ElementType, forwardRef, ReactNode, Ref } from "react";
+import NextLink from "views/components/NextLink";
 
-type Props = { href: string } & NextLinkProps;
+type NavLinkProps = {
+	as?: ElementType | undefined;
+	children: ReactNode;
+} & ComponentPropsWithRef<"a">;
 
-const NavLink = ({ children, className = "", ...props }: Props) => (
-	<NextLink className={classNames("nav-link text-capitalize", className)} {...props}>
-		{children}
-	</NextLink>
-);
+const NavLink = (
+	{ as, className = "", children, ...rest }: NavLinkProps,
+	ref: Ref<HTMLAnchorElement> | undefined
+) => {
+	const Component = as || NextLink;
 
-export default NavLink;
+	return (
+		<Component className={classNames("nav-link", className)} ref={ref} {...(rest as any)}>
+			{children}
+		</Component>
+	);
+};
+
+NavLink.displayName = "NavLink";
+
+export default forwardRef(NavLink);

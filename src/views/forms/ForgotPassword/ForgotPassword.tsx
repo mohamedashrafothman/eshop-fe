@@ -3,7 +3,7 @@
 import { FocusError } from "focus-formik-error";
 import { FormikHelpers, useFormik } from "formik";
 import { useForgotPasswordMutation } from "hooks/useTanstackQuery/useAuth";
-import { useTransitionRouter } from "next-view-transitions";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { apiFormErrorExtractor, isFieldRequired } from "utils/helpers";
 import EmailField from "views/components/EmailField";
@@ -11,7 +11,7 @@ import NextLink from "views/components/NextLink";
 import formValidationSchema, { type schemaType } from "./schema";
 
 const ForgotPassword = () => {
-	const { push } = useTransitionRouter();
+	const { push } = useRouter();
 
 	// server state hooks
 	const forgotPasswordMutation = useForgotPasswordMutation();
@@ -109,7 +109,7 @@ const ForgotPassword = () => {
 							<NextLink
 								href="/auth/login"
 								className="btn btn-outline-primary border-primary-dark w-100 text-capitalize justify-content-center icon-link icon-link-hover icon-link-hover-reversed">
-								<svg className="bi w-20px h-20px" width="20" height="20">
+								<svg className="bi w-22px h-22px" width="22" height="22">
 									<use href="#icon-chevron-left" />
 								</svg>
 								<strong>back to login</strong>

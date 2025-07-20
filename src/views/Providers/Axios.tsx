@@ -5,7 +5,7 @@ import to from "await-to-js";
 import axiosInstance, { isAxiosCancelError, type AxiosInstance } from "config/axios";
 import httpStatus from "http-status";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { useTransitionRouter } from "next-view-transitions";
+import { useRouter } from "next/navigation";
 import { useCallback, useLayoutEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { postRefreshToken, type PostRefreshTokenResponseType } from "services/api/e-shop/auth";
@@ -13,7 +13,7 @@ import { postRefreshToken, type PostRefreshTokenResponseType } from "services/ap
 type Props = { children?: React.ReactNode | undefined; instance?: AxiosInstance | undefined };
 
 const Axios = ({ children, instance = axiosInstance }: Props) => {
-	const { push } = useTransitionRouter();
+	const { push } = useRouter();
 	const { data: session } = useSession();
 	const queryClient = useQueryClient();
 

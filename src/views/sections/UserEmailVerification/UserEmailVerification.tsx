@@ -7,8 +7,7 @@ import {
 	useUserEmailResendQuery,
 	useUserEmailVerifyQuery,
 } from "hooks/useTanstackQuery/useUsers";
-import { useTransitionRouter } from "next-view-transitions";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import NextLink from "views/components/NextLink";
 
@@ -16,7 +15,7 @@ type Props = { title: string };
 
 const UserEmailVerification = ({ title }: Props) => {
 	const queryClient = useQueryClient();
-	const { push } = useTransitionRouter();
+	const { push } = useRouter();
 	const { token = undefined } = useParams<{ token?: string | undefined }>();
 
 	// server state hooks

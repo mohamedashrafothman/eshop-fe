@@ -11,8 +11,7 @@ import {
 	useSingleStatesQuery,
 } from "hooks/useTanstackQuery/useStates";
 import ICountry from "interfaces/Country.interface";
-import { useTransitionRouter } from "next-view-transitions";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { apiFormErrorExtractor, isFieldRequired, pick } from "utils/helpers";
 import SelectField from "views/components/SelectField";
@@ -21,7 +20,7 @@ import formValidationSchema, { type schemaType, CODE_MAX_LENGTH, NAME_MAX_LENGTH
 
 const States = () => {
 	const queryClient = useQueryClient();
-	const { push } = useTransitionRouter();
+	const { push } = useRouter();
 	const { identifier = "" } = useParams<{ identifier: string }>();
 
 	// server state hooks

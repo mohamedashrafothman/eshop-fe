@@ -9,8 +9,7 @@ import {
 	usePostUserMutation,
 	useSingleUsersQuery,
 } from "hooks/useTanstackQuery/useUsers";
-import { useTransitionRouter } from "next-view-transitions";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { apiFormErrorExtractor, isFieldRequired, pick } from "utils/helpers";
 import vars from "utils/vars";
@@ -22,7 +21,7 @@ import formValidationSchema, { type schemaType } from "./schema";
 
 const Users = () => {
 	const queryClient = useQueryClient();
-	const { push } = useTransitionRouter();
+	const { push } = useRouter();
 	const { identifier = "" } = useParams<{ identifier: string }>();
 
 	// server state hooks

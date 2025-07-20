@@ -12,8 +12,7 @@ import {
 	useSingleProductsQuery,
 } from "hooks/useTanstackQuery/useProducts";
 import IProduct from "interfaces/Product.interface";
-import { useTransitionRouter } from "next-view-transitions";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { apiFormErrorExtractor, isFieldRequired, objectToFormData, pick } from "utils/helpers";
 import vars from "utils/vars";
@@ -31,7 +30,7 @@ import formValidationSchema, {
 
 const Products = () => {
 	const queryClient = useQueryClient();
-	const { push } = useTransitionRouter();
+	const { push } = useRouter();
 	const { identifier = "" } = useParams<{ identifier: string }>();
 
 	// server state hooks

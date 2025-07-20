@@ -66,32 +66,40 @@ const SVGs = () => (
 				<title className="visually-hidden">facebook</title>
 				<path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951" />
 			</symbol>
-			<symbol id="icon-chevron-left" viewBox="0 0 16 16" fill="currentColor">
+			<symbol id="icon-chevron-left" viewBox="0 0 40 40" fill="none" stroke="currentColor">
 				<title className="visually-hidden">chevron-left</title>
 				<path
-					fillRule="evenodd"
-					d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
+					d="M23.6664 12.0332L16.8164 18.8832C16.506 19.1955 16.3318 19.6179 16.3318 20.0582C16.3318 20.4985 16.506 20.9209 16.8164 21.2332L23.4831 27.8999"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="bevel"
 				/>
 			</symbol>
-			<symbol id="icon-chevron-right" viewBox="0 0 16 16" fill="currentColor">
+			<symbol id="icon-chevron-right" viewBox="0 0 40 40" fill="none" stroke="currentColor">
 				<title className="visually-hidden">chevron-right</title>
 				<path
-					fillRule="evenodd"
-					d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+					d="M16.3333 27.9668L23.1833 21.1168C23.4937 20.8045 23.6679 20.3821 23.6679 19.9418C23.6679 19.5015 23.4937 19.079 23.1833 18.7668L16.5166 12.1001"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="bevel"
 				/>
 			</symbol>
-			<symbol id="icon-chevron-down" viewBox="0 0 16 16" fill="currentColor">
+			<symbol id="icon-chevron-down" viewBox="0 0 40 40" fill="none" stroke="currentColor">
 				<title className="visually-hidden">chevron-down</title>
 				<path
-					fillRule="evenodd"
-					d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"
+					d="M12.0332 16.3335L18.8832 23.1835C19.1955 23.4939 19.6179 23.6681 20.0582 23.6681C20.4985 23.6681 20.9209 23.4939 21.2332 23.1835L27.8999 16.5168"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="bevel"
 				/>
 			</symbol>
-			<symbol id="icon-chevron-up" viewBox="0 0 16 16" fill="currentColor">
+			<symbol id="icon-chevron-up" viewBox="0 0 40 40" fill="none" stroke="currentColor">
 				<title className="visually-hidden">chevron-up</title>
 				<path
-					fillRule="evenodd"
-					d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708z"
+					d="M27.9665 23.6667L21.1165 16.8167C20.8042 16.5063 20.3818 16.332 19.9415 16.332C19.5012 16.332 19.0788 16.5063 18.7665 16.8167L12.0999 23.4834"
+					strokeWidth="2.5"
+					strokeLinecap="round"
+					strokeLinejoin="bevel"
 				/>
 			</symbol>
 			<symbol id="icon-envelop-check" viewBox="0 0 16 16" fill="currentColor">

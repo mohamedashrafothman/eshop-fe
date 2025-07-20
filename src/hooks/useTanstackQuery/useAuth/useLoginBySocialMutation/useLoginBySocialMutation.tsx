@@ -7,7 +7,7 @@ import {
 import { LOGIN_SOCIAL_KEY_ARRAY } from "hooks/useTanstackQuery/useAuth";
 import { ME_KEY_ARRAY } from "hooks/useTanstackQuery/useUsers";
 import { signIn, useSession } from "next-auth/react";
-import { useTransitionRouter } from "next-view-transitions";
+import { useRouter } from "next/navigation";
 import {
 	postLoginBySocialMedia as mutationFn,
 	type OAuthProviderNamesType,
@@ -17,7 +17,7 @@ import {
 import { pick } from "utils/helpers";
 
 const useLoginBySocialMutation = () => {
-	const { push } = useTransitionRouter();
+	const { push } = useRouter();
 	const session = useSession();
 	const queryClient = useQueryClient();
 	const isAuthenticated = session.status === "authenticated";

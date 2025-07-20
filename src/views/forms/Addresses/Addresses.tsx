@@ -13,8 +13,7 @@ import { useCitiesQuery } from "hooks/useTanstackQuery/useCities";
 import { useCountriesQuery } from "hooks/useTanstackQuery/useCountries";
 import { useStatesQuery } from "hooks/useTanstackQuery/useStates";
 import { useMeQuery } from "hooks/useTanstackQuery/useUsers";
-import { useTransitionRouter } from "next-view-transitions";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { apiFormErrorExtractor, isFieldRequired, pick } from "utils/helpers";
 import SelectField from "views/components/SelectField";
@@ -23,7 +22,7 @@ import formValidationSchema, { type schemaType, NAME_MAX_LENGTH } from "./schema
 
 const Addresses = () => {
 	const queryClient = useQueryClient();
-	const { push } = useTransitionRouter();
+	const { push } = useRouter();
 	const { identifier = "" } = useParams<{ identifier: string }>();
 
 	// state hooks

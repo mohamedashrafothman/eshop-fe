@@ -1,8 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import { Link } from "next-view-transitions";
-import { LinkProps } from "next/link";
+import Link, { LinkProps } from "next/link";
 import { usePathname } from "next/navigation";
 import { forwardRef, HTMLAttributes, ReactNode, Ref } from "react";
 import type { UrlObject } from "url";
