@@ -1,0 +1,14 @@
+.products-search-form {
+	.input-group {
+		.input-group-text {
+			&:focus-within {
+				z-index: 3;
+				position: relative;
+			}
+		}
+		.react-select__control {
+			@extend .rounded-end-0 !optional;
+			@extend .fw-bold !optional;
+		}
+	}
+}

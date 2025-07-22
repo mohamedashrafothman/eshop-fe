@@ -1,5 +1,7 @@
 import Dropdown from "bootstrap/js/dist/dropdown";
+import { useRouter } from "next/navigation";
 import { RefObject, useEffect, useRef } from "react";
+import { isFunction } from "utils/helpers";
 
 type RefOrRefs<T extends HTMLElement> =
 	| RefObject<T | null>
@@ -8,9 +10,11 @@ type RefOrRefs<T extends HTMLElement> =
 
 const useBootstrapDropdown = <T extends HTMLElement = HTMLElement>(
 	refOrRefs: RefOrRefs<T>,
-	isActive: boolean = true
+	options?: any | undefined
 ) => {
+	const { push } = useRouter();
 	const lastOpenedBy = useRef<"hover" | "click" | null>(null);
+	const { isActive = true, allowTouch = true, ...restOfOptions } = options || {};
 
 	useEffect(() => {
 		if (!isActive) return;
@@ -30,8 +34,8 @@ const useBootstrapDropdown = <T extends HTMLElement = HTMLElement>(
 
 		const listeners: {
 			el: HTMLElement;
-			mouseOver: EventListener;
-			mouseOut: EventListener;
+			mouseOver?: EventListener | undefined;
+			mouseOut?: EventListener | undefined;
 			click: EventListener;
 		}[] = [];
 
@@ -41,7 +45,7 @@ const useBootstrapDropdown = <T extends HTMLElement = HTMLElement>(
 			) as HTMLElement;
 			if (!parentDropdown) return;
 
-			const instance = Dropdown.getOrCreateInstance(el);
+			const instance = Dropdown.getOrCreateInstance(el, restOfOptions);
 			instances.push(instance);
 
 			let timeout: ReturnType<typeof setTimeout> | null = null;
@@ -74,25 +78,38 @@ const useBootstrapDropdown = <T extends HTMLElement = HTMLElement>(
 				}
 			};
 
-			const handleClick = () => (lastOpenedBy.current = "click");
+			const handleClick = (e: Event) => {
+				lastOpenedBy.current = "click";
+				if (!(e.currentTarget instanceof HTMLElement)) return;
 
-			parentDropdown.addEventListener("mouseover", handleMouseOver);
-			parentDropdown.addEventListener("mouseout", handleMouseOut);
+				if (e.currentTarget.nodeName !== "A" || !e.currentTarget.hasAttribute("href"))
+					return;
+
+				push(e.currentTarget.getAttribute("href") as string);
+			};
+
+			if (allowTouch) parentDropdown.addEventListener("mouseover", handleMouseOver);
+			if (allowTouch) parentDropdown.addEventListener("mouseout", handleMouseOut);
 			el.addEventListener("click", handleClick);
 
 			listeners.push({
 				el: parentDropdown,
-				mouseOver: handleMouseOver,
-				mouseOut: handleMouseOut,
 				click: handleClick,
+				...(allowTouch
+					? {
+							mouseOver: handleMouseOver,
+							mouseOut: handleMouseOut,
+						}
+					: {}),
 			});
 		});
 
 		return () => {
 			listeners.forEach(({ el, mouseOver, mouseOut, click }) => {
-				el.removeEventListener("mouseover", mouseOver);
-				el.removeEventListener("mouseout", mouseOut);
-				el.removeEventListener("click", click);
+				if (mouseOver && isFunction(mouseOver))
+					el.removeEventListener("mouseover", mouseOver);
+				if (mouseOut && isFunction(mouseOut)) el.removeEventListener("mouseout", mouseOut);
+				if (click && isFunction(click)) el.removeEventListener("click", click);
 			});
 			instances.forEach((instance) => instance.dispose());
 		};

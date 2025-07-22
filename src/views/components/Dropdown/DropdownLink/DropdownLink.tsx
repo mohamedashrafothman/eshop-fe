@@ -2,12 +2,12 @@
 
 import classNames from "classnames";
 import { ComponentPropsWithRef, ElementType, forwardRef, ReactNode, Ref } from "react";
-import NextLink from "views/components/NextLink";
+import NextLink, { type NextLinkProps } from "views/components/NextLink";
 
 type DropdownLinkProps = {
 	as?: ElementType | undefined;
 	children: ReactNode;
-} & ComponentPropsWithRef<"a">;
+} & ((ComponentPropsWithRef<"a"> & NextLinkProps) | ComponentPropsWithRef<"button">);
 
 const DropdownLink = (
 	{ as, className = "", children, ...rest }: DropdownLinkProps,

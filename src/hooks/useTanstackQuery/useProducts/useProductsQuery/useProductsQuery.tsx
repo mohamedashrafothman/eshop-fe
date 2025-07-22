@@ -9,7 +9,7 @@ import {
 	type GetProductsResponseType,
 } from "services/api/e-shop/products";
 
-const useProductsQuery = (query: GetProductsDataType | undefined) =>
+const useProductsQuery = (query: GetProductsDataType | undefined, options: any = {}) =>
 	useQuery<
 		Pick<AxiosResponseProps<GetProductsResponseType>, "data">["data"]["entities"],
 		AxiosErrorProps
@@ -17,6 +17,7 @@ const useProductsQuery = (query: GetProductsDataType | undefined) =>
 		queryKey: [...ALL_KEY_ARRAY, { ...(query || {}) }],
 		queryFn: () =>
 			queryFn({ params: query || {} }).then(({ data: { entities } }) => entities || {}),
+		...options,
 	});
 
 export default useProductsQuery;

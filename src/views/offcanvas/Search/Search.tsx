@@ -3,6 +3,7 @@
 import Offcanvas from "bootstrap/js/dist/offcanvas";
 import { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
+import { default as ProductsSearchForm } from "views/forms/ProductsSearch";
 
 const Search = () => {
 	// portal dom element
@@ -40,10 +41,12 @@ const Search = () => {
 				tabIndex={-1}
 				aria-labelledby="search-offcanvas-label"
 				ref={offCanvasRef}>
-				<div className="offcanvas-body py-5">
+				<div className="offcanvas-body py-5 overflow-visible">
 					<div className="container">
 						<div className="row g-0 align-items-center flex-nowrap">
-							<div className="col">Search</div>
+							<div className="col">
+								<ProductsSearchForm />
+							</div>
 							<div className="col-auto">
 								<button
 									type="button"

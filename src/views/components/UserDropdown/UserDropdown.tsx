@@ -1,10 +1,10 @@
 "use client";
 
-import Dropdown from "bootstrap/js/dist/dropdown";
 import { useLogoutMutation, useMeQuery } from "hooks/useTanstackQuery/useAuth";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import Dropdown from "views/components/Dropdown";
 import NextLink from "views/components/NextLink";
 
 const UserDropdown = () => {
@@ -12,7 +12,6 @@ const UserDropdown = () => {
 	const postLogoutMutation = useLogoutMutation();
 
 	// ref hook
-	const dropdownRef = useRef<HTMLButtonElement | null>(null);
 	const postLogoutCancelRequestRef = useRef<AbortController | null>(null);
 
 	// state hook
@@ -41,27 +40,12 @@ const UserDropdown = () => {
 		);
 	};
 
-	// effect hook
-	useEffect(() => {
-		const dropdownRefCurrent = dropdownRef?.current;
-		let dropdown: Dropdown | null;
-		if (dropdownRefCurrent) {
-			dropdown = Dropdown.getInstance(dropdownRefCurrent);
-			if (!dropdown) dropdown = new Dropdown(dropdownRefCurrent);
-		}
-		return () => {
-			if (dropdownRefCurrent && dropdown) Dropdown.getInstance(dropdownRefCurrent)?.dispose();
-		};
-	}, []);
-
 	return (
-		<div className="dropdown">
-			<button
-				className="btn btn-primary border-primary-dark dropdown-toggle dropdown-toggle-with-rotate-icon rounded-pill p-1 w-100 hstack gap-2 align-items-center flex-nowrap"
-				type="button"
-				data-bs-toggle="dropdown"
-				aria-expanded="false"
-				ref={dropdownRef}>
+		<Dropdown>
+			<Dropdown.Toggle
+				className="btn btn-primary border-primary-dark rounded-pill p-1 w-100 hstack gap-2 align-items-center flex-nowrap"
+				dropdownOptions={{ allowTouch: false }}
+				withRotation>
 				<Image
 					src={`https://placehold.co/50x50/f5f5f5/6a983c.png?text=${
 						(user?.name &&
@@ -102,34 +86,33 @@ const UserDropdown = () => {
 						<use href="#icon-chevron-down"></use>
 					</svg>
 				</span>
-			</button>
-			<ul className="dropdown-menu w-100 shadow my-2">
-				<li>
-					<NextLink
-						className="dropdown-item text-capitalize white-space-pre-line"
+			</Dropdown.Toggle>
+			<Dropdown.Menu className="w-100 shadow my-2">
+				<Dropdown.MenuItem>
+					<Dropdown.Link
+						as={NextLink}
+						className="text-capitalize white-space-pre-line"
 						href="/dashboard"
 						exact>
 						Dashboard
-					</NextLink>
-				</li>
-				<li>
-					<hr className="dropdown-divider border border-top-0 bg-transparent" />
-				</li>
-				<li>
-					<NextLink
-						className="dropdown-item text-capitalize white-space-pre-line"
+					</Dropdown.Link>
+				</Dropdown.MenuItem>
+				<Dropdown.MenuItem isDivider />
+				<Dropdown.MenuItem>
+					<Dropdown.Link
+						as={NextLink}
+						className="text-capitalize white-space-pre-line"
 						href="/dashboard/me"
 						exact>
 						Account information
-					</NextLink>
-				</li>
-				<li>
-					<hr className="dropdown-divider border border-top-0 bg-transparent" />
-				</li>
-				<li>
-					<button
+					</Dropdown.Link>
+				</Dropdown.MenuItem>
+				<Dropdown.MenuItem isDivider />
+				<Dropdown.MenuItem>
+					<Dropdown.Link
+						as="button"
 						type="button"
-						className="dropdown-item text-capitalize white-space-pre-line"
+						className="text-capitalize white-space-pre-line"
 						onClick={() => onLogoutButtonClickHandler()}
 						disabled={isLogoutLoadingState}>
 						Logout
@@ -138,10 +121,10 @@ const UserDropdown = () => {
 								<span className="visually-hidden">Loading...</span>
 							</span>
 						)}
-					</button>
-				</li>
-			</ul>
-		</div>
+					</Dropdown.Link>
+				</Dropdown.MenuItem>
+			</Dropdown.Menu>
+		</Dropdown>
 	);
 };
 

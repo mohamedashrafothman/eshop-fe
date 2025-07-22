@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "classnames";
-import { ComponentPropsWithoutRef, useId } from "react";
+import { ComponentPropsWithRef, forwardRef, Ref, useId } from "react";
 import FieldHelpLabel from "views/components/FieldHelpLabel";
 import FieldRequiredLabel from "views/components/FieldRequiredLabel";
 
@@ -12,23 +12,26 @@ export type Props = {
 	label?: string | undefined;
 	helpText?: string | undefined;
 	preventReactId?: boolean | undefined;
-} & ComponentPropsWithoutRef<"input">;
+} & ComponentPropsWithRef<"input">;
 
-const TextField = ({
-	isValid = false,
-	isInvalid = false,
-	id: passedId,
-	type = "text",
-	className,
-	label,
-	placeholder,
-	error,
-	required,
-	helpText = "",
-	maxLength,
-	preventReactId = false,
-	...restOfProps
-}: Props) => {
+const TextField = (
+	{
+		isValid = false,
+		isInvalid = false,
+		id: passedId,
+		type = "text",
+		className,
+		label,
+		placeholder,
+		error,
+		required,
+		helpText = "",
+		maxLength,
+		preventReactId = false,
+		...restOfProps
+	}: Props,
+	ref?: Ref<HTMLInputElement> | undefined
+) => {
 	const reactId = useId();
 	const id = `${passedId || "textField"}${!preventReactId ? `-${reactId}` : ""}`;
 
@@ -41,6 +44,7 @@ const TextField = ({
 				</label>
 			)}
 			<input
+				ref={ref}
 				type={type}
 				id={id}
 				className={classNames("form-control text-truncate", className, {
@@ -71,4 +75,4 @@ const TextField = ({
 	);
 };
 
-export default TextField;
+export default forwardRef(TextField);

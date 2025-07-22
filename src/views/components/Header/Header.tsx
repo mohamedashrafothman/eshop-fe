@@ -9,6 +9,7 @@ import HeaderTop from "views/components/Header/HeaderTop";
 import Logo from "views/components/Logo";
 import Nav, { PROPS_TYPES as NAV_PROPS_TYPES } from "views/components/Nav";
 import UserDropdown from "views/components/UserDropdown";
+import { default as ProductsSearchForm } from "views/forms/ProductsSearch";
 import { default as DashboardSideOffcanvas } from "views/offcanvas/DashboardSide";
 import { default as PublicHeaderOffcanvas } from "views/offcanvas/PublicHeader";
 import { default as SearchOffcanvas } from "views/offcanvas/Search";
@@ -51,7 +52,9 @@ const Header = ({ type = "public", className = "", ...props }: Props) => {
 										<div className="col-auto">
 											<Logo />
 										</div>
-										<div className="col-lg-6 d-none d-lg-block">Search</div>
+										<div className="col-lg-6 d-none d-lg-block">
+											<ProductsSearchForm />
+										</div>
 										<div className="col-auto">
 											<div className="hstack gap-1 flex-nowrap">
 												<Nav

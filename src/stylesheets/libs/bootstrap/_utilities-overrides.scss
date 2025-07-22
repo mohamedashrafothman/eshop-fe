@@ -40,6 +40,8 @@ $width-values: (
 	"150px": 150px,
 	"200px": 200px,
 	"300px": 300px,
+	"border": var(--#{$prefix}border-width),
+	"borderx2": calc(var(--#{$prefix}border-width) * 2),
 );
 $height-values: map-merge($width-values, ());
 

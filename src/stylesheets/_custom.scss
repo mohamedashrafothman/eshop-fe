@@ -254,6 +254,8 @@ strong {
 	}
 
 	&__option {
+		@extend .text-start !optional;
+		@extend .text-truncate !optional;
 		&--is-focused {
 			color: $dropdown-link-hover-color !important;
 			background-color: $dropdown-link-hover-bg !important;

@@ -10,15 +10,17 @@ import {
 	type ReactNode,
 	type Ref,
 } from "react";
+import { isFunction } from "utils/helpers";
 
 type Props = {
 	as?: ElementType | undefined;
 	children: ReactNode;
 	withRotation?: boolean | undefined;
+	dropdownOptions?: object | undefined;
 } & ComponentPropsWithRef<"button" | "a">;
 
 const DropdownToggle = (
-	{ as, children, className = "", withRotation, ...rest }: Props,
+	{ as, children, className = "", withRotation, dropdownOptions, ...rest }: Props,
 	ref: Ref<HTMLButtonElement | HTMLAnchorElement> | undefined
 ) => {
 	const Component = as || "button";
@@ -27,7 +29,7 @@ const DropdownToggle = (
 	const dropdownRef = useRef<HTMLButtonElement | HTMLAnchorElement | null>(null);
 
 	// custom hooks
-	useBootstrapDropdown(dropdownRef);
+	useBootstrapDropdown(dropdownRef, dropdownOptions);
 
 	return (
 		<Component
@@ -38,7 +40,7 @@ const DropdownToggle = (
 			data-bs-toggle="dropdown"
 			ref={(node: any) => {
 				dropdownRef.current = node;
-				if (typeof ref === "function") ref(node);
+				if (isFunction(ref)) ref(node);
 				else if (ref) (ref as React.MutableRefObject<any>).current = node;
 			}}
 			{...rest}>
