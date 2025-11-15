@@ -10,19 +10,19 @@ import {
 	type ReactNode,
 	type Ref,
 } from "react";
-import { isFunction } from "utils/helpers";
 
 type Props = {
 	as?: ElementType | undefined;
 	children: ReactNode;
 	withRotation?: boolean | undefined;
 	dropdownOptions?: object | undefined;
-} & ComponentPropsWithRef<"button" | "a">;
+} & ComponentPropsWithRef<"button"> &
+	ComponentPropsWithRef<"a">;
 
-const DropdownToggle = (
+function DropdownToggle(
 	{ as, children, className = "", withRotation, dropdownOptions, ...rest }: Props,
-	ref: Ref<HTMLButtonElement | HTMLAnchorElement> | undefined
-) => {
+	ref: Ref<HTMLButtonElement | HTMLAnchorElement>
+) {
 	const Component = as || "button";
 
 	// ref hook
@@ -38,15 +38,26 @@ const DropdownToggle = (
 			})}
 			role="button"
 			data-bs-toggle="dropdown"
-			ref={(node: any) => {
+			ref={(node: HTMLButtonElement | HTMLAnchorElement | null) => {
 				dropdownRef.current = node;
-				if (isFunction(ref)) ref(node);
-				else if (ref) (ref as React.MutableRefObject<any>).current = node;
+
+				// Callback ref
+				if (typeof ref === "function") {
+					ref(node);
+					return;
+				}
+
+				// Object ref (may be readonly)
+				if (ref && "current" in ref) {
+					(
+						ref as React.MutableRefObject<HTMLButtonElement | HTMLAnchorElement | null>
+					).current = node;
+				}
 			}}
 			{...rest}>
 			{children}
 		</Component>
 	);
-};
+}
 
 export default forwardRef(DropdownToggle);
