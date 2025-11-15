@@ -1,40 +1,46 @@
+import { FormikProps, FormikValues } from "formik";
 import { useCallback, useEffect, useRef } from "react";
 import { isFunction, isSameValueAsInitialValue, omit } from "utils/helpers";
 
-type Props = {
-	delay?: number | undefined;
-	formik: { [key: string]: any };
-	compareAgainstInitialValue?: boolean | undefined;
+type AutoSaveProps<T extends FormikValues> = {
+	delay?: number;
+	formik: FormikProps<T>;
+	compareAgainstInitialValue?: boolean;
 };
 
-const AutoSave = ({ delay = 400, formik, compareAgainstInitialValue = false }: Props) => {
+function AutoSave<T extends FormikValues>({
+	delay = 400,
+	formik,
+	compareAgainstInitialValue = false,
+}: AutoSaveProps<T>) {
 	const { values, errors, initialValues, submitForm } = formik;
 
-	// ref hooks
 	const didMountRef = useRef(false);
 
-	// event handlers
 	const onFormSubmit = useCallback(async () => {
-		if (!didMountRef?.current) {
+		if (!didMountRef.current) {
 			didMountRef.current = true;
 			return;
 		}
-		const v = omit(values, Object.keys(errors));
-		if (
+
+		// Remove fields with errors before submitting
+		const cleanValues = omit(values, Object.keys(errors));
+
+		const shouldSubmit =
 			isFunction(submitForm) &&
-			(!compareAgainstInitialValue ||
-				(compareAgainstInitialValue && !isSameValueAsInitialValue(v, initialValues)))
-		)
-			submitForm(v);
+			(!compareAgainstInitialValue || !isSameValueAsInitialValue(cleanValues, initialValues));
+
+		if (shouldSubmit) {
+			await submitForm();
+		}
 	}, [values, errors, submitForm, compareAgainstInitialValue, initialValues]);
 
-	// effect hooks
 	useEffect(() => {
-		const timer = setTimeout(() => onFormSubmit(), delay);
+		const timer = setTimeout(onFormSubmit, delay);
 		return () => clearTimeout(timer);
 	}, [values, errors, delay, onFormSubmit]);
 
 	return null;
-};
+}
 
 export default AutoSave;
