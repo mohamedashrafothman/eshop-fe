@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: PAGE_TITLE };
 
 const PasswordConfirmPage = () => (
 	<>
-		<div className="container">
+		<div className="container py-16px">
 			<Breadcrumb items={[{ href: "/auth/password/confirm", title: PAGE_TITLE }]} />
 		</div>
 		<ResetPasswordConfirmationSection title={PAGE_TITLE} />

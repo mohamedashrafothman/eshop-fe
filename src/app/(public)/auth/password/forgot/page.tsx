@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: PAGE_TITLE };
 
 const ForgotPasswordPage = () => (
 	<>
-		<div className="container">
+		<div className="container py-16px">
 			<Breadcrumb items={[{ href: "/auth/password/forgot", title: PAGE_TITLE }]} />
 		</div>
 		<ForgotPasswordSection title={PAGE_TITLE} />;

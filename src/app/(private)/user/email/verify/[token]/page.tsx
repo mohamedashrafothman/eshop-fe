@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: PAGE_TITLE };
 
 const EmailVerificationPage = () => (
 	<>
-		<div className="container">
+		<div className="container py-16px">
 			<Breadcrumb items={[{ href: "/user/email/verify", title: PAGE_TITLE }]} />
 		</div>
 		<UserEmailVerificationSection title={PAGE_TITLE} />;
