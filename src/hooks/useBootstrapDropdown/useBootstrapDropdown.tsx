@@ -113,7 +113,7 @@ const useBootstrapDropdown = <T extends HTMLElement = HTMLElement>(
 			});
 			instances.forEach((instance) => instance.dispose());
 		};
-	}, [refOrRefs, isActive]);
+	}, [refOrRefs, isActive, restOfOptions, allowTouch, push]);
 };
 
 export default useBootstrapDropdown;

@@ -111,10 +111,7 @@ const PasswordField = ({
 					</span>
 				)}
 			</div>
-			<div
-				className={classNames("input-group flex-nowrap", {
-					"has-validation": isInvalid || isValid,
-				})}>
+			<div className={classNames("input-group", { "has-validation": isInvalid || isValid })}>
 				<input
 					type={isPasswordVisibleState ? "text" : "password"}
 					name={name}

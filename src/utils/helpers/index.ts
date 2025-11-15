@@ -4,8 +4,7 @@ export * from "./form";
 export * from "./server";
 export * from "./user";
 
-export const isFunction = (value: unknown): value is (...args: any[]) => any =>
-	typeof value === "function";
+export const isFunction = (value: unknown): value is () => any => typeof value === "function";
 
 export const isObject = (value: unknown): boolean =>
 	typeof value === "object" && !Array.isArray(value) && value !== null;
